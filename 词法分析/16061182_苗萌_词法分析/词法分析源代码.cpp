@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string.h>
+#include<fstream>
 using namespace std;
 #define	CONSTSY 0//const
 #define	INTSY 1//int
@@ -82,7 +83,7 @@ char printsym[SYMNUM][IDENL] = {
 "MAINSY"//main
 };
  
-FILE *fin;//源代码输入文件 
+ifstream fin;//源代码输入文件 
 char ch;//当前读到的字符 
 int ll = 0;//lenth of current line       LenOfCline
 int cc = 0;//character counter      indexInLine
@@ -104,9 +105,10 @@ void getch(){
 		lc++;
 		ll = 0;//清空行长度 
 		cc = 0;//清空字符计数器 
-		if(fgets(line,1024,fin)!=NULL){
+		if(fin.getline(line,1024)!=NULL){
 			ll = strlen(line);
-			line[ll] = '\0';//行尾设置为空格? 
+			line[ll++] = '\n';//行尾设置为空格? 
+			line[ll] = ' ';
 		}
 		else{
 			ch = EOF;
@@ -321,7 +323,7 @@ void setup(){
 }
 
 int main(){
-	fin = fopen("16061182_test.txt","r");
+	fin.open("16061182_test.txt",ios::in);
 	setup();
 	getch();
 	//printf("%c",ch);
@@ -332,7 +334,7 @@ int main(){
 	}
 	
 	
-	fclose(fin);
+	fin.close();
 	return 0;
 }
 
