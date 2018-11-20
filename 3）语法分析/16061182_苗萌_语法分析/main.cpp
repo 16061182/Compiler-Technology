@@ -52,8 +52,8 @@ using namespace std;
 #define MAXTAB 500//size limit of symbol tab
 #define MAXBLK 100//size limit of block index tab
 #define MAXSOURCECODE 1000000//读入的源代码的长度限制
-#define MARK indextmp = sourceindex; sytmp = sy;
-#define BACK sourceindex = indextmp; sy = sytmp;
+#define MARK indextmp = sourceindex; sytmp = sy; chtmp = ch;
+#define BACK sourceindex = indextmp; sy = sytmp; ch = chtmp;
 
 char printsym[SYMNUM][IDENL] = {
 "CONSTSY",//const
@@ -139,6 +139,7 @@ int sourceindex = 0;
 //语法分析回退用变量
 int indextmp;
 int sytmp;
+char chtmp;
 
 void error(){
 	printf("error!\n");
@@ -337,6 +338,7 @@ void getsym(){
 void deccon();
 void defcon();
 void integer();
+void decvar_extern();
 void decvar();
 void defvar();
 void deffunct();
@@ -375,7 +377,7 @@ void program(){//程序*
         getsym();
         if(sy == COMMA || sy == LBRA || sy == SEMI){//是变量说明
             BACK
-            decvar();
+            decvar_extern();
         }
         else if(sy == LPAR || sy == LBPA){//是有返回值函数定义
             BACK
@@ -505,7 +507,30 @@ void integer(){//整数*
 	printf("it is integer\n");
 }
 
-void decvar(){//变量说明*
+void decvar_extern(){//用于程序中的变量说明（带回溯）
+    if(sy != INTSY && sy != CHARSY){
+		error();
+	}
+	while(sy == INTSY || sy == CHARSY){
+        MARK
+        //printf("after mark %c\n",ch);
+		defvar();
+        if(sy == LPAR){//如果是'('，说明不是var而是有返回值函数
+            BACK
+            //printf("after back %c\n",ch);
+            break;
+        }
+		else if(sy == SEMI){
+            getsym();
+		}
+		else{
+            error();
+		}
+	}
+	printf("it is decvar_extern\n");
+}
+
+void decvar(){//用于语句列中的变量说明*
 	if(sy != INTSY && sy != CHARSY){
 		error();
 	}
@@ -752,8 +777,8 @@ void factor(){//因子*
 		}
 		getsym();
 	}
-	else if(sy == ICON){
-		getsym();
+	else if(sy == ICON || sy == PLUS || sy == MINUS){
+		integer();
 	}
 	else if(sy == CCON){
 		getsym();
@@ -1095,13 +1120,16 @@ void setup(){
 }
 
 int main(){
-	fin.open("baka.txt",ios::in);
+	fin.open("16061182_test.txt",ios::in);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
+	/*printf("%c\n",sourcecode[33]);
+	printf("%c\n",sourcecode[34]);
+	printf("%c\n",sourcecode[35]);*/
 	getch();
 	getsym();
-	program(); 
+	program();
 	//printf("%c",ch);
 //	while(sourceindex < sourcelenth){
 		//getch();
