@@ -1,3 +1,8 @@
+/*
+(1)标识符名称和预定义名称相同时，会直接视符号为预定义名称，因此应保证标识符名称和预定义名称不相同(相同则报错)
+(2)判断语句是函数调用语句还是赋值语句时，可以直接根据符号表中的参数名来判断。若此语句所在模块中，
+	在此语句之前有该IDEN的声明和赋值操作，那么即使定义了该IDEN函数，仍把同一模块中后面所有的IDEN视为变量而不是函数名（c语言特性）
+*/
 #include<iostream>
 #include<string.h>
 #include<fstream>
@@ -347,8 +352,11 @@ void program(){//程序*
             BACK
             decvar();
         }
-        else if(sy == LPAR || sy == LBPA){
+        else if(sy == LPAR || sy == LBPA){//是有返回值函数定义
             BACK
+        }
+        else{
+        	error();
         }
     }
     while(sy == INTSY || sy == CHARSY || sy == VOIDSY){//循环定义函数
@@ -356,101 +364,88 @@ void program(){//程序*
             deffunct();
         }
         else if(sy == VOIDSY){
-            deffuncf();
+        	MARK
+        	getsym();
+        	if(sy == IDEN){//说明是无返回值函数定义
+        		BACK
+        		deffuncf();
+        	}
+        	else if(sy == MAINSY){//说明是主函数
+        		BACK
+        		break;
+        	}
         }
     }
     mainfunc();
 }
 
-void deccon(){//常量说明
+void deccon(){//常量说明*
 	if(sy != CONSTSY){
 		error();
 	}
 	while(sy == CONSTSY){
 		getsym();
 		defcon();
-		if(sy == SEMI){
-			getsym();
-		}
-		else{
+		if(sy != SEMI){
 			error();
 		}
+		getsym();
 	}
 }
 
-void defcon(){//
+void defcon(){//常量定义*
 	if(sy == INTSY){
 		getsym();
-		if(sy == IDEN){
-			getsym();
-		}
-		else{
+		if(sy != IDEN){
 			error();
 		}
-		if(sy == BECOM){
-			getsym();
-		}
-		else{
+		getsym();
+		if(sy != BECOM){
 			error();
 		}
+		getsym();
 		integer();
 		while(sy == COMMA){
 			getsym();
-			if(sy == IDEN){
-				getsym();
-			}
-			else{
+			if(sy != IDEN){
 				error();
 			}
-			if(sy == BECOM){
-				getsym();
-			}
-			else{
+			getsym();
+			if(sy != BECOM){
 				error();
 			}
+			getsym();
 			integer();
 		}
 	}
 	else if(sy == CHARSY){
 		getsym();
-		if(sy == IDEN){
-			getsym();
-		}
-		else{
+		if(sy != IDEN){
 			error();
 		}
-		if(sy == BECOM){
-			getsym();
-		}
-		else{
+		getsym();
+		if(sy != BECOM){
 			error();
 		}
-		if(sy == CCON){
-			getsym();
-		}
-		else{
+		getsym();
+		if(sy != CCON){
 			error();
 		}
+		getsym();
 		while(sy == COMMA){
 			getsym();
-			if(sy == IDEN){
-				getsym();
-			}
-			else{
+			if(sy != IDEN){
 				error();
 			}
-			if(sy == BECOM){
-				getsym();
-			}
-			else{
+			getsym();
+			if(sy != BECOM){
 				error();
 			}
-			if(sy == CCON){
-				getsym();
-			}
-			else{
+			getsym();
+			if(sy != CCON){
 				error();
 			}
+			getsym();
 		}
 	}
 	else{
@@ -458,51 +453,23 @@ void defcon(){//
 	}
 }
 
-void integer(){
+void integer(){//整数*
 	if(sy == PLUS){
 		getsym();
-		if(sy == ICON){
-			getsym();
-		}
-		else{
+		if(sy != ICON){
 			error();
 		}
+		getsym();
 	}
 	else if(sy == MINUS){
 		getsym();
-		if(sy == ICON){
-			getsym();
-		}
-		else{
+		if(sy != ICON){
 			error();
 		}
+		getsym();
 	}
 	else if(sy == ICON){
 		getsym();
-	}
-	else{
-		error();
-	}
-}
-
-void dechead(){
-	if(sy == INTSY){
-		getsym();
-		if(sy == IDEN){
-			getsym();
-		}
-		else{
-			error();
-		}
-	}
-	else if(sy == CHARSY){
-		getsym();
-		if(sy == IDEN){
-			getsym();
-		}
-		else{
-			error();
-		}
 	}
 	else{
 		error();
@@ -562,8 +529,15 @@ void defvar(){//变量定义*
 	}
 }
 
-void deffunct(){//有返回值函数定义
-	dechead();
+void deffunct(){//有返回值函数定义*
+	if(sy != INTSY && sy != CHARSY){//省略声明头部的定义
+		error();
+	}
+	getsym();
+	if(sy != IDEN){
+		error();
+	}
+	getsym();
 	if(sy == LPAR){
 		getsym();
 		paralist();
@@ -594,7 +568,7 @@ void deffunct(){//有返回值函数定义
 	}
 }
 
-void deffuncf(){
+void deffuncf(){//无返回值函数定义*
 	if(sy != VOIDSY){
 		error();
 	}
@@ -633,7 +607,7 @@ void deffuncf(){
 	}
 }
 
-void multistate(){
+void multistate(){//语句列*
 	if(sy == CONSTSY){
 		deccon();
 	}
@@ -643,7 +617,7 @@ void multistate(){
 	states();
 }
 
-void paralist(){
+void paralist(){//参数表*
 	if(sy != INTSY && sy != CHARSY){
 		error();
 	}
@@ -665,7 +639,7 @@ void paralist(){
 	}
 }
 
-void mainfunc(){
+void mainfunc(){//主函数*
 	if(sy != VOIDSY){
 		error();
 	}
@@ -685,14 +659,15 @@ void mainfunc(){
 	if(sy != LBPA){
 		error();
 	}
+	getsym();
 	multistate();
 	if(sy != RBPA){
-		error()
+		error();
 	}
-	getsym();
+	getsym();//主函数的末尾，需要考虑
 }
 
-void expr(){
+void expr(){//表达式*
 	if(sy == PLUS){
 		getsym();
 	}
@@ -706,7 +681,7 @@ void expr(){
 	}
 }
 
-void item(){
+void item(){//项*
 	factor();
 	while(sy == TIMES || sy == DIV){
 		getsym();
@@ -714,8 +689,8 @@ void item(){
 	}
 }
 
-void factor(){
-	if(sy == IDEN){//huisu
+void factor(){//因子*
+	if(sy == IDEN){//根据符号表判断是标识符还是有返回值函数调用
 		getsym();
 		if(sy == LBRA){
 			getsym();
@@ -745,7 +720,7 @@ void factor(){
 	}
 }
 
-void state(){
+void state(){//语句*
 	if(sy == IFSY){
 		tioajianstate();
 	}
@@ -760,8 +735,17 @@ void state(){
 		}
 		getsym();
 	}
-	else if(sy == IDEN){//huisu
-		fuzhistate();
+	else if(sy == IDEN){//不需要回溯，根据符号表判断!!!
+		MARK
+		getsym();
+		if(sy == SEMI || sy == LPAR){//函数调用语句
+			BACK
+			callfunctstate();//此处需要根据标识符判断是调用有返回值还是无返回值
+		}
+		else if(sy == BECOM || sy == LBRA){//赋值语句
+			BACK
+			fuzhistate();
+		}
 		if(sy != SEMI){
 			error();
 		}
@@ -791,9 +775,12 @@ void state(){
 	else if(sy == SEMI){
 		getsym();
 	}
+	else{
+		error();
+	}
 }
 
-void fuzhistate(){
+void fuzhistate(){//赋值语句*
 	if(sy != IDEN){
 		error();
 	}
@@ -813,7 +800,7 @@ void fuzhistate(){
 	expr();
 }
 
-void tioajianstate(){
+void tioajianstate(){//条件语句*
 	if(sy != IFSY){
 		error();
 	}
@@ -835,7 +822,7 @@ void tioajianstate(){
 
 }
 
-void tiaojian(){
+void tiaojian(){//条件*
 	expr();
 	if(sy == LSS || sy == LEQ || sy == GTR || sy == GEQ || sy == NEQ || sy == EQL){
 		getsym();
@@ -844,7 +831,7 @@ void tiaojian(){
 
 }
 
-void xunhuanstate(){
+void xunhuanstate(){//循环语句*
 	if(sy == WHILESY){
 		getsym();
 		if(sy != LPAR){
@@ -893,7 +880,7 @@ void xunhuanstate(){
 		if(sy != IDEN){
 			error();
 		}
-		getsym()
+		getsym();
 		if(sy != PLUS && sy != MINUS){
 			error();
 		}
@@ -913,7 +900,7 @@ void xunhuanstate(){
 	}
 }
 
-void callfunctstate(){//the same as call funcfstate
+void callfunctstate(){//有返回值函数调用语句*
 	if(sy != IDEN){
 		error();
 	}
@@ -928,7 +915,7 @@ void callfunctstate(){//the same as call funcfstate
 	}
 }
 
-void callfuncfstate(){
+void callfuncfstate(){//无返回值函数调用语句*
 	if(sy != IDEN){
 		error();
 	}
@@ -943,7 +930,7 @@ void callfuncfstate(){
 	}
 }
 
-void valueparalist(){
+void valueparalist(){//值参数表*
 	expr();
 	while(sy == COMMA){
 		getsym();
@@ -951,14 +938,14 @@ void valueparalist(){
 	}
 }
 
-void states(){//exists some mistakes?
+void states(){//语句列*
 	while(sy == IFSY || sy == WHILESY || sy == FORSY || sy == LBPA
 		|| sy == IDEN || sy == SCANFSY || sy == PRINTFSY || sy == RETURNSY || sy == SEMI){
 		state();
 	}
 }
 
-void readstate(){
+void readstate(){//读语句*
 	if(sy != SCANFSY){
 		error();
 	}
@@ -984,7 +971,7 @@ void readstate(){
 	getsym();
 }
 
-void writestate(){
+void writestate(){//写语句*
 	if(sy != PRINTFSY){
 		error();
 	}
@@ -1009,7 +996,7 @@ void writestate(){
 	getsym();
 }
 
-void returnstate(){
+void returnstate(){//返回语句*
 	if(sy != RETURNSY){
 		error();
 	}
