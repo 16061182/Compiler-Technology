@@ -1,0 +1,5 @@
+void func1(int a){
+	printf(a);
+	printf(c);
+	return;
+}

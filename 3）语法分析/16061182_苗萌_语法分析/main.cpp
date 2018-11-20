@@ -118,13 +118,12 @@ char line[LINEL];//±£´æÒ»ÐÐ×Ö·û
 char key[KEYNUM][IDENL];//Ô¤¶¨Òå¹Ø¼ü×Ö±í
 int ksy[KEYNUM]; //Ô¤¶¨Òå¹Ø¼ü×Ö¶ÔÓ¦µÄsymbol
 int sy;
-char id[IDENL];//¹Ø¼ü×Ö×î³¤Õ¼50¸ö×Ö·û
 int inum;//getsym¶ÁÈ¡µÄÊý×Ö
 int printnum = 1;
 
 //符号表相关的变量声明
 symboltab tab;
-char id[IDENL];
+char id[IDENL];//¹Ø¼ü×Ö×î³¤Õ¼50¸ö×Ö·û
 int type;
 int kind;
 int value;
@@ -142,7 +141,7 @@ int indextmp;
 int sytmp;
 
 void error(){
-	printf("error!");
+	printf("error!\n");
 }
 
 void readfile(){
@@ -151,7 +150,7 @@ void readfile(){
             fin >> sourcecode[sourcelenth++];
         }
     }
-    sourcecode[sourcelenth++] = EOF;//末尾加上EOF便于停止
+//    sourcecode[sourcelenth++] = EOF;//末尾加上EOF便于停止
 }
 
 void getch(){
@@ -335,6 +334,32 @@ void getsym(){
 }
 
 //---------------------------------------------------------------------------
+void deccon();
+void defcon();
+void integer();
+void decvar();
+void defvar();
+void deffunct();
+void deffuncf();
+void multistate();
+void paralist();
+void mainfunc();
+void expr();
+void item();
+void factor();
+void state();
+void fuzhistate();
+void tiaojianstate();
+void tiaojian();
+void xunhuanstate();
+void callfunctstate();
+void callfuncfstate();
+void valueparalist();
+void states();
+void readstate();
+void writestate();
+void returnstate();
+
 void program(){//程序*
     if(sy == CONSTSY){
         deccon();
@@ -377,6 +402,7 @@ void program(){//程序*
         }
     }
     mainfunc();
+    printf("it is program\n");
 }
 
 void deccon(){//常量说明*
@@ -391,6 +417,7 @@ void deccon(){//常量说明*
 		}
 		getsym();
 	}
+	printf("it is deccon\n");
 }
 
 void defcon(){//常量定义*
@@ -451,6 +478,7 @@ void defcon(){//常量定义*
 	else{
 		error();
 	}
+	printf("it is defcon\n");
 }
 
 void integer(){//整数*
@@ -474,6 +502,7 @@ void integer(){//整数*
 	else{
 		error();
 	}
+	printf("it is integer\n");
 }
 
 void decvar(){//变量说明*
@@ -487,6 +516,7 @@ void decvar(){//变量说明*
 		}
 		getsym();
 	}
+	printf("it is decvar\n");
 }
 
 void defvar(){//变量定义*
@@ -527,6 +557,7 @@ void defvar(){//变量定义*
 			getsym();
 		}
 	}
+	printf("it is defvar\n");
 }
 
 void deffunct(){//有返回值函数定义*
@@ -566,6 +597,7 @@ void deffunct(){//有返回值函数定义*
 	else{
 		error();
 	}
+	printf("it is deffunct\n");
 }
 
 void deffuncf(){//无返回值函数定义*
@@ -605,6 +637,7 @@ void deffuncf(){//无返回值函数定义*
 	else{
 		error();
 	}
+	printf("it is deffuncf\n");
 }
 
 void multistate(){//语句列*
@@ -615,6 +648,7 @@ void multistate(){//语句列*
 		decvar();
 	}
 	states();
+	printf("it is multistate\n");
 }
 
 void paralist(){//参数表*
@@ -626,7 +660,7 @@ void paralist(){//参数表*
 		error();
 	}
 	getsym();
-	while(sym == COMMA){
+	while(sy == COMMA){
 		getsym();
 		if(sy != INTSY && sy != CHARSY){
 			error();
@@ -637,6 +671,7 @@ void paralist(){//参数表*
 		}
 		getsym();
 	}
+	printf("it is paralist\n");
 }
 
 void mainfunc(){//主函数*
@@ -665,6 +700,7 @@ void mainfunc(){//主函数*
 		error();
 	}
 	getsym();//主函数的末尾，需要考虑
+	printf("it is mainfunc\n");
 }
 
 void expr(){//表达式*
@@ -679,6 +715,7 @@ void expr(){//表达式*
 		getsym();
 		item();
 	}
+	printf("it is expr\n");
 }
 
 void item(){//项*
@@ -687,11 +724,17 @@ void item(){//项*
 		getsym();
 		factor();
 	}
+	printf("it is item\n");
 }
 
 void factor(){//因子*
-	if(sy == IDEN){//根据符号表判断是标识符还是有返回值函数调用
+	if(sy == IDEN){//根据符号表判断是标识符还是有返回值函数调用(这里只是便于测试的简化版本)
+		MARK
 		getsym();
+		if(sy == LPAR){
+			BACK
+			callfunctstate();
+		}
 		if(sy == LBRA){
 			getsym();
 			expr();
@@ -718,11 +761,12 @@ void factor(){//因子*
 	else{
 		error();
 	}
+	printf("it is factor\n");
 }
 
 void state(){//语句*
 	if(sy == IFSY){
-		tioajianstate();
+		tiaojianstate();
 	}
 	else if(sy == WHILESY || sy == FORSY){
 		xunhuanstate();
@@ -778,6 +822,7 @@ void state(){//语句*
 	else{
 		error();
 	}
+	printf("it is state\n");
 }
 
 void fuzhistate(){//赋值语句*
@@ -798,9 +843,10 @@ void fuzhistate(){//赋值语句*
 	}
 	getsym();
 	expr();
+	printf("it is fuzhistate\n");
 }
 
-void tioajianstate(){//条件语句*
+void tiaojianstate(){//条件语句*
 	if(sy != IFSY){
 		error();
 	}
@@ -819,7 +865,7 @@ void tioajianstate(){//条件语句*
 		getsym();
 		state();
 	}
-
+	printf("it is tiaojianstate\n");
 }
 
 void tiaojian(){//条件*
@@ -828,7 +874,7 @@ void tiaojian(){//条件*
 		getsym();
 		expr();
 	}
-
+	printf("it is tiaojian\n");
 }
 
 void xunhuanstate(){//循环语句*
@@ -898,6 +944,7 @@ void xunhuanstate(){//循环语句*
 	else{
 		error();
 	}
+	printf("it is xunhuanstate\n");
 }
 
 void callfunctstate(){//有返回值函数调用语句*
@@ -913,6 +960,7 @@ void callfunctstate(){//有返回值函数调用语句*
 		}
 		getsym();
 	}
+	printf("it is callfunctstate\n");
 }
 
 void callfuncfstate(){//无返回值函数调用语句*
@@ -928,6 +976,7 @@ void callfuncfstate(){//无返回值函数调用语句*
 		}
 		getsym();
 	}
+	printf("it is callfuncfstate\n");
 }
 
 void valueparalist(){//值参数表*
@@ -936,6 +985,7 @@ void valueparalist(){//值参数表*
 		getsym();
 		expr();
 	}
+	printf("it is valueparalist\n");
 }
 
 void states(){//语句列*
@@ -943,6 +993,7 @@ void states(){//语句列*
 		|| sy == IDEN || sy == SCANFSY || sy == PRINTFSY || sy == RETURNSY || sy == SEMI){
 		state();
 	}
+	printf("it is states\n");
 }
 
 void readstate(){//读语句*
@@ -969,6 +1020,7 @@ void readstate(){//读语句*
 		error();
 	}
 	getsym();
+	printf("it is readstate\n");
 }
 
 void writestate(){//写语句*
@@ -994,6 +1046,7 @@ void writestate(){//写语句*
 		error();
 	}
 	getsym();
+	printf("it is writestate\n");
 }
 
 void returnstate(){//返回语句*
@@ -1009,6 +1062,7 @@ void returnstate(){//返回语句*
 		}
 		getsym();
 	}
+	printf("it is returnstate\n");
 }
 
 
@@ -1041,18 +1095,23 @@ void setup(){
 }
 
 int main(){
-	fin.open("16061182_test.txt",ios::in);
+	fin.open("baka.txt",ios::in);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
 	getch();
+	getsym();
+	program(); 
 	//printf("%c",ch);
-	while(ch != EOF){
+//	while(sourceindex < sourcelenth){
 		//getch();
 		//printf("%c",ch);
-		getsym();
-	}
-
+//		getsym();
+		//printf("%d %d\n",sourceindex,sourcelenth);
+		//printf("%d\n",ch);
+//	}
+	//sourcecode[sourcelenth] = EOF;
+	//printf("%d",sourcecode[sourcelenth]);
 
 	fin.close();
 	return 0;
