@@ -55,6 +55,15 @@ using namespace std;
 #define MARK indextmp = sourceindex; sytmp = sy; chtmp = ch;
 #define BACK sourceindex = indextmp; sy = sytmp; ch = chtmp;
 
+#define TYPE_INT 1
+#define TYPE_CHAR 2
+#define TYPE_VOID 3
+#define KIND_CONST 1
+#define KIND_VAR 2
+#define KIND_ARRAY 3
+#define KIND_FUNCT 4
+#define KIND_FUNCF 5
+
 char printsym[SYMNUM][IDENL] = {
 "CONSTSY",//const
 "INTSY",//int
@@ -120,16 +129,21 @@ int ksy[KEYNUM]; //Ô¤¶¨Òå¹Ø¼ü×Ö¶ÔÓ¦µÄsymbol
 int sy;
 int inum;//getsym¶ÁÈ¡µÄÊý×Ö
 int printnum = 1;
+char id0[IDENL];
 
 //符号表相关的变量声明
 symboltab tab;
 char id[IDENL];//¹Ø¼ü×Ö×î³¤Õ¼50¸ö×Ö·û
-int type;
-int kind;
-int value;
-int address;
-int paranum;
-int level;
+int tempintarray[MAXSOURCECODE];//临时保存所有int数组信息
+int tempintindex = 0;
+char tempchararray[MAXSOURCECODE];//临时保存所有char数组信息
+int tempcharindex = 0;
+int integervalue;//保存一个integer值
+int typevalue;//保存当前IDEN的类型int,char,void
+char idvalue[IDENL];//保存当前IDEN的名称（小写）
+int levelvalue;//保存当前层次
+int paranumvalue;//保存当前参数个数
+int funcindex;//当前函数在符号表中的地址
 
 //源代码存储数组及其索引
 char sourcecode[MAXSOURCECODE];
@@ -169,7 +183,7 @@ void getsym(){
 			getch();
 		}while(ch >= 'a'&&ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_' || ch >= '0'&&ch <= '9');
 		id[i] = '\0';
-		char id0[IDENL];
+		//char id0[IDENL];
 		for(i=0;i<strlen(id);i++){
 			if(id[i]>='A'&&id[i]<='Z'){
 			}
@@ -187,7 +201,6 @@ void getsym(){
 		if(found) sy = ksy[i];
 		else sy = IDEN;
 		printf("%d %s %s\n",printnum++,printsym[sy],id);
-
 	}
 	else if(ch == '='){
 		getch();
@@ -362,7 +375,37 @@ void readstate();
 void writestate();
 void returnstate();
 
+void enter(int _type,int _kind,int _value,char *_name,int _level,int _paranum){
+    int index = tab.index;
+    int i;
+    for(i=tab.index - 1;tab.symbols[i].level == _level;i--){
+        if(strcmp(_name,tab.symbols[i].name) == 0){//在当前层中已经定义过
+            printf("IDEN have been declared in the same level");
+            return ;
+        }
+    }
+    tab.symbols[index].type = _type;
+    tab.symbols[index].kind = _kind;
+    tab.symbols[index].value = _value;
+    strcpy(tab.symbols[index].name,_name);
+    tab.symbols[index].address = 0;
+    tab.symbols[index].level = _level;
+    tab.symbols[index].paranum = _paranum;//数组的长度
+    if(_kind == KIND_ARRAY){
+        if(_type == TYPE_INT){
+            tab.symbols[index].address = tempintindex;//该数组第一个参数在tempintarray中的位置
+            tempintindex += _paranum;//预留出空间
+        }
+        else if(_type == TYPE_CHAR){
+            tab.symbols[index].address = tempcharindex;
+            tempcharindex += _paranum;
+        }
+    }
+    tab.index += 1;
+}
+
 void program(){//程序*
+    levelvalue = 0;
     if(sy == CONSTSY){
         deccon();
     }
@@ -428,23 +471,29 @@ void defcon(){//常量定义*
 		if(sy != IDEN){
 			error();
 		}
+		strcpy(idvalue,id0);//获取符号名称
 		getsym();
 		if(sy != BECOM){
 			error();
 		}
 		getsym();
 		integer();
+		enter(TYPE_INT,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+		//paranumvalue ++;//函数参数数量加一
 		while(sy == COMMA){
 			getsym();
 			if(sy != IDEN){
 				error();
 			}
+			strcpy(idvalue,id0);//获取符号名称
 			getsym();
 			if(sy != BECOM){
 				error();
 			}
 			getsym();
 			integer();
+			enter(TYPE_INT,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+			//paranumvalue ++;//函数参数数量加一
 		}
 	}
 	else if(sy == CHARSY){
@@ -452,6 +501,7 @@ void defcon(){//常量定义*
 		if(sy != IDEN){
 			error();
 		}
+		strcpy(idvalue,id0);//获取符号名称
 		getsym();
 		if(sy != BECOM){
 			error();
@@ -460,12 +510,16 @@ void defcon(){//常量定义*
 		if(sy != CCON){
 			error();
 		}
+		integervalue = inum;//获取ASCII码值
+		enter(TYPE_CHAR,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+		//paranumvalue ++;//函数参数数量加一
 		getsym();
 		while(sy == COMMA){
 			getsym();
 			if(sy != IDEN){
 				error();
 			}
+			strcpy(idvalue,id0);//获取符号名称
 			getsym();
 			if(sy != BECOM){
 				error();
@@ -474,6 +528,9 @@ void defcon(){//常量定义*
 			if(sy != CCON){
 				error();
 			}
+			integervalue = inum;//获取ASCII码值
+            enter(TYPE_CHAR,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+            //paranumvalue ++;//函数参数数量加一
 			getsym();
 		}
 	}
@@ -489,6 +546,7 @@ void integer(){//整数*
 		if(sy != ICON){
 			error();
 		}
+		integervalue = inum;//正号
 		getsym();
 	}
 	else if(sy == MINUS){
@@ -496,9 +554,11 @@ void integer(){//整数*
 		if(sy != ICON){
 			error();
 		}
+		integervalue = 0-inum;//负号
 		getsym();
 	}
 	else if(sy == ICON){
+        integervalue = inum;//正号
 		getsym();
 	}
 	else{
@@ -548,38 +608,55 @@ void defvar(){//变量定义*
 	if(sy != INTSY && sy != CHARSY){
 		error();
 	}
+	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型
 	getsym();
 	if(sy != IDEN){
 		error();
 	}
+	strcpy(idvalue,id0);//获取符号名称
 	getsym();
 	if(sy == LBRA){
 		getsym();
 		if(sy != ICON){
 			error();
 		}
+		integervalue = inum;//记录数组元素个数
 		getsym();
 		if(sy != RBRA){
 			error();
 		}
+		enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
+		//paranumvalue ++;//函数参数数量加一
 		getsym();
+	}
+	else{
+        enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
+        //paranumvalue ++;//函数参数数量加一
 	}
 	while(sy == COMMA){
 		getsym();
 		if(sy != IDEN){
 			error();
 		}
+		strcpy(idvalue,id0);//获取符号名称
 		getsym();
 		if(sy == LBRA){
 			getsym();
 			if(sy != ICON){
 				error();
 			}
+			integervalue = inum;//记录数组元素个数
 			getsym();
 			if(sy != RBRA){
 				error();
 			}
+			enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
+			//paranumvalue ++;//函数参数数量加一
 			getsym();
+		}
+		else{
+            enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
+            //paranumvalue ++;//函数参数数量加一
 		}
 	}
 	printf("it is defvar\n");
@@ -589,10 +666,16 @@ void deffunct(){//有返回值函数定义*
 	if(sy != INTSY && sy != CHARSY){//省略声明头部的定义
 		error();
 	}
+	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型
 	getsym();
 	if(sy != IDEN){
 		error();
 	}
+	strcpy(idvalue,id0);//获取符号名称
+	funcindex = tab.index;//获取函数名保存位置
+	enter(typevalue,KIND_FUNCT,0,idvalue,levelvalue,0);//函数名加入符号表
+	paranumvalue = 0;//初始化当前函数所包含的参数个数
+	levelvalue += 1;//层次加一
 	getsym();
 	if(sy == LPAR){
 		getsym();
@@ -600,6 +683,7 @@ void deffunct(){//有返回值函数定义*
 		if(sy != RPAR){
 			error();
 		}
+		tab.symbols[funcindex].paranum = paranumvalue;//记录函数参数的数量
 		getsym();
 		if(sy != LBPA){
 			error();
@@ -609,6 +693,9 @@ void deffunct(){//有返回值函数定义*
 		if(sy != RBPA){
 			error();
 		}
+		//函数结束，退栈
+		tab.index = funcindex + 1;//函数名保留在符号栈中
+		levelvalue --;//层次减一
 		getsym();
 	}
 	else if(sy == LBPA){
@@ -617,6 +704,9 @@ void deffunct(){//有返回值函数定义*
 		if(sy != RBPA){
 			error();
 		}
+        //函数结束，退栈
+		tab.index = funcindex + 1;//函数名保留在符号栈中
+		levelvalue --;//层次减一
 		getsym();
 	}
 	else{
@@ -633,6 +723,11 @@ void deffuncf(){//无返回值函数定义*
 	if(sy != IDEN){
 		error();
 	}
+	strcpy(idvalue,id0);//获取符号名称
+	funcindex = tab.index;//获取函数名保存位置
+	enter(TYPE_VOID,KIND_FUNCF,0,idvalue,levelvalue,0);//加入符号表
+	paranumvalue = 0;//初始化当前函数所包含的参数个数
+	levelvalue += 1;//层次加一
 	getsym();
 	if(sy == LPAR){
 		getsym();
@@ -640,6 +735,7 @@ void deffuncf(){//无返回值函数定义*
 		if(sy != RPAR){
 			error();
 		}
+		tab.symbols[funcindex].paranum = paranumvalue;//记录函数参数的数量
 		getsym();
 		if(sy != LBPA){
 			error();
@@ -649,6 +745,9 @@ void deffuncf(){//无返回值函数定义*
 		if(sy != RBPA){
 			error();
 		}
+		//函数结束，退栈
+		tab.index = funcindex + 1;//函数名保留在符号栈中
+		levelvalue --;//层次减一
 		getsym();
 	}
 	else if(sy == LBPA){
@@ -657,6 +756,9 @@ void deffuncf(){//无返回值函数定义*
 		if(sy != RBPA){
 			error();
 		}
+		//函数结束，退栈
+		tab.index = funcindex + 1;//函数名保留在符号栈中
+		levelvalue --;//层次减一
 		getsym();
 	}
 	else{
@@ -680,20 +782,28 @@ void paralist(){//参数表*
 	if(sy != INTSY && sy != CHARSY){
 		error();
 	}
+	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录参数类型
 	getsym();
 	if(sy != IDEN){
 		error();
 	}
+	strcpy(idvalue,id0);//记录参数名称
+	enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//加入符号表
+	paranumvalue += 1;//记录参数的个数
 	getsym();
 	while(sy == COMMA){
 		getsym();
 		if(sy != INTSY && sy != CHARSY){
 			error();
 		}
+		typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录参数类型
 		getsym();
 		if(sy != IDEN){
 			error();
 		}
+		strcpy(idvalue,id0);//记录参数名称
+		enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//加入符号表
+		paranumvalue++;//参数的个数++
 		getsym();
 	}
 	printf("it is paralist\n");
