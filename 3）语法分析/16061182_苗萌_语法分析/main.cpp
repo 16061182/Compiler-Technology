@@ -412,6 +412,19 @@ void enter(int _type,int _kind,int _value,char *_name,int _level,int _paranum){
     }
 }
 
+int loc(char *_name){//查找符号表，找到返回下标，未找到返回-1
+    int i;
+    int found = 0;
+    for(i=tab.index-1;i>=0;i--){
+        if(strcmp(_name,tab.symbols[i].name) == 0){
+            found = 1;
+            break;
+        }
+    }
+    if(found) return i;
+    else return -1;
+}
+
 /*void clean(int index){//清除符号表项的内容
     tab.symbols[index].type = 0;
     tab.symbols[index].kind = 0;
@@ -897,8 +910,37 @@ void item(){//项*
 }
 
 void factor(){//因子*
-	if(sy == IDEN){//根据符号表判断是标识符还是有返回值函数调用(这里只是便于测试的简化版本)
-		MARK
+	if(sy == IDEN){//根据符号表判断是标识符还是有返回值函数调用
+		strcpy(idvalue,id0);//保存符号名称
+		int location = loc(idvalue);//查找位置
+		if(location >= 0 ){
+            int kind = tab.symbols[location].kind;
+            if(kind == KIND_FUNCT){
+                callfunctstate();
+            }
+            else if(kind == KIND_VAR){
+                getsym();
+            }
+            else if(kind == KIND_ARRAY){
+                getsym();
+                if(sy != LBRA){
+                    error();
+                }
+                getsym();
+                expr();
+                if(sy != RBRA){
+                    error();
+                }
+                getsym();
+            }
+            else{
+                error();
+            }
+		}
+		else{
+            error();//未声明的标识符
+		}
+		/*MARK
 		getsym();
 		if(sy == LPAR){
 			BACK
@@ -911,7 +953,7 @@ void factor(){//因子*
 				error();
 			}
 			getsym();
-		}
+		}*/
 	}
 	else if(sy == LPAR){
 		getsym();
@@ -948,8 +990,32 @@ void state(){//语句*
 		}
 		getsym();
 	}
-	else if(sy == IDEN){//不需要回溯，根据符号表判断!!!
-		MARK
+	else if(sy == IDEN){//根据符号表判断是函数调用还是赋值
+		strcpy(idvalue,id0);//保存符号名称
+		int location = loc(idvalue);//查找位置
+		if(location>=0){
+            int kind = tab.symbols[location].kind;
+            if(kind == KIND_FUNCT){
+                callfunctstate();
+            }
+            else if(kind == KIND_FUNCF){
+                callfuncfstate();
+            }
+            else if(kind == KIND_VAR || kind == KIND_ARRAY){
+                fuzhistate();
+            }
+            else{
+                error();
+            }
+		}
+		else{
+            error();//未声明的标识符
+		}
+		if(sy != SEMI){
+            error();
+		}
+		getsym();
+		/*MARK
 		getsym();
 		if(sy == SEMI || sy == LPAR){//函数调用语句
 			BACK
@@ -962,7 +1028,7 @@ void state(){//语句*
 		if(sy != SEMI){
 			error();
 		}
-		getsym();
+		getsym();*/
 	}
 	else if(sy == SCANFSY){
 		readstate();
@@ -999,7 +1065,7 @@ void fuzhistate(){//赋值语句*
 		error();
 	}
 	getsym();
-	if(sy == LBRA){
+	if(sy == LBRA){//需要查找符号表判断是不是数组
 		getsym();
 		expr();
 		if(sy != RBRA){
