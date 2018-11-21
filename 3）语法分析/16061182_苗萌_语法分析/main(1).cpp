@@ -105,7 +105,7 @@ char printsym[SYMNUM][IDENL] = {
 typedef struct{
     char name[IDENL];//标识符名称
     int type;//标识符类型 1:int 2:char 3:void
-    int kind;//标识符种类 1:const 2:var 3:array 4:funct 5:funcf
+    int kind;//标识符种类 1:const 2:var 3:array 4:func
     int value;//标识符的值
     int address;//数组或函数的入口地址
     int paranum;//函数参数个数或数组大小
@@ -122,7 +122,7 @@ ifstream fin;//Ô´´úÂëÊäÈëÎÄ¼þ
 char ch;//µ±Ç°¶Áµ½µÄ×Ö·û
 int ll = 0;//lenth of current line       LenOfCline
 int cc = 0;//character counter      indexInLine
-int lc = 0;//行计数器（用来打印报错信息）
+int lc = 0;//line counter
 char line[LINEL];//±£´æÒ»ÐÐ×Ö·û
 char key[KEYNUM][IDENL];//Ô¤¶¨Òå¹Ø¼ü×Ö±í
 int ksy[KEYNUM]; //Ô¤¶¨Òå¹Ø¼ü×Ö¶ÔÓ¦µÄsymbol
@@ -144,8 +144,8 @@ char idvalue[IDENL];//保存当前IDEN的名称（小写）
 int levelvalue;//保存当前层次
 int paranumvalue;//保存当前参数个数
 int funcindex;//当前函数在符号表中的地址
-int intarrayindex;//当前函数开始时int数组表的下标
-int chararrayindex;//当前函数开始时char数组表的下标
+int intarrayindex;
+int chararrayindex;
 
 //源代码存储数组及其索引
 char sourcecode[MAXSOURCECODE];
@@ -176,7 +176,6 @@ void getch(){
 
 void getsym(){
 	while(ch == ' '||ch == '\t'||ch == '\n'){
-        if(ch == '\n') lc++;
 		getch();
 	}
 	if(ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_'){
@@ -383,7 +382,7 @@ void enter(int _type,int _kind,int _value,char *_name,int _level,int _paranum){
     int i;
     for(i=tab.index - 1;tab.symbols[i].level == _level;i--){
         if(strcmp(_name,tab.symbols[i].name) == 0){//在当前层中已经定义过
-            cout << _name << " have been declared in the same level" << endl;
+            printf("IDEN have been declared in the same level");
             return ;
         }
     }
@@ -404,24 +403,13 @@ void enter(int _type,int _kind,int _value,char *_name,int _level,int _paranum){
             tempcharindex += _paranum;
         }
     }
+    tab.index += 1;
     char types[4][IDENL] = {"","int","char","void"};
     char kinds[6][IDENL] = {"","const","var","array","funct","funcf"};
-    tab.index += 1;
     for(i=0;i<tab.index;i++){
-        cout << "       type:" << types[tab.symbols[i].type] << " kind:" << kinds[tab.symbols[i].kind] << " value:" << tab.symbols[i].value << " name:" << tab.symbols[i].name << " level:" << tab.symbols[i].level << " paranum:" << tab.symbols[i].paranum << " address:" << tab.symbols[i].address << endl;
-    }
+    	cout << "       type:" << types[tab.symbols[i].type] << " kind:" << kinds[tab.symbols[i].kind] << " value:" << tab.symbols[i].value << " name:" << tab.symbols[i].name << " level:" << tab.symbols[i].level << " paranum:" << tab.symbols[i].paranum << " address:" << tab.symbols[i].address << endl;
+	}
 }
-
-/*void clean(int index){//清除符号表项的内容
-    tab.symbols[index].type = 0;
-    tab.symbols[index].kind = 0;
-    tab.symbols[index].value = 0;
-    strcpy(tab.symbols[index].name,"");
-    tab.symbols[index].address = 0;
-    tab.symbols[index].level = 0;
-    tab.symbols[index].paranum = 0;//数组的长度
-
-}*/
 
 void program(){//程序*
     levelvalue = 0;
@@ -596,8 +584,7 @@ void decvar_extern(){//用于程序中的变量说明（带回溯）
 		defvar();
         if(sy == LPAR){//如果是'('，说明不是var而是有返回值函数
             BACK
-            tab.index --;//符号表回退
-            //printf("after back %c\n",ch);
+            tab.index --;
             break;
         }
 		else if(sy == SEMI){
@@ -693,8 +680,8 @@ void deffunct(){//有返回值函数定义*
 	}
 	strcpy(idvalue,id0);//获取符号名称
 	funcindex = tab.index;//获取函数名保存位置
-	intarrayindex = tempintindex;//获取int数组表下标
-	chararrayindex = tempcharindex;//获取char数组表下标
+	intarrayindex = tempintindex;
+	chararrayindex = tempcharindex;
 	enter(typevalue,KIND_FUNCT,0,idvalue,levelvalue,0);//函数名加入符号表
 	paranumvalue = 0;//初始化当前函数所包含的参数个数
 	levelvalue += 1;//层次加一
@@ -717,8 +704,8 @@ void deffunct(){//有返回值函数定义*
 		}
 		//函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
-		tempintindex = intarrayindex;//int数组表回退
-		tempcharindex = chararrayindex;//char数组表回退
+		tempintindex = intarrayindex;
+		tempcharindex = chararrayindex;
 		levelvalue --;//层次减一
 		getsym();
 	}
@@ -730,8 +717,8 @@ void deffunct(){//有返回值函数定义*
 		}
         //函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
-		tempintindex = intarrayindex;//int数组表回退
-		tempcharindex = chararrayindex;//char数组表回退
+		tempintindex = intarrayindex;
+		tempcharindex = chararrayindex;
 		levelvalue --;//层次减一
 		getsym();
 	}
@@ -751,8 +738,8 @@ void deffuncf(){//无返回值函数定义*
 	}
 	strcpy(idvalue,id0);//获取符号名称
 	funcindex = tab.index;//获取函数名保存位置
-	intarrayindex = tempintindex;//获取int数组表下标
-	chararrayindex = tempcharindex;//获取char数组表下标
+	intarrayindex = tempintindex;
+	chararrayindex = tempcharindex;
 	enter(TYPE_VOID,KIND_FUNCF,0,idvalue,levelvalue,0);//加入符号表
 	paranumvalue = 0;//初始化当前函数所包含的参数个数
 	levelvalue += 1;//层次加一
@@ -775,8 +762,8 @@ void deffuncf(){//无返回值函数定义*
 		}
 		//函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
-		tempintindex = intarrayindex;//int数组表回退
-		tempcharindex = chararrayindex;//char数组表回退
+		tempintindex = intarrayindex;
+		tempcharindex = chararrayindex;
 		levelvalue --;//层次减一
 		getsym();
 	}
@@ -788,8 +775,8 @@ void deffuncf(){//无返回值函数定义*
 		}
 		//函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
-		tempintindex = intarrayindex;//int数组表回退
-		tempcharindex = chararrayindex;//char数组表回退
+		tempintindex = intarrayindex;
+		tempcharindex = chararrayindex;
 		levelvalue --;//层次减一
 		getsym();
 	}
