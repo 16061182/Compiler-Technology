@@ -1,0 +1,76 @@
+# depslib dependency file v1.0
+1542799322 source:d:\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1542799152 d:\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1542799637 d:\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+
+1542799622 d:\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543059165 source:e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1543071485 e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1543071596 e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+
+1543071705 e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543059166 source:e:\git\compiler-technology\4）代码生成\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1543117190 e:\git\compiler-technology\4）代码生成\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1543119756 e:\git\compiler-technology\4）代码生成\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+
+1543133758 e:\git\compiler-technology\4）代码生成\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+

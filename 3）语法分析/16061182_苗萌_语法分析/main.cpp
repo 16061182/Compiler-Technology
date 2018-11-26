@@ -479,7 +479,7 @@ void program(){//程序*
         }
     }
     mainfunc();
-    printf("it is program\n");
+    printf("This is a program\n");
 }
 
 void deccon(){//常量说明*
@@ -494,7 +494,7 @@ void deccon(){//常量说明*
 		}
 		getsym();
 	}
-	printf("it is deccon\n");
+	printf("This is a deccon\n");
 }
 
 void defcon(){//常量定义*
@@ -569,7 +569,7 @@ void defcon(){//常量定义*
 	else{
 		error();
 	}
-	printf("it is defcon\n");
+	printf("This is a defcon\n");
 }
 
 void integer(){//整数*
@@ -596,7 +596,7 @@ void integer(){//整数*
 	else{
 		error();
 	}
-	printf("it is integer\n");
+	printf("This is a integer\n");
 }
 
 void decvar_extern(){//用于程序中的变量说明（带回溯）
@@ -620,7 +620,7 @@ void decvar_extern(){//用于程序中的变量说明（带回溯）
             error();
 		}
 	}
-	printf("it is decvar_extern\n");
+	printf("This is a decvar_extern\n");
 }
 
 void decvar(){//用于语句列中的变量说明*
@@ -634,7 +634,7 @@ void decvar(){//用于语句列中的变量说明*
 		}
 		getsym();
 	}
-	printf("it is decvar\n");
+	printf("This is a decvar\n");
 }
 
 void defvar(){//变量定义*
@@ -692,7 +692,7 @@ void defvar(){//变量定义*
             //paranumvalue ++;//函数参数数量加一
 		}
 	}
-	printf("it is defvar\n");
+	printf("This is a defvar\n");
 }
 
 void deffunct(){//有返回值函数定义*
@@ -751,7 +751,7 @@ void deffunct(){//有返回值函数定义*
 	else{
 		error();
 	}
-	printf("it is deffunct\n");
+	printf("This is a deffunct\n");
 }
 
 void deffuncf(){//无返回值函数定义*
@@ -809,7 +809,7 @@ void deffuncf(){//无返回值函数定义*
 	else{
 		error();
 	}
-	printf("it is deffuncf\n");
+	printf("This is a deffuncf\n");
 }
 
 void multistate(){//语句列*
@@ -820,7 +820,7 @@ void multistate(){//语句列*
 		decvar();
 	}
 	states();
-	printf("it is multistate\n");
+	printf("This is a multistate\n");
 }
 
 void paralist(){//参数表*
@@ -851,7 +851,7 @@ void paralist(){//参数表*
 		paranumvalue++;//参数的个数++
 		getsym();
 	}
-	printf("it is paralist\n");
+	printf("This is a paralist\n");
 }
 
 void mainfunc(){//主函数*
@@ -882,7 +882,7 @@ void mainfunc(){//主函数*
 	}
 	levelvalue --;
 	getsym();//主函数的末尾，需要考虑
-	printf("it is mainfunc\n");
+	printf("This is a mainfunc\n");
 }
 
 void expr(){//表达式*
@@ -897,7 +897,7 @@ void expr(){//表达式*
 		getsym();
 		item();
 	}
-	printf("it is expr\n");
+	printf("This is a expr\n");
 }
 
 void item(){//项*
@@ -906,7 +906,7 @@ void item(){//项*
 		getsym();
 		factor();
 	}
-	printf("it is item\n");
+	printf("This is a item\n");
 }
 
 void factor(){//因子*
@@ -921,6 +921,9 @@ void factor(){//因子*
             else if(kind == KIND_VAR){
                 getsym();
             }
+            else if(kind == KIND_CONST){
+            	getsym();
+			}
             else if(kind == KIND_ARRAY){
                 getsym();
                 if(sy != LBRA){
@@ -972,7 +975,7 @@ void factor(){//因子*
 	else{
 		error();
 	}
-	printf("it is factor\n");
+	printf("This is a factor\n");
 }
 
 void state(){//语句*
@@ -1057,7 +1060,7 @@ void state(){//语句*
 	else{
 		error();
 	}
-	printf("it is state\n");
+	printf("This is a state\n");
 }
 
 void fuzhistate(){//赋值语句*
@@ -1078,7 +1081,7 @@ void fuzhistate(){//赋值语句*
 	}
 	getsym();
 	expr();
-	printf("it is fuzhistate\n");
+	printf("This is a fuzhistate\n");
 }
 
 void tiaojianstate(){//条件语句*
@@ -1100,7 +1103,7 @@ void tiaojianstate(){//条件语句*
 		getsym();
 		state();
 	}
-	printf("it is tiaojianstate\n");
+	printf("This is a tiaojianstate\n");
 }
 
 void tiaojian(){//条件*
@@ -1109,7 +1112,7 @@ void tiaojian(){//条件*
 		getsym();
 		expr();
 	}
-	printf("it is tiaojian\n");
+	printf("This is a tiaojian\n");
 }
 
 void xunhuanstate(){//循环语句*
@@ -1179,7 +1182,7 @@ void xunhuanstate(){//循环语句*
 	else{
 		error();
 	}
-	printf("it is xunhuanstate\n");
+	printf("This is a xunhuanstate\n");
 }
 
 void callfunctstate(){//有返回值函数调用语句*
@@ -1195,7 +1198,7 @@ void callfunctstate(){//有返回值函数调用语句*
 		}
 		getsym();
 	}
-	printf("it is callfunctstate\n");
+	printf("This is a callfunctstate\n");
 }
 
 void callfuncfstate(){//无返回值函数调用语句*
@@ -1211,7 +1214,7 @@ void callfuncfstate(){//无返回值函数调用语句*
 		}
 		getsym();
 	}
-	printf("it is callfuncfstate\n");
+	printf("This is a callfuncfstate\n");
 }
 
 void valueparalist(){//值参数表*
@@ -1220,7 +1223,7 @@ void valueparalist(){//值参数表*
 		getsym();
 		expr();
 	}
-	printf("it is valueparalist\n");
+	printf("This is a valueparalist\n");
 }
 
 void states(){//语句列*
@@ -1228,7 +1231,7 @@ void states(){//语句列*
 		|| sy == IDEN || sy == SCANFSY || sy == PRINTFSY || sy == RETURNSY || sy == SEMI){
 		state();
 	}
-	printf("it is states\n");
+	printf("This is a states\n");
 }
 
 void readstate(){//读语句*
@@ -1255,7 +1258,7 @@ void readstate(){//读语句*
 		error();
 	}
 	getsym();
-	printf("it is readstate\n");
+	printf("This is a readstate\n");
 }
 
 void writestate(){//写语句*
@@ -1281,7 +1284,7 @@ void writestate(){//写语句*
 		error();
 	}
 	getsym();
-	printf("it is writestate\n");
+	printf("This is a writestate\n");
 }
 
 void returnstate(){//返回语句*
@@ -1297,7 +1300,7 @@ void returnstate(){//返回语句*
 		}
 		getsym();
 	}
-	printf("it is returnstate\n");
+	printf("This is a returnstate\n");
 }
 
 
