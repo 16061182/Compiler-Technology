@@ -1,3 +1,4 @@
+//表达式的类型全是int（mips中也没有char类型，变量的类型应该会保存在运行栈中）
 #ifndef YUFAFENXI_H_INCLUDED
 #define YUFAFENXI_H_INCLUDED
 #include<iostream>
@@ -5,6 +6,7 @@
 #include<fstream>
 #include"define.h"
 #include"cifafenxi.h"
+#include"siyuanshi.h"
 using namespace std;
 
 void deccon();
@@ -18,13 +20,13 @@ void deffuncf();
 void multistate();
 void paralist();
 void mainfunc();
-void expr();
-void item();
+int expr();
+int item();
 void factor();
 void state();
 void fuzhistate();
 void tiaojianstate();
-void tiaojian();
+int tiaojian();
 void xunhuanstate();
 void callfunctstate();
 void callfuncfstate();
@@ -167,6 +169,7 @@ void defcon(){//常量定义*
 		getsym();
 		integer();
 		enter(TYPE_INT,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+		entermidcode(CONST,INT,idvalue,"",integervalue,0,0);//登录四元式表
 		while(sy == COMMA){
 			getsym();
 			if(sy != IDEN){
@@ -180,6 +183,7 @@ void defcon(){//常量定义*
 			getsym();
 			integer();
 			enter(TYPE_INT,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+			entermidcode(CONST,INT,idvalue,"",integervalue,0,0);//登录四元式表
 		}
 	}
 	else if(sy == CHARSY){
@@ -196,8 +200,9 @@ void defcon(){//常量定义*
 		if(sy != CCON){
 			error(DEFCON_CCON_ERROR);
 		}
-		integervalue = inum;//获取ASCII码值
-		enter(TYPE_CHAR,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+		//integervalue = inum;//获取ASCII码值
+		enter(TYPE_CHAR,KIND_CONST,inum,idvalue,levelvalue,0);//登录符号表
+		entermidcode(CONST,CHAR,idvalue,"",inum,0,0);//登录四元式表
 		getsym();
 		while(sy == COMMA){
 			getsym();
@@ -213,8 +218,9 @@ void defcon(){//常量定义*
 			if(sy != CCON){
 				error(DEFCON_CCON_ERROR);
 			}
-			integervalue = inum;//获取ASCII码值
-            enter(TYPE_CHAR,KIND_CONST,integervalue,idvalue,levelvalue,0);//登录符号表
+			//integervalue = inum;//获取ASCII码值
+            enter(TYPE_CHAR,KIND_CONST,inum,idvalue,levelvalue,0);//登录符号表
+            entermidcode(CONST,CHAR,idvalue,"",inum,0,0);//登录四元式表
 			getsym();
 		}
 	}
@@ -291,7 +297,8 @@ void defvar(){//变量定义*
 	if(sy != INTSY && sy != CHARSY){
 		error(DEFVAR_TYPE_ERROR);
 	}
-	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型
+	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型（符号表）
+	midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 	getsym();
 	if(sy != IDEN){
 		error(DEFVAR_IDEN_ERROR);
@@ -309,10 +316,12 @@ void defvar(){//变量定义*
 			error(RBRA_LOST_ERROR);
 		}
 		enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
+		entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
 		getsym();
 	}
 	else{
         enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
+        entermidcode(VAR,midtypevalue,idvalue,"",0,0,0);//登录四元式表
 	}
 	while(sy == COMMA){
 		getsym();
@@ -332,10 +341,12 @@ void defvar(){//变量定义*
 				error(RBRA_LOST_ERROR);
 			}
 			enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
+			entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
 			getsym();
 		}
 		else{
             enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
+            entermidcode(VAR,midtypevalue,idvalue,"",0,0,0);//登录四元式表
 		}
 	}
 	printf("This is a defvar\n");
@@ -346,15 +357,18 @@ void deffunct(){//有返回值函数定义*
 		error(DEFFUNCT_TYPE_ERROR);
 	}
 	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型
+	midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 	getsym();
 	if(sy != IDEN){
 		error(DEFFUNCT_NAME_ERROR);
 	}
 	strcpy(idvalue,id0);//获取符号名称
-	funcindex = tab.index;//获取函数名保存位置
-	intarrayindex = tempintindex;//获取int数组表下标
-	chararrayindex = tempcharindex;//获取char数组表下标
+	funcindex = tab.index;//记录函数名保存位置
+	intarrayindex = tempintindex;//记录int数组表下标
+	chararrayindex = tempcharindex;//记录char数组表下标
 	enter(typevalue,KIND_FUNCT,0,idvalue,levelvalue,0);//函数名加入符号表
+	midfuncindex = midtab.index;
+	entermidcode(FUNC,midtypevalue,idvalue,"",0,0,0);//登录四元式表（暂缺paranum）
 	paranumvalue = 0;//初始化当前函数所包含的参数个数
 	levelvalue += 1;//层次加一
 	getsym();
@@ -365,6 +379,7 @@ void deffunct(){//有返回值函数定义*
 			error(RPAR_LOST_ERROR);
 		}
 		tab.symbols[funcindex].paranum = paranumvalue;//记录函数参数的数量
+		midtab.midcodes[midfuncindex].value = paranumvalue;//参数数量计入四元式
 		getsym();
 		if(sy != LBPA){
 			error(LBPA_LOST_ERROR);
@@ -413,6 +428,8 @@ void deffuncf(){//无返回值函数定义*
 	intarrayindex = tempintindex;//获取int数组表下标
 	chararrayindex = tempcharindex;//获取char数组表下标
 	enter(TYPE_VOID,KIND_FUNCF,0,idvalue,levelvalue,0);//加入符号表
+	midfuncindex = midtab.index;
+	entermidcode(FUNC,VOID,idvalue,"",0,0,0);//四元式
 	paranumvalue = 0;//初始化当前函数所包含的参数个数
 	levelvalue += 1;//层次加一
 	getsym();
@@ -423,6 +440,7 @@ void deffuncf(){//无返回值函数定义*
 			error(RPAR_LOST_ERROR);
 		}
 		tab.symbols[funcindex].paranum = paranumvalue;//记录函数参数的数量
+		midtab.midcodes[midfuncindex].value = paranumvalue;//参数数量计入四元式
 		getsym();
 		if(sy != LBPA){
 			error(LBPA_LOST_ERROR);
@@ -474,12 +492,14 @@ void paralist(){//参数表*
 		error(PARALIST_TYPE_ERROR);
 	}
 	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录参数类型
+	midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 	getsym();
 	if(sy != IDEN){
 		error(PARALIST_IDEN_ERROR);
 	}
 	strcpy(idvalue,id0);//记录参数名称
 	enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//加入符号表
+	entermidcode(PARA,midtypevalue,idvalue,"",0,0,0);//四元式
 	paranumvalue += 1;//记录参数的个数
 	getsym();
 	while(sy == COMMA){
@@ -488,12 +508,14 @@ void paralist(){//参数表*
 			error(PARALIST_TYPE_ERROR);
 		}
 		typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录参数类型
+		midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 		getsym();
 		if(sy != IDEN){
 			error(PARALIST_IDEN_ERROR);
 		}
 		strcpy(idvalue,id0);//记录参数名称
 		enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//加入符号表
+		entermidcode(PARA,midtypevalue,idvalue,"",0,0,0);//四元式
 		paranumvalue++;//参数的个数++
 		getsym();
 	}
@@ -517,6 +539,7 @@ void mainfunc(){//主函数*
 		error(RPAR_LOST_ERROR);
 	}
 	getsym();
+	entermidcode(FUNC,VOID,"main","",0,0,0);//主函数加入四元式
 	if(sy != LBPA){
 		error(LBPA_LOST_ERROR);
 	}
@@ -531,28 +554,39 @@ void mainfunc(){//主函数*
 	printf("This is a mainfunc\n");
 }
 
-void expr(){//表达式*
+int expr(){//表达式*
+	int negative = 0;//如果是1，代表第一个项的值需要取反
 	if(sy == PLUS){
 		getsym();
 	}
 	else if(sy == MINUS){
 		getsym();
+		negative = 1;
 	}
-	item();
+	int t1 = item();
 	while(sy == PLUS || sy == MINUS){
 		getsym();
-		item();
+		int t2 = item();
+		midcode_kind kind = (sy == PLUS)?JIA:JIAN;
+		if(negative) entermidcode(kind,INT,"negative","",regno++,t1,t2);
+        else entermidcode(kind,INT,"","",regno++,t1,t2);
 	}
 	printf("This is a expr\n");
+	return regno - 1;
 }
 
-void item(){//项*
+int item(){//项* 返回值是项的值保存的寄存器编号
 	factor();
 	while(sy == TIMES || sy == DIV){
 		getsym();
 		factor();
+        midcode_kind kind = (sy == TIMES)?CHENG:CHU;
+        int t1 = regno - 2;//左操作数寄存器下标
+        int t2 = regno - 1;//右操作数寄存器下标
+		entermidcode(kind,INT,"","",regno++,t1,t2);
 	}
 	printf("This is a item\n");
+	return regno - 1;
 }
 
 void factor(){//因子*
@@ -561,13 +595,20 @@ void factor(){//因子*
 		int location = loc(idvalue);//查找位置
 		if(location >= 0 ){
             int kind = tab.symbols[location].kind;
+            midcode_type midtypevalue = (tab.symbols[location].type == TYPE_INT)?INT:CHAR;//记录因子类型
+            char name[IDENL];
+            strcpy(name,tab.symbols[location].name);//记录因子名称
             if(kind == KIND_FUNCT){
                 callfunctstate();
+                entermidcode(FACTOR_FUNC,midtypevalue,"","",regno++,0,0);//value把0号寄存器的值（函数返回值）保存在regno号寄存器中
             }
             else if(kind == KIND_VAR){
+                entermidcode(FACTOR_VAR,midtypevalue,name,"",regno++,0,0);
                 getsym();
             }
             else if(kind == KIND_CONST){
+                int value = tab.symbols[location].value;//获取常量的值，常量因子直接传值，值记录在t1
+                entermidcode(FACTOR_CON,midtypevalue,"","",regno++,value,0);
             	getsym();
 			}
             else if(kind == KIND_ARRAY){
@@ -576,10 +617,11 @@ void factor(){//因子*
                     error(LBRA_LOST_ERROR);
                 }
                 getsym();
-                expr();
+                int index = expr();//数组下标
                 if(sy != RBRA){
                     error(RBRA_LOST_ERROR);
                 }
+                entermidcode(FACTOR_ARRAY,midtypevalue,name,"",regno++,index,0);
                 getsym();
             }
             else{
@@ -592,17 +634,21 @@ void factor(){//因子*
 	}
 	else if(sy == LPAR){
 		getsym();
-		expr();
+		int index = expr();
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
+		entermidcode(FACTOR_EXPR,INT,"","",regno++,index,0);
 		getsym();
 	}
 	else if(sy == ICON || sy == PLUS || sy == MINUS){
 		integer();
+		entermidcode(FACTOR_CON,INT,"","",regno++,integervalue,0);
 	}
 	else if(sy == CCON){
 		getsym();
+		//此时inum中保存了CCON的ASCII值
+		entermidcode(FACTOR_CON,CHAR,"","",regno++,inum,0);
 	}
 	else{
 		error(FACTOR_ERROR);
@@ -699,20 +745,29 @@ void fuzhistate(){//赋值语句*
 	if(sy != IDEN){
 		error(FUZHISTATE_IDEN_ERROR);
 	}
+	char name[IDENL]; strcpy(name,id0);//记录名称
+	int indexloc = midtab.index;
 	getsym();
+	int flag = 0;//是否写过赋值语句
 	if(sy == LBRA){//需要查找符号表判断是不是数组
 		getsym();
-		expr();
+		int temp = expr();//数组下标
 		if(sy != RBRA){
 			error(RBRA_LOST_ERROR);
 		}
+		//数组元素赋值
+		entermidcode(ASSIGN_ARR,INT,name,"",0,temp,0);//t1记录数组下标的寄存器位置
+		flag = 1;
 		getsym();
 	}
+	//普通变量赋值
+	if(!flag) entermidcode(ASSIGN,INT,name,"",0,0,0);
 	if(sy != BECOM){
 		error(FUZHISTATE_BECOM_ERROR);
 	}
 	getsym();
-	expr();
+	int value = expr();//获得=右侧表达式值
+	midtab.midcodes[indexloc].value = value;
 	printf("This is a fuzhistate\n");
 }
 
@@ -725,26 +780,52 @@ void tiaojianstate(){//条件语句*
 		error(LPAR_LOST_ERROR);
 	}
 	getsym();
-	tiaojian();
+	int relation = tiaojian();//记录关系
 	if(sy != RPAR){
 		error(RPAR_LOST_ERROR);
 	}
+	//生成条件跳转四元式
+	midcode_kind kind;
+	switch(relation){
+	    case LSS : kind = BGEQ; break;// < to >=
+	    case LEQ : kind = BGTR; break;// <= to >
+	    case GTR : kind = BLEQ; break;// > to <=
+	    case GEQ : kind = BLSS; break;// >= to <
+	    case NEQ : kind = BEQ; break;// != to ==
+	    case EQL : kind = BNE; break;// == to !=
+	    default : break;
+	}
+	int indexloc = midtab.index;
+	entermidcode(kind,INT,"","",0,exprregno1,exprregno2);//这里的value是跳转的目标行，应该是state()之后的位置
 	getsym();
 	state();
+    midtab.midcodes[indexloc].value = midtab.index;//写入跳转位置
+    indexloc = midtab.index;
+    entermidcode(JUMP,INT,"","",0,0,0);//value是else的state之后的位置
+
 	if(sy == ELSESY){
 		getsym();
 		state();
 	}
+	midtab.midcodes[indexloc].value = midtab.index;//写入跳转位置
 	printf("This is a tiaojianstate\n");
 }
 
-void tiaojian(){//条件*
-	expr();
+int tiaojian(){//条件*
+	exprregno1 = expr();
+	int relation;
 	if(sy == LSS || sy == LEQ || sy == GTR || sy == GEQ || sy == NEQ || sy == EQL){
+		int relation = sy;
 		getsym();
-		expr();
+		exprregno2 = expr();
+	}
+	else{
+        //expr1 != 0
+        relation = NEQ;
+        exprregno2 = 0;//$zero
 	}
 	printf("This is a tiaojian\n");
+	return relation;//返回条件的类型
 }
 
 void xunhuanstate(){//循环语句*
@@ -754,12 +835,28 @@ void xunhuanstate(){//循环语句*
 			error(LPAR_LOST_ERROR);
 		}
 		getsym();
-		tiaojian();
+		int relation = tiaojian();
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
+		//生成条件跳转四元式
+        midcode_kind kind;
+        switch(relation){
+            case LSS : kind = BGEQ; break;// < to >=
+            case LEQ : kind = BGTR; break;// <= to >
+            case GTR : kind = BLEQ; break;// > to <=
+            case GEQ : kind = BLSS; break;// >= to <
+            case NEQ : kind = BEQ; break;// != to ==
+            case EQL : kind = BNE; break;// == to !=
+            default : break;
+        }
+        int indexloc = midtab.index;
+        entermidcode(kind,INT,"","",0,exprregno1,exprregno2);
 		getsym();
 		state();
+		entermidcode(JUMP,INT,"","",indexloc,0,0);//跳转到while的循环条件
+		//记录jump语句的下一条语句
+		midtab.midcodes[indexloc].value = midtab.index;
 	}
 	else if(sy == FORSY){
 		getsym();
@@ -770,17 +867,26 @@ void xunhuanstate(){//循环语句*
 		if(sy != IDEN){
 			error(XUNHUANSTATE_IDEN_ERROR);
 		}
+		char name[IDENL];
+		strcpy(name,id0);//记录名称
 		getsym();
 		if(sy != BECOM){
 			error(XUNHUANSTATE_BECOM_ERROR);
 		}
 		getsym();
-		expr();
+		int init = expr();
+		//生成赋值语句
+		entermidcode(ASSIGN,INT,name,"",init,0,0);
+		//生成无条件跳转
+		int indexloc = midtab.index;//记录跳转指令的位置
+		entermidcode(JUMP,INT,"","",0,0,0);
 		if(sy != SEMI){
 			error(XUNHUANSTATE_SEMI_ERROR);
 		}
 		getsym();
-		tiaojian();
+		int relation = tiaojian();
+		int expr1 = exprregno1;
+		int expr2 = exprregno2;//记录表达式的值
 		if(sy != SEMI){
 			error(XUNHUANSTATE_SEMI_ERROR);
 		}
@@ -788,6 +894,8 @@ void xunhuanstate(){//循环语句*
 		if(sy != IDEN){
 			error(XUNHUANSTATE_STEP_ERROR);
 		}
+		//char name[IDENL];
+		strcpy(name,id0);//保存标识符名
 		getsym();
 		if(sy != BECOM){
 			error(XUNHUANSTATE_STEP_ERROR);
@@ -800,16 +908,43 @@ void xunhuanstate(){//循环语句*
 		if(sy != PLUS && sy != MINUS){
 			error(XUNHUANSTATE_STEP_ERROR);
 		}
+		midcode_kind kind = (sy == PLUS)?JIA:JIAN;//记录步长变化符号
 		getsym();
 		if(sy != ICON){
 			error(XUNHUANSTATE_STEP_ERROR);
 		}
+		int value = inum;//记录步长的值
 		getsym();
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
+		//记录步长变化语句第一句的位置
+		int stepindexloc = midtab.index;
+		//步长变化语句
+        entermidcode(FACTOR_VAR,INT,name,"",regno++,0,0);//标识符因子读到寄存器
+        entermidcode(FACTOR_CON,INT,"","",regno++,value,0);//步长因子读到寄存器
+        int t1 = regno - 2;
+        int t2 = regno - 1;
+        int out = regno;//记录循环变量的寄存器地址
+        entermidcode(kind,INT,"","",regno++,t1,t2);//计算新的循环变量
+        //记录跳转位置（在步长变化之后，即for语句块的第一句）
+        midtab.midcodes[indexloc].value = midtab.index;
+        /*//记录for语句块第一句位置
+        indexloc = midtab.index;*/
 		getsym();
 		state();
+		//生成条件跳转语句
+        //midcode_kind kind;
+        switch(relation){
+            case LSS : kind = BLSS; break;//< is <
+            case LEQ : kind = BLEQ; break;//
+            case GTR : kind = BGTR; break;//
+            case GEQ : kind = BGEQ; break;//
+            case NEQ : kind = BNE; break;//
+            case EQL : kind = BEQ; break;//
+            default : break;
+        }
+        entermidcode(kind,INT,"","",stepindexloc,expr1,expr2);//跳转到步长变化语句
 	}
 	else{
 		error(XUNHUANSTATE_ERROR);

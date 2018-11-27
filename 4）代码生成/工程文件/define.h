@@ -48,6 +48,7 @@ using namespace std;
 #define MAXINT 2147483647//最大整数
 #define MAXINTN 10//整数长度限制
 #define MAXTAB 500//符号表最大长度
+#define MAXMIDCODETAB 5000//四元式表最大长度
 #define MAXBLK 100//最大分程序数量
 #define MAXSOURCECODE 1000000//读入的源代码的长度限制
 #define MARK indextmp = sourceindex; sytmp = sy; chtmp = ch;
@@ -169,6 +170,53 @@ typedef struct{
     int blockindex[MAXBLK];//block index tab
 }symboltab;
 
+enum midcode_kind{
+    CONST,
+    VAR,
+    ARRAY,
+    FUNC,
+    CALL,
+    PARA,
+    PUSH_CON,
+    PUSH_VAR,
+    ASSIGN,
+    ASSIGN_ARR,
+    JIA,
+    JIAN,
+    CHENG,
+    CHU,
+    FACTOR_CON,
+    FACTOR_VAR,
+    FACTOR_FUNC,
+    FACTOR_ARRAY,
+    FACTOR_EXPR,
+    BEQ,
+    BNE,
+    BGTR,
+    BGEQ,
+    BLSS,
+    BLEQ,
+    JUMP
+};
+enum midcode_type{
+    INT,
+    CHAR,
+    VOID
+};
+typedef struct{
+    midcode_kind kind;//四元式种类标志
+    midcode_type type;//操作数类型
+    char name1[IDENL];//被赋值者的名称
+    char name2[IDENL];//赋值者的名称
+    int value;
+    int t1;//第一个寄存器号
+    int t2;//第二个寄存器号
+}midcode;
+typedef struct{
+    midcode midcodes[MAXMIDCODETAB];
+    int index;
+}midcodetab;
+
 ifstream fin;//Ô´´úÂëÊäÈëÎÄ¼þ
 char ch;//µ±Ç°¶Áµ½µÄ×Ö·û
 int ll = 0;//lenth of current line       LenOfCline
@@ -208,5 +256,15 @@ int indextmp;
 int sytmp;
 char chtmp;
 
+//四元式相关的变量声明
+midcodetab midtab;
+midcode_type midtypevalue;//记录type的临时变量
+int midfuncindex;//记录函数定义四元式位置的临时变量
+int midtiaojian;//记录条件操作符的临时变量
+//int reg1;
+//int reg2;
+int regno = 2;//申请的临时寄存器编号（0号为$zero，1号为函数返回寄存器）
+int exprregno1;//记录表达式值保存的寄存器的下标
+int exprregno2;
 
 #endif // DEFINE_H_INCLUDED
