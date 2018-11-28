@@ -33,7 +33,7 @@ void getsym(){
 		do{
 			id[i++] = ch;
 			getch();
-		}while((ch >= 'a'&&ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch >= '0'&&ch <= '9');
+		}while((ch >= 'a'&&ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' ||( ch >= '0'&&ch <= '9'));
 		id[i] = '\0';
 		for(i=0;i<strlen(id);i++){
 			if(id[i]>='A'&&id[i]<='Z'){
@@ -164,7 +164,7 @@ void getsym(){
 	}
 	else if(ch == '\"'){
 		getch();
-		char str[LINEL];
+		//char str[LINEL];
 		int i = 0;
 		while(ch >= 32&&ch <= 126&&ch != 34&&i < LINEL){
 			str[i++] = ch;

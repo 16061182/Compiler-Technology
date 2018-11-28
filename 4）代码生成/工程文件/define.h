@@ -116,6 +116,15 @@ using namespace std;
 #define RETURNSTATE_RETURN_ERROR 49 //返回语句开头不是return
 #define IDEN_KIND_ERROR 50 //标识符种类错误（用于factor和state）
 #define PROGRAM_IDEN_ERROR 51
+#define FUNC_NOTFOUND_ERROR 52//未声明的函数
+#define IDEN_REDEFINE 53//标识符重定义
+#define IDEN_NOT_ARRAY 54//标识符不是数组名（本应是数组名）
+#define IDEN_NOT_VAR 55
+#define IDEN_NOT_CONST 56
+#define IDEN_NOT_FUNCT 57
+#define IDEN_NOT_FUNCF 58
+#define BECOM_NOT_MATCH 59//赋值语句左右两侧类型不同
+#define IDEN_NOT_VARORCONST 60
 char printsym[SYMNUM][IDENL] = {
 "CONSTSY",//const
 "INTSY",//int
@@ -177,8 +186,7 @@ enum midcode_kind{
     FUNC,
     CALL,
     PARA,
-    PUSH_CON,
-    PUSH_VAR,
+    PUSH,
     ASSIGN,
     ASSIGN_ARR,
     JIA,
@@ -196,12 +204,16 @@ enum midcode_kind{
     BGEQ,
     BLSS,
     BLEQ,
-    JUMP
+    JUMP,
+    READ,
+    WRITE,
+    RETURN
 };
 enum midcode_type{
     INT,
     CHAR,
-    VOID
+    VOID,
+    STR
 };
 typedef struct{
     midcode_kind kind;//四元式种类标志
@@ -229,6 +241,7 @@ int sy;
 int inum;//getsym¶ÁÈ¡µÄÊý×Ö
 int printnum = 1;
 char id0[IDENL];
+char str[LINEL];
 
 //符号表相关的变量声明
 symboltab tab;
@@ -245,6 +258,12 @@ int paranumvalue;//保存当前参数个数
 int funcindex;//当前函数在符号表中的地址
 int intarrayindex;//当前函数开始时int数组表的下标
 int chararrayindex;//当前函数开始时char数组表的下标
+int exprtype;//表达式类型特征值，1代表类型是char，其他代表类型是int
+int exprlevel;//表达式嵌套层数
+/*int firstfactorflag;//第一个因子flag，为0的话表达式未读到第1个因子，为1的话表达式已经读到第1个因子
+int factorsum;//一个表达式中的因子数量
+int firstfactortype;//第一个因子的type，分为TYPE_INT和TYPE_CHAR
+int exprlevel;//表达式嵌套层数*/
 
 //源代码存储数组及其索引
 char sourcecode[MAXSOURCECODE];
@@ -264,7 +283,20 @@ int midtiaojian;//记录条件操作符的临时变量
 //int reg1;
 //int reg2;
 int regno = 2;//申请的临时寄存器编号（0号为$zero，1号为函数返回寄存器）
+int pararegno = 0;//保存函数调用传入参数的寄存器组
 int exprregno1;//记录表达式值保存的寄存器的下标
 int exprregno2;
+
+void initexprtype(){//初始化特征值
+    exprtype = 0;
+    exprlevel = 0;
+}
+int getexprtype(){//根据特征值获取表达式类型
+    if(exprlevel > 1) return TYPE_INT;
+    else{
+        if(exprtype == 1) return TYPE_CHAR;
+        else return TYPE_INT;
+    }
+}
 
 #endif // DEFINE_H_INCLUDED
