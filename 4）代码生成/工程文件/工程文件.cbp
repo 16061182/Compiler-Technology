@@ -35,6 +35,7 @@
 		<Unit filename="cifafenxi.h" />
 		<Unit filename="define.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="mips.h" />
 		<Unit filename="siyuanshi.h" />
 		<Unit filename="yufafenxi.h" />
 		<Extensions>

@@ -4,6 +4,8 @@
 (2)#判断语句是函数调用语句还是赋值语句时，可以直接根据符号表中的参数名来判断。若此语句所在模块中，
 	#在此语句之前有该IDEN的声明和赋值操作，那么即使定义了该IDEN函数，仍把同一模块中后面所有的IDEN视为变量而不是函数名（c语言特性）
 (3)报错：数组赋值越界报错
+(4)测试代码中没有（<表达式>）的出现
+(5)测试代码中没有 外部变量因子、赋值、读的出现，需要构建外部变量表
 */
 
 /*文法细节解读
@@ -33,6 +35,8 @@ c语言语法细节解读
 #include<fstream>
 #include"define.h"
 #include"yufafenxi.h"
+#include"siyuanshi.h"
+#include"mips.h"
 using namespace std;
 
 void setup(){
@@ -65,12 +69,26 @@ void setup(){
 
 int main(){
 	fin.open("16061182_test.txt",ios::in);
+	fout.open("16061182_result.asm",ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
 	getch();
 	getsym();
 	program();
+
+	print_str_con();
+	cout << "--------------------" << endl;
+	cout << get_firstpara("getint") << "    " << get_funcend("getint") << endl;
+	cout << get_firstpara("getcha") << "    " << get_funcend("getcha") << endl;
+	cout << get_firstpara("print1") << "    " << get_funcend("print1") << endl;
+	cout << get_firstpara("print2") << "    " << get_funcend("print2") << endl;
+	cout << get_firstpara("main") << "    " << get_funcend("main") << endl;
+	cout << get_para_offset("print1","c",0) << endl;
+	cout << get_para_offset("print1","var2",7) << endl;
+	cout << get_para_offset("main","o",0) << endl;
+	cout << para_offsets[0].name << "   " << para_offsets[1].name << endl;
+	generatemips();
 
 	fin.close();
 	return 0;

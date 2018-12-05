@@ -1,0 +1,288 @@
+0  CONST INT con1 = 0
+1  VAR INT var1
+2  FUNC INT getint(1)
+3  PARA INT i
+4  FACTOR_VAR INT i save in reg[1]
+5  FACTOR_CON INT 1 save in reg[2]
+6  IF reg[1] BGEQ reg[2] THEN GOTO label_0
+7  FACTOR_CON INT 0 save in reg[3]
+8  RETURN reg[3] TO $V0 AND THEN GOTO 0
+9  JUMP to label_1
+10  label_0    ----------------Label----------------
+11  label_1    ----------------Label----------------
+12  FACTOR_VAR INT i save in reg[4]
+13  FACTOR_CON INT 1 save in reg[5]
+14  IF reg[4] BNE reg[5] THEN GOTO label_2
+15  FACTOR_CON INT 0 save in reg[6]
+16  RETURN reg[6] TO $V0 AND THEN GOTO 0
+17  JUMP to label_3
+18  label_2    ----------------Label----------------
+19  label_3    ----------------Label----------------
+20  FACTOR_VAR INT i save in reg[7]
+21  FACTOR_CON INT 2 save in reg[8]
+22  IF reg[7] BNE reg[8] THEN GOTO label_4
+23  FACTOR_CON INT 1 save in reg[9]
+24  RETURN reg[9] TO $V0 AND THEN GOTO 0
+25  JUMP to label_5
+26  label_4    ----------------Label----------------
+27  label_5    ----------------Label----------------
+28  FACTOR_VAR INT i save in reg[10]
+29  FACTOR_CON INT 1 save in reg[11]
+30  reg[11] = reg[10] JIAN reg[11]
+31  PUSH INT parareg[0] from reg[11]
+32  CALL INT getint(1)
+33  FACTOR_FUNC INT getint save in reg[11]
+34  FACTOR_VAR INT i save in reg[12]
+35  FACTOR_CON INT 2 save in reg[13]
+36  reg[13] = reg[12] JIAN reg[13]
+37  PUSH INT parareg[1] from reg[13]
+38  CALL INT getint(1)
+39  FACTOR_FUNC INT getint save in reg[13]
+40  reg[13] = reg[11] JIA reg[13]
+41  RETURN reg[13] TO $V0 AND THEN GOTO 0
+42  FUNC CHAR getcha(0)
+43  CONST CHAR c = 97
+44  FACTOR_CON CHAR 97 save in reg[1]
+45  RETURN reg[1] TO $V0 AND THEN GOTO 0
+46  FUNC VOID print1(3)
+47  PARA INT i
+48  PARA INT j
+49  PARA CHAR c
+50  VAR CHAR var1
+51  VAR INT num
+52  VAR INT count
+53  ARRAY INT var2[8]
+54  FACTOR_CON CHAR 97 save in reg[1]
+55  ASSIGN CHAR var1 = reg[1]
+56  FACTOR_CON INT 0 save in reg[2]
+57  ASSIGN INT num = reg[2]
+58  FACTOR_CON INT 0 save in reg[3]
+59  ASSIGN INT count = reg[3]
+60  FACTOR_CON INT 0 save in reg[4]
+61  FACTOR_CON INT 1 save in reg[5]
+62  ASSIGN_ARR INT var2[reg[4]] = reg[5]
+63  FACTOR_CON INT 1 save in reg[6]
+64  FACTOR_VAR INT i save in reg[7]
+65  FACTOR_VAR INT j save in reg[8]
+66  reg[8] = reg[7] JIAN reg[8]
+67  ASSIGN_ARR INT var2[reg[6]] = reg[8]
+68  FACTOR_CON INT 1 save in reg[9]
+69  FACTOR_ARRAY INT var2 [reg[9]] save in reg[10]
+70  IF reg[10] BEQ reg[0] THEN GOTO label_6
+71  WRITE var2[1] is true
+72  JUMP to label_7
+73  label_6    ----------------Label----------------
+74  label_7    ----------------Label----------------
+75  FACTOR_VAR INT i save in reg[11]
+76  FACTOR_VAR INT j save in reg[12]
+77  IF reg[11] BGEQ reg[12] THEN GOTO label_8
+78  FACTOR_VAR INT num save in reg[13]
+79  FACTOR_CON INT 1 save in reg[14]
+80  reg[14] = reg[13] JIA reg[14]
+81  ASSIGN INT num = reg[14]
+82  JUMP to label_9
+83  label_8    ----------------Label----------------
+84  FACTOR_VAR INT num save in reg[15]
+85  FACTOR_CON INT 1 save in reg[16]
+86  reg[16] = reg[15] JIAN reg[16]
+87  ASSIGN INT num = reg[16]
+88  label_9    ----------------Label----------------
+89  FACTOR_VAR INT i save in reg[17]
+90  FACTOR_VAR INT j save in reg[18]
+91  IF reg[17] BLEQ reg[18] THEN GOTO label_10
+92  FACTOR_CON INT 2 save in reg[19]
+93  FACTOR_CON INT 1 save in reg[20]
+94  ASSIGN_ARR INT var2[reg[19]] = reg[20]
+95  JUMP to label_11
+96  label_10    ----------------Label----------------
+97  label_11    ----------------Label----------------
+98  FACTOR_VAR INT i save in reg[21]
+99  FACTOR_VAR INT j save in reg[22]
+100  IF reg[21] BEQ reg[22] THEN GOTO label_12
+101  FACTOR_CON INT 3 save in reg[23]
+102  FACTOR_CON INT 1 save in reg[24]
+103  ASSIGN_ARR INT var2[reg[23]] = reg[24]
+104  JUMP to label_13
+105  label_12    ----------------Label----------------
+106  label_13    ----------------Label----------------
+107  FACTOR_CON INT 0 save in reg[25]
+108  FACTOR_ARRAY INT var2 [reg[25]] save in reg[26]
+109  FACTOR_CON INT 1 save in reg[27]
+110  FACTOR_ARRAY INT var2 [reg[27]] save in reg[28]
+111  reg[28] = reg[26] CHENG reg[28]
+112  IF reg[28] BEQ reg[0] THEN GOTO label_14
+113  FACTOR_CON INT 4 save in reg[29]
+114  FACTOR_CON INT 1 save in reg[30]
+115  ASSIGN_ARR INT var2[reg[29]] = reg[30]
+116  JUMP to label_15
+117  label_14    ----------------Label----------------
+118  label_15    ----------------Label----------------
+119  FACTOR_CON INT 100 save in reg[31]
+120  FACTOR_CON CHAR 97 save in reg[32]
+121  reg[32] = reg[31] CHU reg[32]
+122  FACTOR_VAR INT i save in reg[33]
+123  reg[33] = reg[32] CHU reg[33]
+124  IF reg[33] BEQ reg[0] THEN GOTO label_16
+125  FACTOR_CON INT 5 save in reg[34]
+126  FACTOR_CON INT 1 save in reg[35]
+127  ASSIGN_ARR INT var2[reg[34]] = reg[35]
+128  JUMP to label_17
+129  label_16    ----------------Label----------------
+130  label_17    ----------------Label----------------
+131  FACTOR_VAR INT i save in reg[36]
+132  FACTOR_CON INT 0 save in reg[37]
+133  reg[37] = reg[37] JIAN reg[36]
+134  FACTOR_VAR INT j save in reg[38]
+135  reg[38] = reg[37] JIA reg[38]
+136  IF reg[38] BEQ reg[0] THEN GOTO label_18
+137  FACTOR_CON INT 6 save in reg[39]
+138  FACTOR_CON INT 1 save in reg[40]
+139  ASSIGN_ARR INT var2[reg[39]] = reg[40]
+140  JUMP to label_19
+141  label_18    ----------------Label----------------
+142  label_19    ----------------Label----------------
+143  FACTOR_VAR CHAR c save in reg[41]
+144  FACTOR_CON CHAR 65 save in reg[42]
+145  reg[42] = reg[41] JIAN reg[42]
+146  IF reg[42] BEQ reg[0] THEN GOTO label_20
+147  FACTOR_CON INT 7 save in reg[43]
+148  FACTOR_CON INT 1 save in reg[44]
+149  ASSIGN_ARR INT var2[reg[43]] = reg[44]
+150  JUMP to label_21
+151  label_20    ----------------Label----------------
+152  label_21    ----------------Label----------------
+153  label_22    ----------------Label----------------
+154  FACTOR_VAR INT i save in reg[45]
+155  FACTOR_CON INT 0 save in reg[46]
+156  IF reg[45] BLEQ reg[46] THEN GOTO label_23
+157  FACTOR_VAR INT i save in reg[47]
+158  FACTOR_CON INT 1 save in reg[48]
+159  reg[48] = reg[47] JIAN reg[48]
+160  ASSIGN INT i = reg[48]
+161  JUMP to label_22
+162  label_23    ----------------Label----------------
+163  FACTOR_CON INT 5 save in reg[49]
+164  ASSIGN INT i = reg[49]
+165  JUMP to label_25
+166  label_24    ----------------Label----------------
+167  FACTOR_VAR INT i save in reg[50]
+168  FACTOR_CON INT 1 save in reg[51]
+169  reg[51] = reg[50] JIAN reg[51]
+170  ASSIGN INT i = reg[51]
+171  FACTOR_VAR INT i save in reg[52]
+172  FACTOR_CON INT 0 save in reg[53]
+173  IF reg[52] BLEQ reg[53] THEN GOTO label_26
+174  label_25    ----------------Label----------------
+175  FACTOR_VAR INT count save in reg[54]
+176  FACTOR_CON INT 1 save in reg[55]
+177  reg[55] = reg[54] JIA reg[55]
+178  ASSIGN INT count = reg[55]
+179  JUMP to label_24
+180  label_26    ----------------Label----------------
+181  FACTOR_CON INT 0 save in reg[56]
+182  ASSIGN INT i = reg[56]
+183  JUMP to label_28
+184  label_27    ----------------Label----------------
+185  FACTOR_VAR INT i save in reg[57]
+186  FACTOR_CON INT 1 save in reg[58]
+187  reg[58] = reg[57] JIA reg[58]
+188  ASSIGN INT i = reg[58]
+189  FACTOR_VAR INT i save in reg[59]
+190  FACTOR_CON INT 5 save in reg[60]
+191  IF reg[59] BGEQ reg[60] THEN GOTO label_29
+192  label_28    ----------------Label----------------
+193  FACTOR_VAR INT count save in reg[61]
+194  FACTOR_CON INT 1 save in reg[62]
+195  reg[62] = reg[61] JIA reg[62]
+196  ASSIGN INT count = reg[62]
+197  JUMP to label_27
+198  label_29    ----------------Label----------------
+199  FACTOR_VAR INT count save in reg[63]
+200  WRITE INT reg[63]
+201  RETURN reg[0] TO $V0 AND THEN GOTO 0
+202  FUNC VOID print2(0)
+203  CONST INT i = 1
+204  VAR INT j
+205  WRITE print2 called
+206  RETURN reg[0] TO $V0 AND THEN GOTO 0
+207  FUNC VOID main(0)
+208  CONST INT a = 1
+209  CONST INT a0b1c2d3e4 = -233
+210  CONST INT f5g6h7i8j9 = 3072
+211  CONST CHAR klmn = 43
+212  CONST CHAR opq = 45
+213  CONST CHAR rst = 42
+214  CONST CHAR uvw = 47
+215  CONST CHAR x = 97
+216  CONST CHAR y_z = 48
+217  VAR INT abcd
+218  VAR CHAR cha1
+219  VAR CHAR cha2
+220  ARRAY CHAR efg[10]
+221  VAR INT hijk
+222  ARRAY INT lmn[5]
+223  VAR INT o
+224  ARRAY INT p[20]
+225  FACTOR_CON INT 0 save in reg[1]
+226  FACTOR_CON INT 0 save in reg[2]
+227  ASSIGN_ARR INT lmn[reg[1]] = reg[2]
+228  FACTOR_CON INT 1 save in reg[3]
+229  FACTOR_CON INT 1 save in reg[4]
+230  ASSIGN_ARR INT lmn[reg[3]] = reg[4]
+231  FACTOR_CON INT 2 save in reg[5]
+232  FACTOR_CON INT 2 save in reg[6]
+233  ASSIGN_ARR INT lmn[reg[5]] = reg[6]
+234  READ INT abcd
+235  READ INT hijk
+236  READ INT o
+237  READ CHAR cha1
+238  READ CHAR cha2
+239  WRITE result1 =
+240  FACTOR_CON INT 0 save in reg[7]
+241  FACTOR_ARRAY INT lmn [reg[7]] save in reg[8]
+242  PUSH INT parareg[2] from reg[8]
+243  CALL INT getint(1)
+244  FACTOR_FUNC INT getint save in reg[8]
+245  FACTOR_CON INT 1 save in reg[9]
+246  FACTOR_ARRAY INT lmn [reg[9]] save in reg[10]
+247  PUSH INT parareg[3] from reg[10]
+248  CALL INT getint(1)
+249  FACTOR_FUNC INT getint save in reg[10]
+250  reg[10] = reg[8] JIA reg[10]
+251  FACTOR_CON INT 2 save in reg[11]
+252  FACTOR_ARRAY INT lmn [reg[11]] save in reg[12]
+253  PUSH INT parareg[4] from reg[12]
+254  CALL INT getint(1)
+255  FACTOR_FUNC INT getint save in reg[12]
+256  reg[12] = reg[10] JIA reg[12]
+257  WRITE INT reg[12]
+258  WRITE the 10th Fibonacci number is
+259  FACTOR_VAR INT abcd save in reg[13]
+260  PUSH INT parareg[5] from reg[13]
+261  CALL INT getint(1)
+262  FACTOR_FUNC INT getint save in reg[13]
+263  WRITE INT reg[13]
+264  CALL CHAR getcha(0)
+265  FACTOR_VAR INT hijk save in reg[14]
+266  FACTOR_VAR INT o save in reg[15]
+267  FACTOR_VAR CHAR cha1 save in reg[16]
+268  PUSH INT parareg[6] from reg[14]
+269  PUSH INT parareg[7] from reg[15]
+270  PUSH INT parareg[8] from reg[16]
+271  CALL VOID print1(3)
+272  FACTOR_VAR INT o save in reg[17]
+273  FACTOR_VAR INT hijk save in reg[18]
+274  FACTOR_VAR CHAR cha1 save in reg[19]
+275  PUSH INT parareg[9] from reg[17]
+276  PUSH INT parareg[10] from reg[18]
+277  PUSH INT parareg[11] from reg[19]
+278  CALL VOID print1(3)
+279  FACTOR_VAR INT hijk save in reg[20]
+280  FACTOR_VAR INT hijk save in reg[21]
+281  FACTOR_VAR CHAR cha2 save in reg[22]
+282  PUSH INT parareg[12] from reg[20]
+283  PUSH INT parareg[13] from reg[21]
+284  PUSH INT parareg[14] from reg[22]
+285  CALL VOID print1(3)
+286  CALL VOID print2(0)
+287  RETURN reg[0] TO $V0 AND THEN GOTO 0

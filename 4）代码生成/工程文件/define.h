@@ -2,6 +2,7 @@
 #define DEFINE_H_INCLUDED
 #include<iostream>
 #include<string.h>
+#include<stdlib.h>
 #include<fstream>
 using namespace std;
 
@@ -53,6 +54,10 @@ using namespace std;
 #define MAXSOURCECODE 1000000//读入的源代码的长度限制
 #define MARK indextmp = sourceindex; sytmp = sy; chtmp = ch;
 #define BACK sourceindex = indextmp; sy = sytmp; ch = chtmp;
+#define MAXYUNXINGZHAN 1000//运行栈的大小限制
+#define MAXFUNC 1000//函数个数限制
+#define MAXPARA 1000//参数表长度限制
+#define MAXVALUEPARA 50
 
 #define TYPE_INT 1
 #define TYPE_CHAR 2
@@ -175,9 +180,79 @@ typedef struct{
 typedef struct{
     symbol symbols[MAXTAB];//symbol tab
     int index;
-    int totalblock;//total number of blocks
-    int blockindex[MAXBLK];//block index tab
+    /*int totalblock;//total number of blocks
+    int blockindex[MAXBLK];//block index tab*/
 }symboltab;
+
+typedef struct{
+    char name[IDENL];//函数参数的名称
+    int offset;//相对于函数头的偏移（从0开始，最小单位为4）
+    int nextoffset;//下一个参数相对于函数头的偏移
+}para_offset;//偏移量表的表项
+int current_offset;//相对于当前函数的偏移
+para_offset para_offsets[MAXPARA];//参数表
+int para_offsets_index;//参数表索引
+void enter_para(char *_name,int _size){//添加参数表
+    strcpy(para_offsets[para_offsets_index].name,_name);
+    para_offsets[para_offsets_index].offset = current_offset;
+    current_offset -= _size * 4;//更新当前函数内偏移
+    para_offsets[para_offsets_index].nextoffset = current_offset;
+    para_offsets_index ++;
+}
+
+char func_names[MAXFUNC][IDENL];//函数名表
+int func_firstpara[MAXFUNC];//函数对应的第一个参数在参数表中的位置
+int func_index;//函数表索引
+void enter_func(char *_name){//添加函数表
+    strcpy(func_names[func_index],_name);
+    func_firstpara[func_index] = para_offsets_index;//第一个参数在表中的位置
+    func_index ++;
+    current_offset = 0;//当前函数内偏移清零
+}
+int get_firstpara(char *_name){//根据函数名获取第一个参数的位置
+    int i;
+    for(i=0;i<func_index;i++){
+        if(strcmp(_name,func_names[i]) == 0){
+            break;
+        }
+    }
+    return func_firstpara[i];
+}
+int get_funcend(char *_name){//获取寄存器在栈中开始的位置
+    int i;
+    for(i=0;i<func_index;i++){
+        if(strcmp(_name,func_names[i]) == 0){
+            break;
+        }
+    }
+    if(func_firstpara[i] != func_firstpara[i+1]){//有参数
+        int ans = func_firstpara[i+1] - 1;
+        return para_offsets[ans].nextoffset + 4;//因为四元式中的寄存器号从1开始
+    }
+    else{//无参数
+        return 4;//为了防止没有参数时占用下一个函数第一个参数的空间（如果是0的话）
+    }
+}
+int get_para_offset(char *_funcname,char *_paraname,int _paraindex){//获取某个特定参数的具体偏移，paraindex是数组的下标
+    int loc = get_firstpara(_funcname);
+    for(;;loc++){
+        if(strcmp(para_offsets[loc].name,_paraname) == 0){//找到参数名
+            break;
+        }
+    }
+    int outcome = para_offsets[loc].offset - 4*_paraindex;
+    return outcome;
+}
+
+void print_func(){//打印函数表和参数表
+    int i,j;
+    for(i=0;i<func_index-1;i++){//遍历函数表
+        cout << func_names[i] << endl;
+        for(j=func_firstpara[i];j<func_firstpara[i+1];j++){//遍历参数表
+            cout << "       name : " << para_offsets[j].name << "      offset : " << para_offsets[j].offset << endl;
+        }
+    }
+}
 
 enum midcode_kind{
     CONST,
@@ -207,7 +282,8 @@ enum midcode_kind{
     JUMP,
     READ,
     WRITE,
-    RETURN
+    RETURN,
+    LABEL
 };
 enum midcode_type{
     INT,
@@ -230,6 +306,7 @@ typedef struct{
 }midcodetab;
 
 ifstream fin;//Ô´´úÂëÊäÈëÎÄ¼þ
+ofstream fout;//mips代码输出文件
 char ch;//µ±Ç°¶Áµ½µÄ×Ö·û
 int ll = 0;//lenth of current line       LenOfCline
 int cc = 0;//character counter      indexInLine
@@ -282,7 +359,7 @@ int midfuncindex;//记录函数定义四元式位置的临时变量
 int midtiaojian;//记录条件操作符的临时变量
 //int reg1;
 //int reg2;
-int regno = 2;//申请的临时寄存器编号（0号为$zero，1号为函数返回寄存器）
+int regno = 1;//申请的临时寄存器编号（0号为$zero，1号为函数返回寄存器）
 int pararegno = 0;//保存函数调用传入参数的寄存器组
 int exprregno1;//记录表达式值保存的寄存器的下标
 int exprregno2;
@@ -298,5 +375,78 @@ int getexprtype(){//根据特征值获取表达式类型
         else return TYPE_INT;
     }
 }
+
+//获取标签名称
+int labelno;
+char *getlabel(){
+    int i = labelno++;
+    char str[IDENL];
+    itoa(i,str,10);
+    char lab[IDENL] = {'l','a','b','e','l','_'};
+    strcat(lab,str);
+    return lab;
+}
+
+//外部全局变量记录
+typedef struct{
+    char name[IDENL];
+    int offset;
+}extern_var;
+extern_var extern_vars[MAXTAB];
+int extern_var_index;
+int extern_var_offset;//在mips堆中的偏移
+//添加外部全局变量
+void enter_extern_var(char *_name,int _size){
+    strcpy(extern_vars[extern_var_index].name,_name);
+    extern_vars[extern_var_index].offset = extern_var_offset;
+    extern_var_offset += 4*_size;
+    extern_var_index++;
+}
+
+//字符串常量记录
+char str_cons[MAXTAB][LINEL];//字符串常量数组
+int str_con_index;//下标
+void enter_str_con(char *_content){
+    int i;
+    for(i=0;i<str_con_index;i++){
+        if(strcmp(str_cons[i],_content) == 0){//已经存在该字符串
+            return ;
+        }
+    }
+    strcpy(str_cons[str_con_index],_content);
+    str_con_index ++;
+}
+int find_str_con(char *_content){//查找字符串的位置
+    int i;
+    for(i=0;i<str_con_index;i++){
+        if(strcmp(str_cons[i],_content) == 0){
+            break;
+        }
+    }
+    return i;
+}
+void print_str_con(){
+    int i;
+    for(i=0;i<str_con_index;i++){
+        cout << str_cons[i] << endl;
+    }
+}
+/*typedef struct{
+    char content[LINEL];
+    int offset;
+}str_con;
+str_con str_cons[MAXTAB];//字符串常量表
+int str_con_index;
+//int str_con_offset;
+void enter_str_con(char *_content){
+    strcpy(str_cons[str_con_index].content,_content);
+    //str_cons[str_con_index].offset = str_con_offset;
+    //offset位移用记录吗？//不用记录，因为字符串常量不会被赋值
+    str_con_index ++;
+}*/
+
+//值参数表（值参数的寄存器号）（用来改四元式输出顺序）
+int value_paras[MAXVALUEPARA];
+int value_para_index;
 
 #endif // DEFINE_H_INCLUDED

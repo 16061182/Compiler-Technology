@@ -1,0 +1,42 @@
+样例1
+输入：
+12 32 97 12 32 55
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = 4####leq_a  _0131346####hhh!####15####
+
+样例2
+输入：
+0 0 98 0 0 0
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = -188####lss_c _0131346####hhh!####15####
+
+样例3
+输入：
+5 4 99 3 2 1
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = 1####neq_e  _0131346####hhh!####15####
+
+样例4
+输入：
+0 0 100 0 0 0
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = -188####eq_d _0131346####hhh!####15####
+
+样例5
+输入：
+0 0 101 0 0 0
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = -188####is e!!_0131346####hhh!####15####
+
+样例6
+输入：
+0 0 102 0 0 0
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = -188####neq_e  _0131346####hhh!####15####
+
+样例7
+输入：
+0 0 103 0 0 0
+输出：
+string test! !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~gcd = -188####grt_f  _0131346####hhh!####15####
+
