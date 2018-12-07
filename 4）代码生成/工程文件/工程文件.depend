@@ -49,19 +49,22 @@
 	<fstream>
 	"define.h"
 
-1543403380 source:e:\git\compiler-technology\4）代码生成\工程文件\main.cpp
+1543742034 source:e:\git\compiler-technology\4）代码生成\工程文件\main.cpp
 	<iostream>
 	<string.h>
 	<fstream>
 	"define.h"
 	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
 
-1543407490 e:\git\compiler-technology\4）代码生成\工程文件\define.h
+1543742802 e:\git\compiler-technology\4）代码生成\工程文件\define.h
 	<iostream>
 	<string.h>
+	<stdlib.h>
 	<fstream>
 
-1543411570 e:\git\compiler-technology\4）代码生成\工程文件\yufafenxi.h
+1543744596 e:\git\compiler-technology\4）代码生成\工程文件\yufafenxi.h
 	<iostream>
 	<string.h>
 	<fstream>
@@ -69,13 +72,13 @@
 	"cifafenxi.h"
 	"siyuanshi.h"
 
-1543303124 e:\git\compiler-technology\4）代码生成\工程文件\cifafenxi.h
+1543590900 e:\git\compiler-technology\4）代码生成\工程文件\cifafenxi.h
 	<iostream>
 	<string.h>
 	<fstream>
 	"define.h"
 
-1543419225 e:\git\compiler-technology\4）代码生成\工程文件\siyuanshi.h
+1543738158 e:\git\compiler-technology\4）代码生成\工程文件\siyuanshi.h
 	<iostream>
 	<string.h>
 	<fstream>
@@ -213,6 +216,15 @@
 	"define.h"
 
 1543740595 e:\编译作业\4）代码生成\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1543740596 e:\git\compiler-technology\4）代码生成\工程文件\mips.h
 	<iostream>
 	<string.h>
 	<fstream>

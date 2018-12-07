@@ -84,7 +84,9 @@ void generatemips(){
     for(i = 0;midtab.midcodes[i].kind == CONST || midtab.midcodes[i].kind == VAR || midtab.midcodes[i].kind == ARRAY;i++){ ; }
 
     /*打印全局变量声明和字符串常量声明
-    * a: .word 15
+    * var_a: .word 0
+    * var_beq_4706_0: .word 0
+    * var_beq_4706_1: .word 0
     */
     int ans;
     for(ans = 0;ans < extern_var_index;ans++){

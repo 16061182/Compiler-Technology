@@ -319,6 +319,9 @@ void defvar(){//变量定义*
 			error(RBRA_LOST_ERROR);
 		}
 		enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
+		if(levelvalue == 0){//是外部数组
+            enter_extern_var(idvalue,KIND_ARRAY,integervalue);//加入外部变量表
+		}
 		//登录参数表
         enter_para(idvalue,integervalue);
 		entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
@@ -326,6 +329,9 @@ void defvar(){//变量定义*
 	}
 	else{
         enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
+        if(levelvalue == 0){//是外部变量
+            enter_extern_var(idvalue,KIND_VAR,0);//加入外部变量表
+        }
         //登录参数表
         enter_para(idvalue,1);
         entermidcode(VAR,midtypevalue,idvalue,"",0,0,0);//登录四元式表
@@ -348,6 +354,9 @@ void defvar(){//变量定义*
 				error(RBRA_LOST_ERROR);
 			}
 			enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
+			if(levelvalue == 0){//是外部数组
+                enter_extern_var(idvalue,KIND_ARRAY,integervalue);//加入外部变量表
+            }
 			//登录参数表
             enter_para(idvalue,integervalue);
 			entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
@@ -355,6 +364,9 @@ void defvar(){//变量定义*
 		}
 		else{
             enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
+            if(levelvalue == 0){//是外部变量
+                enter_extern_var(idvalue,KIND_VAR,0);//加入外部变量表
+            }
             //登录参数表
             enter_para(idvalue,1);
             entermidcode(VAR,midtypevalue,idvalue,"",0,0,0);//登录四元式表
@@ -635,6 +647,7 @@ int factor(){//因子*
 		int location = loc(idvalue);//查找位置
 		if(location >= 0 ){
             int kind = tab.symbols[location].kind;
+            int level = tab.symbols[location].level;//记录层数（0层为外部变量）
             midcode_type midtypevalue;//记录因子类型
             if(tab.symbols[location].type == TYPE_INT){
                 midtypevalue = INT;
@@ -651,7 +664,12 @@ int factor(){//因子*
                 entermidcode(FACTOR_FUNC,midtypevalue,name,"",regno-1,0,0);//（特殊）把函数返回值保存在regno-1号寄存器中
             }
             else if(kind == KIND_VAR){
-                entermidcode(FACTOR_VAR,midtypevalue,name,"",regno++,0,0);
+                if(level > 0){//是普通变量
+                    entermidcode(FACTOR_VAR,midtypevalue,name,"",regno++,0,0);
+                }
+                else if(level == 0){//是外部变量
+                    entermidcode(FACTOR_VAR_EXTERN,midtypevalue,name,"",regno++,0,0);
+                }
                 getsym();
             }
             else if(kind == KIND_CONST){
@@ -674,7 +692,12 @@ int factor(){//因子*
                 if(sy != RBRA){
                     error(RBRA_LOST_ERROR);
                 }
-                entermidcode(FACTOR_ARRAY,midtypevalue,name,"",regno++,index,0);
+                if(level > 0){
+                    entermidcode(FACTOR_ARRAY,midtypevalue,name,"",regno++,index,0);
+                }
+                else if(level == 0){//是外部数组
+                    entermidcode(FACTOR_ARRAY_EXTERN,midtypevalue,name,"",regno++,index,0);
+                }
                 getsym();
             }
             else{
@@ -794,6 +817,7 @@ void fuzhistate(){//赋值语句*
 	if(location < 0){
         error(IDEN_NOTFOUND_ERROR);
 	}
+	int level = tab.symbols[location].level;//获得符号的层次
 	int iden_type = tab.symbols[location].type;//获得被赋值符号的类型
 	if(iden_type == TYPE_INT) type = INT;
 	else if(iden_type == TYPE_CHAR) type = CHAR;
@@ -838,7 +862,17 @@ void fuzhistate(){//赋值语句*
 	if(expr_type != iden_type){
         error(BECOM_NOT_MATCH);//
 	}
-	entermidcode(kind,type,name,"",value,temp,0);//加入四元式表
+	if(level > 0){
+        entermidcode(kind,type,name,"",value,temp,0);//加入四元式表
+	}
+	else if(level == 0){//外部变量赋值
+        if(kind == ASSIGN){
+            entermidcode(ASSIGN_EXTERN,type,name,"",value,temp,0);//加入四元式表
+        }
+        else if(kind == ASSIGN_ARR){
+            entermidcode(ASSIGN_ARR_EXTERN,type,name,"",value,temp,0);//加入四元式表
+        }
+	}
 	//midtab.midcodes[indexloc].value = value;
 	printf("This is a fuzhistate\n");
 }
@@ -1285,10 +1319,12 @@ void readstate(){//读语句*
 	strcpy(name,id0);
 	//检查是否定义过同时获取type
 	midcode_type type;
+	int level;//记录变量的层次
 	int location = loc(name);
 	if(location >= 0){
         if(tab.symbols[location].kind == KIND_VAR){
             type = (tab.symbols[location].type == TYPE_INT)?INT:CHAR;
+            level = tab.symbols[location].level;
         }
         else{
             error(IDEN_NOT_VAR);
@@ -1297,7 +1333,12 @@ void readstate(){//读语句*
 	else{
         error(IDEN_NOTFOUND_ERROR);
 	}
-    entermidcode(READ,type,name,"",0,0,0);
+	if(level > 0){
+        entermidcode(READ,type,name,"",0,0,0);
+	}
+	else if(level == 0){
+        entermidcode(READ_EXTERN,type,name,"",0,0,0);
+	}
 	getsym();
 	while(sy == COMMA){
 		getsym();
@@ -1310,6 +1351,7 @@ void readstate(){//读语句*
 		if(location >= 0){
             if(tab.symbols[location].kind == KIND_VAR){
                 type = (tab.symbols[location].type == TYPE_INT)?INT:CHAR;
+                level = tab.symbols[location].level;
             }
             else{
                 error(IDEN_NOT_VAR);
@@ -1318,7 +1360,12 @@ void readstate(){//读语句*
 		else{
             error(IDEN_NOTFOUND_ERROR);
 		}
-		entermidcode(READ,type,name,"",0,0,0);
+		if(level > 0){
+            entermidcode(READ,type,name,"",0,0,0);
+		}
+		else if(level == 0){
+            entermidcode(READ_EXTERN,type,name,"",0,0,0);
+		}
 		getsym();
 	}
 	if(sy != RPAR){

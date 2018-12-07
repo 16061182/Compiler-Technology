@@ -35,7 +35,12 @@ char kinds[30][IDENL] = {//需要更新
         "READ",
         "WRITE",
         "RETURN",
-        "LABEL"
+        "LABEL",
+        "FACTOR_VAR_EXTERN",
+        "FACTOR_ARRAY_EXTERN",
+        "ASSIGN_EXTERN",
+        "ASSIGN_ARR_EXTERN",
+        "READ_EXTERN"
 };
 char types[4][IDENL] = {
         "INT",
@@ -151,6 +156,21 @@ void print_singlemidcode(int i){
     else if(kind == LABEL){
         cout << i << "  " << temp.name1 << "    ----------------Label----------------" << endl;
     }
+    else if(kind == FACTOR_VAR_EXTERN){
+        cout << i << "  " << "FACTOR_VAR_EXTERN " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
+    }
+    else if(kind == FACTOR_ARRAY_EXTERN){
+        cout << i << "  " << "FACTOR_ARRAY_EXTERN " << types[type] << " " << name1 << " [reg[" << t1 << "]] save in reg[" << value << "]" << endl;
+    }
+    else if(kind == ASSIGN_EXTERN){
+        cout << i << "  " << "ASSIGN_EXTERN " << types[type] << " " << name1 << " = " << "reg[" << value << "]" << endl;
+    }
+    else if(kind == ASSIGN_ARR_EXTERN){
+        cout << i << "  " << "ASSIGN_ARR_EXTERN " << types[type] << " " << name1 << "[" << "reg[" << t1 << "]]" << " = " << "reg[" << value << "]" << endl;
+    }
+    else if(kind == READ_EXTERN){
+        cout << i << "  " << "READ_EXTERN " << types[type] << " " << name1 << endl;
+    }
 }
 
 void fprint_singlemidcode(int i){
@@ -231,6 +251,21 @@ void fprint_singlemidcode(int i){
     }
     else if(kind == LABEL){
         fout << "#------------" << i << "  " << temp.name1 << "    ----------------Label----------------" << endl;
+    }
+    else if(kind == FACTOR_VAR_EXTERN){
+        fout << "#------------" << i << "  " << "FACTOR_VAR_EXTERN " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
+    }
+    else if(kind == FACTOR_ARRAY_EXTERN){
+        fout << "#------------" << i << "  " << "FACTOR_ARRAY_EXTERN " << types[type] << " " << name1 << " [reg[" << t1 << "]] save in reg[" << value << "]" << endl;
+    }
+    else if(kind == ASSIGN_EXTERN){
+        fout << "#------------" << i << "  " << "ASSIGN_EXTERN " << types[type] << " " << name1 << " = " << "reg[" << value << "]" << endl;
+    }
+    else if(kind == ASSIGN_ARR_EXTERN){
+        fout << "#------------" << i << "  " << "ASSIGN_ARR_EXTERN " << types[type] << " " << name1 << "[" << "reg[" << t1 << "]]" << " = " << "reg[" << value << "]" << endl;
+    }
+    else if(kind == READ_EXTERN){
+        fout << "#------------" << i << "  " << "READ_EXTERN " << types[type] << " " << name1 << endl;
     }
 }
 

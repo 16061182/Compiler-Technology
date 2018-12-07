@@ -283,7 +283,12 @@ enum midcode_kind{
     READ,
     WRITE,
     RETURN,
-    LABEL
+    LABEL,
+    FACTOR_VAR_EXTERN,
+    FACTOR_ARRAY_EXTERN,
+    ASSIGN_EXTERN,
+    ASSIGN_ARR_EXTERN,
+    READ_EXTERN
 };
 enum midcode_type{
     INT,
@@ -390,17 +395,34 @@ char *getlabel(){
 //外部全局变量记录
 typedef struct{
     char name[IDENL];
-    int offset;
+    int kind;//种类
+    int index;//数组下标
 }extern_var;
 extern_var extern_vars[MAXTAB];
 int extern_var_index;
-int extern_var_offset;//在mips堆中的偏移
+//int extern_var_offset;//在mips堆中的偏移
 //添加外部全局变量
-void enter_extern_var(char *_name,int _size){
-    strcpy(extern_vars[extern_var_index].name,_name);
-    extern_vars[extern_var_index].offset = extern_var_offset;
-    extern_var_offset += 4*_size;
-    extern_var_index++;
+void enter_extern_var(char *_name,int _kind,int _size){//变量_size为0，数组_size为数组大小
+    if(_kind == KIND_VAR){//是变量
+        strcpy(extern_vars[extern_var_index].name,_name);
+        extern_vars[extern_var_index].kind == KIND_VAR;
+        //extern_vars[extern_var_index].offset = extern_var_offset;
+        //extern_var_offset += 4*_size;
+        extern_var_index++;
+    }
+    else if(_kind == KIND_ARRAY){//是数组
+        int i;
+        for(i=0;i<_size;i++){
+            strcpy(extern_vars[extern_var_index].name,_name);
+            char no[IDENL];
+            itoa(i,no,10);//获取下标
+            strcat(extern_vars[extern_var_index].name,"_");//名字后面加上下划线
+            strcat(extern_vars[extern_var_index].name,no);//下划线后面加上下标数字（最后一个下划线后的数字是数组下标）
+            extern_vars[extern_var_index].kind == KIND_ARRAY;
+            extern_var_index++;
+        }
+    }
+
 }
 
 //字符串常量记录
