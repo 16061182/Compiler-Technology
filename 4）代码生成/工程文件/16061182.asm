@@ -1,15 +1,15 @@
 .data
-   var_b: .word 0
-   var_add: .space 40
-   str_0: .asciiz "var2[1] is true"
-   str_1: .asciiz "print2 called"
-   str_2: .asciiz "result1 = "
-   str_3: .asciiz "the 10th Fibonacci number is "
+   .var_b: .word 0
+   .var_add: .space 40
+   .str_0: .asciiz "var2[1] is true"
+   .str_1: .asciiz "print2 called"
+   .str_2: .asciiz "result1 = "
+   .str_3: .asciiz "the 10th Fibonacci number is "
 .text
-   jal main
+   jal .func_main
    j end
 #------------3  FUNC INT getint(1)
-getint:
+.func_getint:
 
 #------------4  PARA INT i
 
@@ -124,7 +124,7 @@ label_5:
 
 #------------33  CALL INT getint(1)
    addi $sp $sp -52
-   jal getint
+   jal .func_getint
    subi $sp $sp -52
    lw $ra -48($sp)
 
@@ -152,7 +152,7 @@ label_5:
 
 #------------39  CALL INT getint(1)
    addi $sp $sp -60
-   jal getint
+   jal .func_getint
    subi $sp $sp -60
    lw $ra -56($sp)
 
@@ -172,7 +172,7 @@ label_5:
 #------------43  FUNC CHAR getcha(0)
    jr $ra
 
-getcha:
+.func_getcha:
 
 #------------44  CONST CHAR c = 97
 
@@ -187,7 +187,7 @@ getcha:
 #------------47  FUNC VOID print1(3)
    jr $ra
 
-print1:
+.func_print1:
 
 #------------48  PARA INT i
 
@@ -284,7 +284,7 @@ print1:
 
 #------------72  WRITE var2[1] is true
    li $v0 4
-   la $a0 str_0
+   la $a0 .str_0
    syscall
    li $v0 11
    li $a0 10
@@ -839,7 +839,7 @@ label_29:
 #------------203  FUNC VOID print2(0)
    jr $ra
 
-print2:
+.func_print2:
 
 #------------204  CONST INT i = 1
 
@@ -847,7 +847,7 @@ print2:
 
 #------------206  WRITE print2 called
    li $v0 4
-   la $a0 str_1
+   la $a0 .str_1
    syscall
    li $v0 11
    li $a0 10
@@ -860,7 +860,7 @@ print2:
 #------------208  FUNC VOID main(0)
    jr $ra
 
-main:
+.func_main:
 
 #------------209  CONST INT a = 1
 
@@ -969,7 +969,7 @@ main:
 #------------240  READ_EXTERN INT b
    li $v0 5
    syscall
-   sw $v0 var_b
+   sw $v0 .var_b
 
 #------------241  FACTOR_CON INT 7 save in reg[7]
    li $t0 7
@@ -1049,21 +1049,21 @@ main:
    lw $t0 -184($sp)
    lw $t1 -216($sp)
    sll $t0 $t0 2
-   sw $t1 var_add($t0)
+   sw $t1 .var_add($t0)
 
 #------------257  FACTOR_CON INT 8 save in reg[16]
    li $t0 8
    sw $t0 -220($sp)
 
 #------------258  FACTOR_VAR_EXTERN INT b save in reg[17]
-   lw $t3 var_b
+   lw $t3 .var_b
    sw $t3 -224($sp)
 
 #------------259  ASSIGN_ARR_EXTERN INT add[reg[16]] = reg[17]
    lw $t0 -220($sp)
    lw $t1 -224($sp)
    sll $t0 $t0 2
-   sw $t1 var_add($t0)
+   sw $t1 .var_add($t0)
 
 #------------260  FACTOR_CON INT 9 save in reg[18]
    li $t0 9
@@ -1076,14 +1076,14 @@ main:
 #------------262  FACTOR_ARRAY_EXTERN INT add [reg[19]] save in reg[20]
    lw $t3 -232($sp)
    sll $t3 $t3 2
-   lw $t3 var_add($t3)
+   lw $t3 .var_add($t3)
    sw $t3 -236($sp)
 
 #------------263  ASSIGN_ARR_EXTERN INT add[reg[18]] = reg[20]
    lw $t0 -228($sp)
    lw $t1 -236($sp)
    sll $t0 $t0 2
-   sw $t1 var_add($t0)
+   sw $t1 .var_add($t0)
 
 #------------264  FACTOR_CON INT 233 save in reg[21]
    li $t0 233
@@ -1091,11 +1091,11 @@ main:
 
 #------------265  ASSIGN_EXTERN INT b = reg[21]
    lw $t3 -240($sp)
-   sw $t3 var_b
+   sw $t3 .var_b
 
 #------------266  WRITE result1 = 
    li $v0 4
-   la $a0 str_2
+   la $a0 .str_2
    syscall
 
 #------------267  FACTOR_CON INT 0 save in reg[22]
@@ -1116,7 +1116,7 @@ main:
 
 #------------270  CALL INT getint(1)
    addi $sp $sp -256
-   jal getint
+   jal .func_getint
    subi $sp $sp -256
    lw $ra -252($sp)
 
@@ -1141,7 +1141,7 @@ main:
 
 #------------275  CALL INT getint(1)
    addi $sp $sp -264
-   jal getint
+   jal .func_getint
    subi $sp $sp -264
    lw $ra -260($sp)
 
@@ -1172,7 +1172,7 @@ main:
 
 #------------281  CALL INT getint(1)
    addi $sp $sp -272
-   jal getint
+   jal .func_getint
    subi $sp $sp -272
    lw $ra -268($sp)
 
@@ -1195,7 +1195,7 @@ main:
 
 #------------285  WRITE the 10th Fibonacci number is 
    li $v0 4
-   la $a0 str_3
+   la $a0 .str_3
    syscall
 
 #------------286  FACTOR_VAR INT abcd save in reg[28]
@@ -1209,7 +1209,7 @@ main:
 
 #------------288  CALL INT getint(1)
    addi $sp $sp -276
-   jal getint
+   jal .func_getint
    subi $sp $sp -276
    lw $ra -272($sp)
 
@@ -1227,7 +1227,7 @@ main:
 #------------291  CALL CHAR getcha(0)
    sw $ra -272($sp)
    addi $sp $sp -276
-   jal getcha
+   jal .func_getcha
    subi $sp $sp -276
    lw $ra -272($sp)
 
@@ -1258,7 +1258,7 @@ main:
 
 #------------298  CALL VOID print1(3)
    addi $sp $sp -288
-   jal print1
+   jal .func_print1
    subi $sp $sp -288
    lw $ra -284($sp)
 
@@ -1289,7 +1289,7 @@ main:
 
 #------------305  CALL VOID print1(3)
    addi $sp $sp -300
-   jal print1
+   jal .func_print1
    subi $sp $sp -300
    lw $ra -296($sp)
 
@@ -1320,19 +1320,19 @@ main:
 
 #------------312  CALL VOID print1(3)
    addi $sp $sp -312
-   jal print1
+   jal .func_print1
    subi $sp $sp -312
    lw $ra -308($sp)
 
 #------------313  CALL VOID print2(0)
    sw $ra -308($sp)
    addi $sp $sp -312
-   jal print2
+   jal .func_print2
    subi $sp $sp -312
    lw $ra -308($sp)
 
 #------------314  FACTOR_VAR_EXTERN INT b save in reg[38]
-   lw $t3 var_b
+   lw $t3 .var_b
    sw $t3 -308($sp)
 
 #------------315  WRITE INT reg[38]
@@ -1350,7 +1350,7 @@ main:
 #------------317  FACTOR_ARRAY_EXTERN INT add [reg[39]] save in reg[40]
    lw $t3 -312($sp)
    sll $t3 $t3 2
-   lw $t3 var_add($t3)
+   lw $t3 .var_add($t3)
    sw $t3 -316($sp)
 
 #------------318  FACTOR_CON INT 8 save in reg[41]
@@ -1360,7 +1360,7 @@ main:
 #------------319  FACTOR_ARRAY_EXTERN INT add [reg[41]] save in reg[42]
    lw $t3 -320($sp)
    sll $t3 $t3 2
-   lw $t3 var_add($t3)
+   lw $t3 .var_add($t3)
    sw $t3 -324($sp)
 
 #------------320  reg[42] = reg[40] JIA reg[42]
@@ -1376,7 +1376,7 @@ main:
 #------------322  FACTOR_ARRAY_EXTERN INT add [reg[43]] save in reg[44]
    lw $t3 -328($sp)
    sll $t3 $t3 2
-   lw $t3 var_add($t3)
+   lw $t3 .var_add($t3)
    sw $t3 -332($sp)
 
 #------------323  reg[44] = reg[42] JIA reg[44]
@@ -1393,7 +1393,87 @@ main:
    li $a0 10
    syscall
 
-#------------325  RETURN reg[0] TO $V0 AND THEN GOTO 0
+#------------325  FACTOR_CON CHAR 99 save in reg[45]
+   li $t0 99
+   sw $t0 -336($sp)
+
+#------------326  WRITE CHAR reg[45]
+   li $v0 11
+   lw $a0 -336($sp)
+   syscall
+   li $v0 11
+   li $a0 10
+   syscall
+
+#------------327  FACTOR_VAR CHAR cha1 save in reg[46]
+   lw $t3 -4($sp)
+   sw $t3 -340($sp)
+
+#------------328  WRITE CHAR reg[46]
+   li $v0 11
+   lw $a0 -340($sp)
+   syscall
+   li $v0 11
+   li $a0 10
+   syscall
+
+#------------329  FACTOR_VAR CHAR cha1 save in reg[47]
+   lw $t3 -4($sp)
+   sw $t3 -344($sp)
+
+#------------330  FACTOR_VAR CHAR cha2 save in reg[48]
+   lw $t3 -8($sp)
+   sw $t3 -348($sp)
+
+#------------331  reg[48] = reg[47] JIA reg[48]
+   lw $t0 -344($sp)
+   lw $t1 -348($sp)
+   add $t2 $t0 $t1
+   sw $t2 -348($sp)
+
+#------------332  WRITE INT reg[48]
+   li $v0 1
+   lw $a0 -348($sp)
+   syscall
+   li $v0 11
+   li $a0 10
+   syscall
+
+#------------333  FACTOR_CON INT 0 save in reg[49]
+   li $t0 0
+   sw $t0 -352($sp)
+
+#------------334  FACTOR_VAR CHAR cha1 save in reg[50]
+   lw $t3 -4($sp)
+   sw $t3 -356($sp)
+
+#------------335  ASSIGN_ARR CHAR efg[reg[49]] = reg[50]
+   lw $t0 -352($sp)
+   lw $t1 -356($sp)
+   sll $t0 $t0 2
+   sub $t0 $sp $t0
+   sw $t1 -12($t0)
+
+#------------336  FACTOR_CON INT 0 save in reg[51]
+   li $t0 0
+   sw $t0 -360($sp)
+
+#------------337  FACTOR_ARRAY CHAR efg [reg[51]] save in reg[52]
+   lw $t3 -360($sp)
+   sll $t3 $t3 2
+   sub $t3 $sp $t3
+   lw $t3 -12($t3)
+   sw $t3 -364($sp)
+
+#------------338  WRITE CHAR reg[52]
+   li $v0 11
+   lw $a0 -364($sp)
+   syscall
+   li $v0 11
+   li $a0 10
+   syscall
+
+#------------339  RETURN reg[0] TO $V0 AND THEN GOTO 0
    lw $v0 -156($sp)
    jr $ra
 

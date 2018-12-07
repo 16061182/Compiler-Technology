@@ -81,12 +81,6 @@ void main(){
 	print2;
 	printf(b);
 	printf(add[7]+add[8]+add[9]);
-
-	printf('c');
-	printf(cha1);
-	printf(cha1 + cha2);
-	efg[0] = cha1;
-	printf(efg[0]);
 	
 	return;
 

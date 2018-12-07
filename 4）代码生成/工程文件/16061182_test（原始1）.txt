@@ -1,5 +1,5 @@
 const int con1 = 0;
-int b,add[10];
+int var1;
 int getint(int i){	
 	if(i < 1) return(0);
 	if(i == 1) return(0);
@@ -65,12 +65,7 @@ void main(){
 	scanf(ABCD);
 	scanf(HIJK,O);
 	scanf(cha1);
-	scanf(cha2);
-	scanf(b); 
-	add[7] = -1+2*(-1+2*3);
-	add[8] = b;
-	add[9] = add[7];
-	b = 233;
+	scanf(cha2); 
 	
 	printf("result1 = ",getint(LMN[0]) +getint(LMN[1]) + getint(LMN[2]));
 	printf("the 10th Fibonacci number is ",getint(ABCD));
@@ -79,14 +74,6 @@ void main(){
 	print1(O,HIJK,cha1);
 	print1(HIJK,HIJK,cha2);
 	print2;
-	printf(b);
-	printf(add[7]+add[8]+add[9]);
-
-	printf('c');
-	printf(cha1);
-	printf(cha1 + cha2);
-	efg[0] = cha1;
-	printf(efg[0]);
 	
 	return;
 

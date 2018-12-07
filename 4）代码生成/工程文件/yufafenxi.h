@@ -270,6 +270,7 @@ void decvar_extern(){//用于程序中的变量说明（带回溯）
             BACK
             tab.index --;//符号表回退
             midtab.index --;//四元式表回退
+            extern_var_index--;//全局变量表回退
             break;
         }
 		else if(sy == SEMI){

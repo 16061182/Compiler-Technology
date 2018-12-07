@@ -72,6 +72,7 @@ int current_paraoffset;//当前函数参数空间之后的栈位置
 int current_stacktop;//当前的符号栈的栈顶（已经有值，-4获得最新空位置）
 int first_para;//函数调用的第一个参数标志
 int first_para_offset;//函数调用第一个参数的偏移
+int not_first_func = 0;//非第一个函数标志（第一个参数前没有jr $ra）
 
 
 
@@ -85,22 +86,28 @@ void generatemips(){
 
     /*打印全局变量声明和字符串常量声明
     * var_a: .word 0
-    * var_beq_4706_0: .word 0
-    * var_beq_4706_1: .word 0
+    * var_beq_4706: .space 40
     */
     int ans;
     for(ans = 0;ans < extern_var_index;ans++){
-        char name[IDENL] = {'v','a','r','_'};
-        char no[IDENL];
-        itoa(ans,no,10);
-        strcat(name,no);
-        fout << "   " << name << ": .word " << 0 << endl;
+        if(extern_vars[ans].kind == KIND_VAR){
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,extern_vars[ans].name);//var_beq_4706_1
+            fout << "   " << name << ": .word " << 0 << endl;
+        }
+        else if(extern_vars[ans].kind == KIND_ARRAY){
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,extern_vars[ans].name);
+            char no[MIPS_IDENL];
+            itoa(extern_vars[ans].arraysize*4,no,10);//需要申请的空间大小
+            fout << "   " << name << ": .space " << no << endl;//在堆中申请空间
+        }
     }
 
     /*打印字符串常量声明*/
     for(ans = 0;ans < str_con_index;ans++){
-        char name[IDENL] = {'s','t','r','_'};
-        char no[IDENL];
+        char name[MIPS_IDENL] = {'.','s','t','r','_'};
+        char no[MIPS_IDENL];
         itoa(ans,no,10);
         strcat(name,no);
         fout << "   " << name << ": .asciiz \"" << str_cons[ans] << "\"" << endl;
@@ -108,7 +115,7 @@ void generatemips(){
 
     /*跳转到main函数*/
     fout << ".text" << endl;
-    fout << "   jal main" << endl;
+    fout << "   jal .func_main" << endl;
     fout << "   j end" << endl;
 
     /*各种函数的定义*/
@@ -118,7 +125,14 @@ void generatemips(){
         fprint_singlemidcode(i);//打印四元式信息
         /*函数定义*/
         if(mid.kind == FUNC){
-            fout << mid.name1 << ":" << endl;
+            if(not_first_func){//不等于0，从第二个函数开始
+                fout << "   jr $ra" << endl;
+                fout << endl;
+            }
+            not_first_func = 1;
+            char name[MIPS_IDENL] = {'.','f','u','n','c','_'};
+            strcat(name,mid.name1);//加上前缀
+            fout << name << ":" << endl;
             strcpy(current_funcname,mid.name1);//记录当前函数名称以便获取参数偏移
             current_paraoffset = get_funcend(current_funcname);//获取当前函数临时数据区开始的地址
             current_stacktop = current_paraoffset;
@@ -127,6 +141,15 @@ void generatemips(){
         else if(mid.kind == FACTOR_VAR){
             int para_offset = get_para_offset(current_funcname,mid.name1,0);//获取参数在栈空间的偏移
             fout << "   lw $t3 " << para_offset << "($sp)" << endl;
+            int save_offset = current_paraoffset - mid.value*4;
+            fout << "   sw $t3 " << save_offset << "($sp)" << endl;
+            current_stacktop = save_offset;
+        }
+        /*外部变量因子*/
+        else if(mid.kind == FACTOR_VAR_EXTERN){
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,mid.name1);//获得变量的label
+            fout << "   lw $t3 " << name << endl;
             int save_offset = current_paraoffset - mid.value*4;
             fout << "   sw $t3 " << save_offset << "($sp)" << endl;
             current_stacktop = save_offset;
@@ -151,6 +174,18 @@ void generatemips(){
             fout << "   sw $t3 " << save_offset << "($sp)" << endl;
             current_stacktop = save_offset;
         }
+        /*外部数组因子*/
+        else if(mid.kind == FACTOR_ARRAY_EXTERN){
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,mid.name1);//数组空间的label
+            int index_offset = current_paraoffset - mid.t1 * 4;//获取下标位置
+            fout << "   lw $t3 " << index_offset << "($sp)" << endl;
+            fout << "   sll $t3 $t3 2" << endl;
+            fout << "   lw $t3 " << name << "($t3)" << endl;//$t3读到数组元素的值
+            int save_offset = current_paraoffset - mid.value * 4;//获取存储位置
+            fout << "   sw $t3 " << save_offset << "($sp)" << endl;
+            current_stacktop = save_offset;
+        }
         /*函数因子*/
         else if(mid.kind == FACTOR_FUNC){
             int v0_offset = current_paraoffset - mid.value * 4;
@@ -159,7 +194,11 @@ void generatemips(){
         }
         /*表达式因子*/
         else if(mid.kind == FACTOR_EXPR){
-
+            int value_offset = current_paraoffset - mid.t1 * 4;//表达式值的偏移
+            fout << "   lw $t0 " << value_offset << "($sp)" << endl;
+            int save_offset = current_paraoffset - mid.value * 4;//因子存储位置
+            fout << "   sw $t0 " << save_offset << "($sp)" << endl;
+            current_stacktop = save_offset;
         }
         /*跳转指令*/
         else if(mid.kind == BGEQ || mid.kind == BGTR || mid.kind == BLEQ || mid.kind == BLSS || mid.kind == BEQ || mid.kind == BNE){
@@ -245,16 +284,18 @@ void generatemips(){
         }
         /*函数调用*/
         else if(mid.kind == CALL){
+            char name[MIPS_IDENL] = {'.','f','u','n','c','_'};
+            strcat(name,mid.name1);
             if(mid.value == 0){//函数没有参数，需要在这里生成sw $ra语句
                 fout << "   sw $ra " << current_stacktop - 4 << "($sp)" << endl;
                 fout << "   addi $sp $sp " << current_stacktop - 8 << endl;
-                fout << "   jal " << mid.name1 << endl;
+                fout << "   jal " << name << endl;
                 fout << "   subi $sp $sp " << current_stacktop - 8 << endl;
                 fout << "   lw $ra " << current_stacktop - 4 << "($sp)" << endl;
             }
             else{
                 fout << "   addi $sp $sp " << first_para_offset << endl;
-                fout << "   jal " << mid.name1 << endl;
+                fout << "   jal " << name << endl;
                 fout << "   subi $sp $sp " << first_para_offset << endl;
                 fout << "   lw $ra " << first_para_offset + 4 << "($sp)" << endl;
                 current_stacktop = first_para_offset + 8;//记录当前栈顶位置
@@ -269,6 +310,14 @@ void generatemips(){
             int save_offset = get_para_offset(current_funcname,mid.name1,0);//获取被赋值符号的位置
             fout << "   sw $t3 " << save_offset << "($sp)" << endl;
         }
+        /*外部变量赋值语句*/
+        else if(mid.kind == ASSIGN_EXTERN){
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,mid.name1);//数组空间的label
+            int value_offset = current_paraoffset - mid.value * 4;
+            fout << "   lw $t3 " << value_offset << "($sp)" << endl;
+            fout << "   sw $t3 " << name << endl;
+        }
         /*数组赋值语句*/
         else if(mid.kind == ASSIGN_ARR){
             int index_offset = current_paraoffset - mid.t1 * 4;//数组下标
@@ -280,13 +329,24 @@ void generatemips(){
             int array_offset = get_para_offset(current_funcname,mid.name1,0);//获取数组的偏移
             fout << "   sw $t1 " << array_offset << "($t0)" << endl;
         }
+        /*外部数组赋值语句*/
+        else if(mid.kind == ASSIGN_ARR_EXTERN){
+            int index_offset = current_paraoffset - mid.t1 * 4;//数组下标
+            fout << "   lw $t0 " << index_offset << "($sp)" << endl;
+            int expr_offset = current_paraoffset - mid.value * 4;//表达式的值
+            fout << "   lw $t1 " << expr_offset << "($sp)" << endl;
+            fout << "   sll $t0 $t0 2" << endl;//数组下标*4
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,mid.name1);//数组label
+            fout << "   sw $t1 " << name << "($t0)" << endl;
+        }
         /*写语句*/
         else if(mid.kind == WRITE){
             if(mid.type == STR){//打印字符串
                 fout << "   li $v0 4" << endl;
                 int ans = find_str_con(mid.name1);
-                char name[IDENL] = {'s','t','r','_'};
-                char no[IDENL];
+                char name[MIPS_IDENL] = {'.','s','t','r','_'};
+                char no[MIPS_IDENL];
                 itoa(ans,no,10);
                 strcat(name,no);//获得了字符串的代号
                 fout << "   la $a0 " << name << endl;
@@ -329,8 +389,23 @@ void generatemips(){
             int para_offset = get_para_offset(current_funcname,mid.name1,0);//获取变量的偏移
             fout << "   sw $v0 " << para_offset << "($sp)" << endl;
         }
+        /*外部变量读语句*/
+        else if(mid.kind == READ_EXTERN){
+            if(mid.type == INT){
+                fout << "   li $v0 5" << endl;
+            }
+            else if(mid.type == CHAR){
+                fout << "   li $v0 12" << endl;
+            }
+            fout << "   syscall" << endl;
+            char name[MIPS_IDENL] = {'.','v','a','r','_'};
+            strcat(name,mid.name1);//获取变量标签
+            fout << "   sw $v0 " << name << endl;
+        }
         fout << endl;//每条语句后打印空行
     }
+    fout << "   jr $ra" << endl;//main函数要跳回去
+    fout << endl;
     fout << "end:" << endl;
 }
 #endif // MIPS_H_INCLUDED

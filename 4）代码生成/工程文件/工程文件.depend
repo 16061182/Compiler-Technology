@@ -233,3 +233,47 @@
 	"yufafenxi.h"
 	"siyuanshi.h"
 
+1544172350 source:e:\工作空间\4）代码生成\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+
+1544173318 e:\工作空间\4）代码生成\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1544111004 e:\工作空间\4）代码生成\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590900 e:\工作空间\4）代码生成\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544110007 e:\工作空间\4）代码生成\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544173662 e:\工作空间\4）代码生成\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+

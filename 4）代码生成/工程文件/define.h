@@ -58,6 +58,7 @@ using namespace std;
 #define MAXFUNC 1000//函数个数限制
 #define MAXPARA 1000//参数表长度限制
 #define MAXVALUEPARA 50
+#define MIPS_IDENL 100//用在mips中的label长度
 
 #define TYPE_INT 1
 #define TYPE_CHAR 2
@@ -396,7 +397,7 @@ char *getlabel(){
 typedef struct{
     char name[IDENL];
     int kind;//种类
-    int index;//数组下标
+    int arraysize;//数组下标
 }extern_var;
 extern_var extern_vars[MAXTAB];
 int extern_var_index;
@@ -405,13 +406,17 @@ int extern_var_index;
 void enter_extern_var(char *_name,int _kind,int _size){//变量_size为0，数组_size为数组大小
     if(_kind == KIND_VAR){//是变量
         strcpy(extern_vars[extern_var_index].name,_name);
-        extern_vars[extern_var_index].kind == KIND_VAR;
+        extern_vars[extern_var_index].kind = KIND_VAR;
         //extern_vars[extern_var_index].offset = extern_var_offset;
         //extern_var_offset += 4*_size;
         extern_var_index++;
     }
-    else if(_kind == KIND_ARRAY){//是数组
-        int i;
+    else if(_kind == KIND_ARRAY){//是数组//仅需记录数组名和数组大小（用来生成数组名.space）
+        strcpy(extern_vars[extern_var_index].name,_name);
+        extern_vars[extern_var_index].kind = KIND_ARRAY;
+        extern_vars[extern_var_index].arraysize = _size;//数组大小
+        extern_var_index++;
+        /*int i;
         for(i=0;i<_size;i++){
             strcpy(extern_vars[extern_var_index].name,_name);
             char no[IDENL];
@@ -420,9 +425,15 @@ void enter_extern_var(char *_name,int _kind,int _size){//变量_size为0，数�
             strcat(extern_vars[extern_var_index].name,no);//下划线后面加上下标数字（最后一个下划线后的数字是数组下标）
             extern_vars[extern_var_index].kind == KIND_ARRAY;
             extern_var_index++;
-        }
+        }*/
     }
-
+}
+//打印全局变量
+void print_extern_var(){
+    int i;
+    for(i=0;i<extern_var_index;i++){
+        cout << extern_vars[i].name << "    " << extern_vars[i].kind << "   " << extern_vars[i].arraysize << endl;
+    }
 }
 
 //字符串常量记录
@@ -467,7 +478,7 @@ void enter_str_con(char *_content){
     str_con_index ++;
 }*/
 
-//值参数表（值参数的寄存器号）（用来改四元式输出顺序）
+//值参数表（值参数的寄存器号）（用来改四元式输出顺序，一次性读完值参数再一起PUSH，方便生成mips）
 int value_paras[MAXVALUEPARA];
 int value_para_index;
 

@@ -6,7 +6,7 @@
 #include"define.h"
 using namespace std;
 
-char kinds[30][IDENL] = {//需要更新
+char kinds[50][IDENL] = {//需要更新
         "CONST",
         "VAR",
         "ARRAY",
@@ -89,87 +89,87 @@ void print_singlemidcode(int i){
     int t1 = temp.t1;
     int t2 = temp.t2;
     if(kind == CONST){
-        cout << i << "  " << "CONST " << types[type] << " " << name1 << " = " << value << endl;
+        cout << "  " << "CONST " << types[type] << " " << name1 << " = " << value << endl;
     }
     else if(kind == VAR){
-        cout << i << "  " << "VAR " << types[type] << " " << name1 << endl;
+        cout << "  " << "VAR " << types[type] << " " << name1 << endl;
     }
     else if(kind == ARRAY){
-        cout << i << "  " << "ARRAY " << types[type] << " " << name1 << "[" << value << "]" << endl;
+        cout << "  " << "ARRAY " << types[type] << " " << name1 << "[" << value << "]" << endl;
     }
     else if(kind == FUNC){
-        cout << i << "  " << "FUNC " << types[type] << " " << name1 << "(" << value << ")" << endl;
+        cout << "  " << "FUNC " << types[type] << " " << name1 << "(" << value << ")" << endl;
     }
     else if(kind == CALL){
-        cout << i << "  " << "CALL " << types[type] << " " << name1 << "(" << value << ")" << endl;
+        cout << "  " << "CALL " << types[type] << " " << name1 << "(" << value << ")" << endl;
     }
     else if(kind == PARA){
-        cout << i << "  " << "PARA " << types[type] << " " << name1 << endl;
+        cout << "  " << "PARA " << types[type] << " " << name1 << endl;
     }
     else if(kind == PUSH){
-        cout << i << "  " << "PUSH " << types[type] << " " << "parareg[" << value << "]" << " from reg[" << t1 << "]" << endl;
+        cout << "  " << "PUSH " << types[type] << " " << "parareg[" << value << "]" << " from reg[" << t1 << "]" << endl;
     }
     else if(kind == ASSIGN){
-        cout << i << "  " << "ASSIGN " << types[type] << " " << name1 << " = " << "reg[" << value << "]" << endl;
+        cout << "  " << "ASSIGN " << types[type] << " " << name1 << " = " << "reg[" << value << "]" << endl;
     }
     else if(kind == ASSIGN_ARR){
-        cout << i << "  " << "ASSIGN_ARR " << types[type] << " " << name1 << "[" << "reg[" << t1 << "]]" << " = " << "reg[" << value << "]" << endl;
+        cout << "  " << "ASSIGN_ARR " << types[type] << " " << name1 << "[" << "reg[" << t1 << "]]" << " = " << "reg[" << value << "]" << endl;
     }
     else if(kind == JIA || temp.kind == JIAN || temp.kind == CHENG || temp.kind == CHU){
-        cout << i << "  " << "reg[" << value << "] = " << "reg[" << t1 << "] " << kinds[kind] << " reg[" << t2 << "]" << endl;
+        cout << "  " << "reg[" << value << "] = " << "reg[" << t1 << "] " << kinds[kind] << " reg[" << t2 << "]" << endl;
     }
     else if(kind == FACTOR_CON){
-        cout << i << "  " << "FACTOR_CON " << types[type] << " " << t1 << " save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_CON " << types[type] << " " << t1 << " save in reg[" << value << "]" << endl;
     }
     else if(kind == FACTOR_VAR){
-        cout << i << "  " << "FACTOR_VAR " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_VAR " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
     }
     else if(kind == FACTOR_FUNC){
-        cout << i << "  " << "FACTOR_FUNC " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_FUNC " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
     }
     else if(kind == FACTOR_ARRAY){
-        cout << i << "  " << "FACTOR_ARRAY " << types[type] << " " << name1 << " [reg[" << t1 << "]] save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_ARRAY " << types[type] << " " << name1 << " [reg[" << t1 << "]] save in reg[" << value << "]" << endl;
     }
     else if(kind == FACTOR_EXPR){
-        cout << i << "  " << "FACTOR_EXPR " << "reg[" << t1 << "] save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_EXPR " << "reg[" << t1 << "] save in reg[" << value << "]" << endl;
     }
     else if(kind == BEQ || temp.kind == BNE || temp.kind == BGTR || temp.kind == BGEQ || temp.kind == BLSS || temp.kind == BLEQ){
-        cout << i << "  " << "IF " << "reg[" << t1 << "] " << kinds[temp.kind] << " reg[" << t2 << "] THEN GOTO " << temp.name1 << endl;
+        cout << "  " << "IF " << "reg[" << t1 << "] " << kinds[temp.kind] << " reg[" << t2 << "] THEN GOTO " << temp.name1 << endl;
     }
     else if(kind == JUMP){
-        cout << i << "  " << "JUMP to " << temp.name1 << endl;
+        cout << "  " << "JUMP to " << temp.name1 << endl;
     }
     else if(kind == READ){
-        cout << i << "  " << "READ " << types[type] << " " << name1 << endl;
+        cout << "  " << "READ " << types[type] << " " << name1 << endl;
     }
     else if(kind == WRITE){
         if(type == STR){
-            cout << i << "  " << "WRITE " << name1 << endl;
+            cout << "  " << "WRITE " << name1 << endl;
         }
         else{
-            cout << i << "  " << "WRITE " << types[type] << " reg[" << value << "]" << endl;
+            cout << "  " << "WRITE " << types[type] << " reg[" << value << "]" << endl;
         }
     }
     else if(kind == RETURN){
-        cout << i << "  " << "RETURN reg[" << t1 << "] TO $V0 AND THEN GOTO " << value << endl;
+        cout << "  " << "RETURN reg[" << t1 << "] TO $V0 AND THEN GOTO " << value << endl;
     }
     else if(kind == LABEL){
-        cout << i << "  " << temp.name1 << "    ----------------Label----------------" << endl;
+        cout << "  " << temp.name1 << "    ----------------Label----------------" << endl;
     }
     else if(kind == FACTOR_VAR_EXTERN){
-        cout << i << "  " << "FACTOR_VAR_EXTERN " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_VAR_EXTERN " << types[type] << " " << name1 << " save in reg[" << value << "]" << endl;
     }
     else if(kind == FACTOR_ARRAY_EXTERN){
-        cout << i << "  " << "FACTOR_ARRAY_EXTERN " << types[type] << " " << name1 << " [reg[" << t1 << "]] save in reg[" << value << "]" << endl;
+        cout << "  " << "FACTOR_ARRAY_EXTERN " << types[type] << " " << name1 << " [reg[" << t1 << "]] save in reg[" << value << "]" << endl;
     }
     else if(kind == ASSIGN_EXTERN){
-        cout << i << "  " << "ASSIGN_EXTERN " << types[type] << " " << name1 << " = " << "reg[" << value << "]" << endl;
+        cout << "  " << "ASSIGN_EXTERN " << types[type] << " " << name1 << " = " << "reg[" << value << "]" << endl;
     }
     else if(kind == ASSIGN_ARR_EXTERN){
-        cout << i << "  " << "ASSIGN_ARR_EXTERN " << types[type] << " " << name1 << "[" << "reg[" << t1 << "]]" << " = " << "reg[" << value << "]" << endl;
+        cout << "  " << "ASSIGN_ARR_EXTERN " << types[type] << " " << name1 << "[" << "reg[" << t1 << "]]" << " = " << "reg[" << value << "]" << endl;
     }
     else if(kind == READ_EXTERN){
-        cout << i << "  " << "READ_EXTERN " << types[type] << " " << name1 << endl;
+        cout << "  " << "READ_EXTERN " << types[type] << " " << name1 << endl;
     }
 }
 

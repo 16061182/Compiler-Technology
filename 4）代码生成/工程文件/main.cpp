@@ -1,12 +1,13 @@
 /*待办事项
-(0)四元式生成、#声明查重
+(0)#四元式生成、#声明查重
 (1)###（无需解决）标识符名称和预定义名称相同时，会直接视符号为预定义名称，因此应保证标识符名称和预定义名称不相同(相同则报错)
 (2)#判断语句是函数调用语句还是赋值语句时，可以直接根据符号表中的参数名来判断。若此语句所在模块中，
 	#在此语句之前有该IDEN的声明和赋值操作，那么即使定义了该IDEN函数，仍把同一模块中后面所有的IDEN视为变量而不是函数名（c语言特性）
 (3)报错：数组赋值越界报错
-(4)测试代码中没有（<表达式>）的出现
-(5)测试代码中没有 外部变量因子、赋值、读的出现，需要构建外部变量表
-(6)表达式的类型的测试，如果是类似'c'的单个字符的话则为TYPE_CHAR，其他情况均为TYPE_INT
+(4)#测试代码中没有（<表达式>）的出现
+(5)#测试代码中没有 外部变量因子、赋值、读的出现，需要构建外部变量表
+(6)#表达式的类型的测试，如果是类似'c'的单个字符的话则为TYPE_CHAR，其他情况均为TYPE_INT
+(7)scanf(a)在控制台既可以输入数字也可以输入字符？
 */
 
 /*文法细节解读
@@ -19,7 +20,7 @@
 (7)读语句中的标识符只能是普通标识符
 (8)关于四元式和mips指令，目前有如下猜测：
         ＜条件＞    ::=  ＜表达式＞＜关系运算符＞＜表达式＞里的表达式是否要检查类型？
-        目前默认for语句中的循环变量是int类型
+        目前默认for语句中的循环变量是int类型，步长变化是char类型会报错吗？
 
 (9)表达式的类型，如果是类似'c'的单个字符的话则为TYPE_CHAR，其他情况均为TYPE_INT
 */
@@ -69,8 +70,8 @@ void setup(){
 }
 
 int main(){
-	fin.open("16061182_test.txt",ios::in);
-	fout.open("16061182_result.asm",ios::out);
+	fin.open("16061144_test.txt",ios::in);
+	fout.open("16061144.asm",ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
@@ -80,7 +81,8 @@ int main(){
 
 	print_str_con();
 	cout << "--------------------" << endl;
-	cout << get_firstpara("getint") << "    " << get_funcend("getint") << endl;
+	print_extern_var();
+	/*cout << get_firstpara("getint") << "    " << get_funcend("getint") << endl;
 	cout << get_firstpara("getcha") << "    " << get_funcend("getcha") << endl;
 	cout << get_firstpara("print1") << "    " << get_funcend("print1") << endl;
 	cout << get_firstpara("print2") << "    " << get_funcend("print2") << endl;
@@ -88,7 +90,7 @@ int main(){
 	cout << get_para_offset("print1","c",0) << endl;
 	cout << get_para_offset("print1","var2",7) << endl;
 	cout << get_para_offset("main","o",0) << endl;
-	cout << para_offsets[0].name << "   " << para_offsets[1].name << endl;
+	cout << para_offsets[0].name << "   " << para_offsets[1].name << endl;*/
 	generatemips();
 
 	fin.close();

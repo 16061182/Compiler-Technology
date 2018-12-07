@@ -1,0 +1,174 @@
+样例1
+输入：
+12 32 a 12 32 55
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+4
+####
+leq_a  
+_
+0
+131346
+####
+55
+ 
+32
+ 
+12
+####
+hhh!####
+15
+####
+
+样例2
+输入：
+0 0 b 0 0 0
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+-188
+####
+lss_c 
+_
+0
+131346
+####
+0
+ 
+0
+ 
+0
+####
+hhh!####
+15
+####
+
+样例3
+输入：
+5 4 c 3 2 1
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+1
+####
+neq_e  
+_
+0
+131346
+####
+1
+ 
+2
+ 
+3
+####
+hhh!####
+15
+####
+
+样例4
+输入：
+0 0 d 0 0 0
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+-188
+####
+eq_d 
+_
+0
+131346
+####
+0
+ 
+0
+ 
+0
+####
+hhh!####
+15
+####
+
+样例5
+输入：
+0 0 e 0 0 0
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+-188
+####
+is e!!
+_
+0
+131346
+####
+0
+ 
+0
+ 
+0
+####
+hhh!####
+15
+####
+
+样例6
+输入：
+0 0 f 0 0 0
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+-188
+####
+neq_e  
+_
+0
+131346
+####
+0
+ 
+0
+ 
+0
+####
+hhh!####
+15
+####
+
+样例7
+输入：
+0 0 g 0 0 0
+输出：
+string test!
+ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQ
+RSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~
+gcd = 
+-188
+####
+grt_f  
+_
+0
+131346
+####
+0
+ 
+0
+ 
+0
+####
+hhh!####
+15
+####
