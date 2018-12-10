@@ -70,8 +70,8 @@ void setup(){
 }
 
 int main(){
-	fin.open("16061144_test.txt",ios::in);
-	fout.open("16061144.asm",ios::out);
+	fin.open("qiyunshan_test.txt",ios::in);
+	fout.open("qiyunshan_result_fixed.asm",ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();

@@ -662,7 +662,7 @@ int factor(){//因子*
             strcpy(name,tab.symbols[location].name);//记录因子名称
             if(kind == KIND_FUNCT){
                 callfunctstate();
-                entermidcode(FACTOR_FUNC,midtypevalue,name,"",regno-1,0,0);//（特殊）把函数返回值保存在regno-1号寄存器中
+                entermidcode(FACTOR_FUNC,midtypevalue,name,"",regno++,0,0);//（特殊）把函数返回值保存在regno-1号寄存器中//事实证明这样会出bug，存在下一个寄存器比较稳妥
             }
             else if(kind == KIND_VAR){
                 if(level > 0){//是普通变量
@@ -1018,10 +1018,12 @@ void xunhuanstate(){//循环语句*
 		strcpy(name,id0);//记录名称
 		//检查是否定义过以及是否是普通标识符
 		int location = loc(name);
+		int level;
 		if(location >= 0){
             if(tab.symbols[location].kind != KIND_VAR){
                 error(IDEN_NOT_VAR);
             }
+            level = tab.symbols[location].level;
 		}
 		else{
             error(IDEN_NOTFOUND_ERROR);
@@ -1033,7 +1035,12 @@ void xunhuanstate(){//循环语句*
 		getsym();
 		int init = expr();
 		//生成赋值语句
-		entermidcode(ASSIGN,INT,name,"",init,0,0);//直接默认循环变量是int类型
+		if(level > 0){//是普通变量
+            entermidcode(ASSIGN,INT,name,"",init,0,0);//直接默认循环变量是int类型
+		}
+		else if(level == 0){//是外部变量
+            entermidcode(ASSIGN_EXTERN,INT,name,"",init,0,0);//直接默认循环变量是int类型
+		}
 		//生成无条件跳转
 		int indexloc = midtab.index;//记录跳转指令的位置
 		entermidcode(JUMP,INT,"","",0,0,0);
@@ -1059,6 +1066,7 @@ void xunhuanstate(){//循环语句*
 		strcpy(name,id0);//保存标识符名
 		//检查是否定义过以及是否是普通标识符
 		location = loc(name);
+		int level_0;
 		if(location >= 0){
             if(tab.symbols[location].kind != KIND_VAR){
                 error(IDEN_NOT_VAR);
@@ -1066,6 +1074,7 @@ void xunhuanstate(){//循环语句*
             if(tab.symbols[location].type != TYPE_INT){
                 error(BECOM_NOT_MATCH);//步长变化语句左侧变量必须是int型，因为右侧必定是int型表达式
             }
+            level_0 = tab.symbols[location].level;
 		}
 		else{
             error(IDEN_NOTFOUND_ERROR);
@@ -1082,10 +1091,12 @@ void xunhuanstate(){//循环语句*
 		strcpy(name_1,id0);
 		//检查是否定义过以及是否是普通标识符
 		int location_1 = loc(name_1);
+		int level_1;
 		if(location_1 >= 0){
             if(tab.symbols[location_1].kind != KIND_VAR && tab.symbols[location_1].kind != KIND_CONST){//后面的标识符可以是const
                 error(IDEN_NOT_VARORCONST);
             }
+            level_1 = tab.symbols[location_1].level;
 		}
 		else{
             error(IDEN_NOTFOUND_ERROR);
@@ -1112,13 +1123,23 @@ void xunhuanstate(){//循环语句*
         strcat(labelname_step,str);
 		entermidcode(LABEL,INT,labelname_step,"",0,0,0);
         //步长变化语句
-        entermidcode(FACTOR_VAR,INT,name_1,"",regno++,0,0);//标识符因子读到寄存器
+        if(level_1 > 0){//是普通变量
+            entermidcode(FACTOR_VAR,INT,name_1,"",regno++,0,0);//标识符因子读到寄存器
+        }
+        else if(level_1 == 0){//是外部变量
+            entermidcode(FACTOR_VAR_EXTERN,INT,name_1,"",regno++,0,0);//外部变量因子读到寄存器
+        }
         entermidcode(FACTOR_CON,INT,"","",regno++,value,0);//步长因子读到寄存器
         int t1 = regno - 2;
         int t2 = regno - 1;
         //变更循环变量
         entermidcode(kind,INT,"","",regno-1,t1,t2);//计算新的循环变量
-        entermidcode(ASSIGN,INT,name,"",regno-1,0,0);
+        if(level_0 > 0){//是普通变量
+            entermidcode(ASSIGN,INT,name,"",regno-1,0,0);
+        }
+        else if(level_0 == 0){//是外部变量
+            entermidcode(ASSIGN_EXTERN,INT,name,"",regno-1,0,0);
+        }
         //记录分析到的位置
         int _index_record = sourceindex;
         char _ch_record = ch;

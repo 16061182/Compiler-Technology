@@ -1,0 +1,367 @@
+# depslib dependency file v1.0
+1542799322 source:d:\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1542799152 d:\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1542799637 d:\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+
+1542799622 d:\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543059165 source:e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1543071485 e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1543071596 e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+
+1543071705 e:\compiler-technology\4）完整编译器\16061182_苗萌_语法分析\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543742034 source:e:\git\compiler-technology\4）代码生成\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+
+1543742802 e:\git\compiler-technology\4）代码生成\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1543744596 e:\git\compiler-technology\4）代码生成\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590900 e:\git\compiler-technology\4）代码生成\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543738158 e:\git\compiler-technology\4）代码生成\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543134154 source:h:\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1543302108 h:\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1543302358 h:\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543303124 h:\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543303134 h:\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543134154 source:e:\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1543302108 e:\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1543306865 e:\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543303124 e:\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543303134 e:\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543403380 source:h:\4）代码生成\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+
+1543407490 h:\4）代码生成\工程文件\define.h
+	<iostream>
+	<string.h>
+	<fstream>
+
+1543411570 h:\4）代码生成\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543303124 h:\4）代码生成\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543405964 h:\4）代码生成\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543742033 source:e:\编译作业\4）代码生成\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+
+1543742801 e:\编译作业\4）代码生成\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1543744594 e:\编译作业\4）代码生成\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590899 e:\编译作业\4）代码生成\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543738157 e:\编译作业\4）代码生成\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1543740595 e:\编译作业\4）代码生成\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1543740596 e:\git\compiler-technology\4）代码生成\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1544172350 source:e:\工作空间\4）代码生成\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+
+1544173318 e:\工作空间\4）代码生成\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1544111004 e:\工作空间\4）代码生成\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590900 e:\工作空间\4）代码生成\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544110007 e:\工作空间\4）代码生成\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544173662 e:\工作空间\4）代码生成\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1544368284 source:e:\git\compiler-technology\5）错误处理\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+
+1544360058 e:\git\compiler-technology\5）错误处理\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1544367476 e:\git\compiler-technology\5）错误处理\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590900 e:\git\compiler-technology\5）错误处理\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544110008 e:\git\compiler-technology\5）错误处理\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544368570 e:\git\compiler-technology\5）错误处理\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1544456226 source:e:\git\compiler-technology\5）代码测试\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+
+1544457627 e:\git\compiler-technology\5）代码测试\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1544453331 e:\git\compiler-technology\5）代码测试\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590900 e:\git\compiler-technology\5）代码测试\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544110008 e:\git\compiler-technology\5）代码测试\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544449326 e:\git\compiler-technology\5）代码测试\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+

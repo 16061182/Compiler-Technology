@@ -1,0 +1,1440 @@
+1 CONSTSY const
+1 INTSY int
+1 IDEN con1
+1 BECOM
+1 ICON 0
+1 SEMI
+This is a integer
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+This is a defcon
+1 INTSY int
+This is a deccon
+1 IDEN var1
+1 SEMI
+1 IDEN var1
+1 SEMI
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+This is a defvar
+1 INTSY int
+1 IDEN getint
+1 LPAR
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:getint level:0 paranum:0 address:0
+This is a defvar
+This is a decvar_extern
+1 IDEN getint
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:0 address:0
+1 LPAR
+1 INTSY int
+1 IDEN i
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:0 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+1 RPAR
+This is a paralist
+1 LBPA
+1 IFSY if
+1 LPAR
+1 IDEN i
+1 LSS
+This is a factor
+This is a item
+This is a expr
+1 ICON 1
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 RETURNSY return
+1 LPAR
+1 ICON 0
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a returnstate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN i
+1 EQL
+This is a factor
+This is a item
+This is a expr
+1 ICON 1
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 RETURNSY return
+1 LPAR
+1 ICON 0
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a returnstate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN i
+1 EQL
+This is a factor
+This is a item
+This is a expr
+1 ICON 2
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 RETURNSY return
+1 LPAR
+1 ICON 1
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a returnstate
+1 RETURNSY return
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN getint
+1 LPAR
+1 IDEN i
+1 MINUS
+This is a factor
+This is a item
+1 ICON 1
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 PLUS
+This is a callfunctstate
+This is a factor
+This is a item
+1 IDEN getint
+1 LPAR
+1 IDEN i
+1 MINUS
+This is a factor
+This is a item
+1 ICON 2
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 RPAR
+This is a callfunctstate
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a returnstate
+1 RBPA
+This is a state
+This is a states
+This is a multistate
+1 CHARSY char
+This is a deffunct
+1 IDEN getcha
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+1 LBPA
+1 CONSTSY const
+1 CHARSY char
+1 IDEN c
+1 BECOM
+1 CCON a
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:char kind:const value:97 name:c level:1 paranum:0 address:0
+1 SEMI
+This is a defcon
+1 RETURNSY return
+This is a deccon
+1 LPAR
+1 IDEN c
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a returnstate
+1 RBPA
+This is a state
+This is a states
+This is a multistate
+1 VOIDSY void
+This is a deffunct
+1 IDEN print1
+1 IDEN print1
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:0 address:0
+1 LPAR
+1 INTSY int
+1 IDEN i
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+1 COMMA
+1 INTSY int
+1 IDEN j
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+1 COMMA
+1 CHARSY char
+1 IDEN c
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+       type:char kind:var value:0 name:c level:1 paranum:0 address:0
+1 RPAR
+This is a paralist
+1 LBPA
+1 CHARSY char
+1 IDEN var1
+1 SEMI
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+       type:char kind:var value:0 name:c level:1 paranum:0 address:0
+       type:char kind:var value:0 name:var1 level:1 paranum:0 address:0
+This is a defvar
+1 INTSY int
+1 IDEN num
+1 COMMA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+       type:char kind:var value:0 name:c level:1 paranum:0 address:0
+       type:char kind:var value:0 name:var1 level:1 paranum:0 address:0
+       type:int kind:var value:0 name:num level:1 paranum:0 address:0
+1 IDEN count
+1 SEMI
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+       type:char kind:var value:0 name:c level:1 paranum:0 address:0
+       type:char kind:var value:0 name:var1 level:1 paranum:0 address:0
+       type:int kind:var value:0 name:num level:1 paranum:0 address:0
+       type:int kind:var value:0 name:count level:1 paranum:0 address:0
+This is a defvar
+1 INTSY int
+1 IDEN var2
+1 LBRA
+1 ICON 8
+1 RBRA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:int kind:var value:0 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+       type:char kind:var value:0 name:c level:1 paranum:0 address:0
+       type:char kind:var value:0 name:var1 level:1 paranum:0 address:0
+       type:int kind:var value:0 name:num level:1 paranum:0 address:0
+       type:int kind:var value:0 name:count level:1 paranum:0 address:0
+       type:int kind:array value:0 name:var2 level:1 paranum:8 address:0
+1 SEMI
+This is a defvar
+1 IDEN var1
+This is a decvar
+1 BECOM
+1 CCON a
+1 SEMI
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IDEN num
+This is a state
+1 BECOM
+1 ICON 0
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IDEN count
+This is a state
+1 BECOM
+1 ICON 0
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IDEN var2
+This is a state
+1 LBRA
+1 ICON 0
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IDEN var2
+This is a state
+1 LBRA
+1 ICON 1
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 IDEN i
+1 MINUS
+This is a factor
+This is a item
+1 IDEN j
+1 SEMI
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 SEMI
+This is a state
+1 IFSY if
+This is a state
+1 LPAR
+1 IDEN var2
+1 LBRA
+1 ICON 1
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 PRINTFSY printf
+1 LPAR
+1 SCON var2[1] is true
+1 RPAR
+1 SEMI
+This is a writestate
+1 SEMI
+This is a state
+This is a tiaojianstate
+This is a state
+1 IFSY if
+This is a state
+1 LPAR
+1 IDEN i
+1 LSS
+This is a factor
+This is a item
+This is a expr
+1 IDEN j
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN num
+1 BECOM
+1 IDEN num
+1 PLUS
+This is a factor
+This is a item
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 ELSESY else
+This is a state
+1 IDEN num
+1 BECOM
+1 IDEN num
+1 MINUS
+This is a factor
+This is a item
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN i
+1 GTR
+This is a factor
+This is a item
+This is a expr
+1 IDEN j
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN var2
+1 LBRA
+1 ICON 2
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN i
+1 NEQ
+This is a factor
+This is a item
+This is a expr
+1 IDEN j
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN var2
+1 LBRA
+1 ICON 3
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN var2
+1 LBRA
+1 ICON 0
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 TIMES
+This is a factor
+1 IDEN var2
+1 LBRA
+1 ICON 1
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN var2
+1 LBRA
+1 ICON 4
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 ICON 100
+1 DIV
+This is a integer
+This is a factor
+1 CCON a
+1 DIV
+This is a factor
+1 IDEN i
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN var2
+1 LBRA
+1 ICON 5
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 MINUS
+1 IDEN i
+1 PLUS
+This is a factor
+This is a item
+1 IDEN j
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN var2
+1 LBRA
+1 ICON 6
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IFSY if
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 PLUS
+1 IDEN c
+1 MINUS
+This is a factor
+This is a item
+1 CCON A
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 IDEN var2
+1 LBRA
+1 ICON 7
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 WHILESY while
+This is a state
+This is a tiaojianstate
+This is a state
+1 LPAR
+1 IDEN i
+1 GTR
+This is a factor
+This is a item
+This is a expr
+1 ICON 0
+1 RPAR
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 LBPA
+1 IDEN i
+1 BECOM
+1 IDEN i
+1 MINUS
+This is a factor
+This is a item
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 RBPA
+This is a state
+This is a states
+1 FORSY for
+This is a state
+This is a xunhuanstate
+This is a state
+1 LPAR
+1 IDEN i
+1 BECOM
+1 ICON 5
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 IDEN i
+1 BECOM
+1 IDEN i
+1 MINUS
+1 ICON 1
+1 RPAR
+1 IDEN i
+1 GTR
+This is a factor
+This is a item
+This is a expr
+1 ICON 0
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 LBPA
+1 IDEN count
+1 BECOM
+1 IDEN count
+1 PLUS
+This is a factor
+This is a item
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 RBPA
+This is a state
+This is a states
+1 FORSY for
+This is a state
+This is a xunhuanstate
+This is a state
+1 LPAR
+1 IDEN i
+1 BECOM
+1 ICON 0
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 IDEN i
+1 BECOM
+1 IDEN i
+1 PLUS
+1 ICON 1
+1 RPAR
+1 IDEN i
+1 LSS
+This is a factor
+This is a item
+This is a expr
+1 ICON 5
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a tiaojian
+1 LBPA
+1 IDEN count
+1 BECOM
+1 IDEN count
+1 PLUS
+This is a factor
+This is a item
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 RBPA
+This is a state
+This is a states
+1 PRINTFSY printf
+This is a state
+This is a xunhuanstate
+This is a state
+1 LPAR
+1 IDEN count
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a writestate
+1 RETURNSY return
+This is a state
+1 SEMI
+This is a returnstate
+1 RBPA
+This is a state
+This is a states
+This is a multistate
+1 VOIDSY void
+This is a deffuncf
+1 IDEN print2
+1 IDEN print2
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+1 LBPA
+1 CONSTSY const
+1 INTSY int
+1 IDEN i
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:i level:1 paranum:0 address:0
+This is a defcon
+1 INTSY int
+This is a deccon
+1 IDEN j
+1 SEMI
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:i level:1 paranum:0 address:0
+       type:int kind:var value:0 name:j level:1 paranum:0 address:0
+This is a defvar
+1 PRINTFSY printf
+This is a decvar
+1 LPAR
+1 SCON print2 called
+1 RPAR
+1 SEMI
+This is a writestate
+1 RETURNSY return
+This is a state
+1 SEMI
+This is a returnstate
+1 RBPA
+This is a state
+This is a states
+This is a multistate
+1 VOIDSY void
+This is a deffuncf
+1 MAINSY main
+1 MAINSY main
+1 LPAR
+1 RPAR
+1 LBPA
+1 CONSTSY const
+1 INTSY int
+1 IDEN a
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+This is a defcon
+1 CONSTSY const
+1 INTSY int
+1 IDEN a0b1c2d3e4
+1 BECOM
+1 MINUS
+1 ICON 233
+1 COMMA
+This is a integer
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+1 IDEN f5g6h7i8j9
+1 BECOM
+1 ICON 3072
+1 SEMI
+This is a integer
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+This is a defcon
+1 CONSTSY const
+1 CHARSY char
+1 IDEN klmn
+1 BECOM
+1 CCON +
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+1 SEMI
+This is a defcon
+1 CONSTSY const
+1 CHARSY char
+1 IDEN opq
+1 BECOM
+1 CCON -
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+1 COMMA
+1 IDEN rst
+1 BECOM
+1 CCON *
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+1 COMMA
+1 IDEN uvw
+1 BECOM
+1 CCON /
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+1 COMMA
+1 IDEN x
+1 BECOM
+1 CCON a
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+1 COMMA
+1 IDEN y_z
+1 BECOM
+1 CCON 0
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+1 SEMI
+This is a defcon
+1 INTSY int
+This is a deccon
+1 IDEN ABCD
+1 SEMI
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+This is a defvar
+1 CHARSY char
+1 IDEN cha1
+1 COMMA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+1 IDEN cha2
+1 SEMI
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha2 level:1 paranum:0 address:0
+This is a defvar
+1 CHARSY char
+1 IDEN EFG
+1 LBRA
+1 ICON 10
+1 RBRA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha2 level:1 paranum:0 address:0
+       type:char kind:array value:0 name:efg level:1 paranum:10 address:0
+1 SEMI
+This is a defvar
+1 INTSY int
+1 IDEN HIJK
+1 COMMA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha2 level:1 paranum:0 address:0
+       type:char kind:array value:0 name:efg level:1 paranum:10 address:0
+       type:int kind:var value:0 name:hijk level:1 paranum:0 address:0
+1 IDEN LMN
+1 LBRA
+1 ICON 5
+1 RBRA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha2 level:1 paranum:0 address:0
+       type:char kind:array value:0 name:efg level:1 paranum:10 address:0
+       type:int kind:var value:0 name:hijk level:1 paranum:0 address:0
+       type:int kind:array value:0 name:lmn level:1 paranum:5 address:0
+1 COMMA
+1 IDEN O
+1 COMMA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha2 level:1 paranum:0 address:0
+       type:char kind:array value:0 name:efg level:1 paranum:10 address:0
+       type:int kind:var value:0 name:hijk level:1 paranum:0 address:0
+       type:int kind:array value:0 name:lmn level:1 paranum:5 address:0
+       type:int kind:var value:0 name:o level:1 paranum:0 address:0
+1 IDEN P
+1 LBRA
+1 ICON 20
+1 RBRA
+       type:int kind:const value:0 name:con1 level:0 paranum:0 address:0
+       type:int kind:var value:0 name:var1 level:0 paranum:0 address:0
+       type:int kind:funct value:0 name:getint level:0 paranum:1 address:0
+       type:char kind:funct value:0 name:getcha level:0 paranum:0 address:0
+       type:void kind:funcf value:0 name:print1 level:0 paranum:3 address:0
+       type:void kind:funcf value:0 name:print2 level:0 paranum:0 address:0
+       type:int kind:const value:1 name:a level:1 paranum:0 address:0
+       type:int kind:const value:-233 name:a0b1c2d3e4 level:1 paranum:0 address:0
+       type:int kind:const value:3072 name:f5g6h7i8j9 level:1 paranum:0 address:0
+       type:char kind:const value:43 name:klmn level:1 paranum:0 address:0
+       type:char kind:const value:45 name:opq level:1 paranum:0 address:0
+       type:char kind:const value:42 name:rst level:1 paranum:0 address:0
+       type:char kind:const value:47 name:uvw level:1 paranum:0 address:0
+       type:char kind:const value:97 name:x level:1 paranum:0 address:0
+       type:char kind:const value:48 name:y_z level:1 paranum:0 address:0
+       type:int kind:var value:0 name:abcd level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha1 level:1 paranum:0 address:0
+       type:char kind:var value:0 name:cha2 level:1 paranum:0 address:0
+       type:char kind:array value:0 name:efg level:1 paranum:10 address:0
+       type:int kind:var value:0 name:hijk level:1 paranum:0 address:0
+       type:int kind:array value:0 name:lmn level:1 paranum:5 address:0
+       type:int kind:var value:0 name:o level:1 paranum:0 address:0
+       type:int kind:array value:0 name:p level:1 paranum:20 address:5
+1 SEMI
+This is a defvar
+1 IDEN LMN
+This is a decvar
+1 LBRA
+1 ICON 0
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 0
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IDEN LMN
+This is a state
+1 LBRA
+1 ICON 1
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 1
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 IDEN LMN
+This is a state
+1 LBRA
+1 ICON 2
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 BECOM
+1 ICON 2
+1 SEMI
+This is a integer
+This is a factor
+This is a item
+This is a expr
+This is a fuzhistate
+1 SCANFSY scanf
+This is a state
+1 LPAR
+1 IDEN ABCD
+1 RPAR
+1 SEMI
+This is a readstate
+1 SCANFSY scanf
+This is a state
+1 LPAR
+1 IDEN HIJK
+1 COMMA
+1 IDEN O
+1 RPAR
+1 SEMI
+This is a readstate
+1 SCANFSY scanf
+This is a state
+1 LPAR
+1 IDEN cha1
+1 RPAR
+1 SEMI
+This is a readstate
+1 SCANFSY scanf
+This is a state
+1 LPAR
+1 IDEN cha2
+1 RPAR
+1 SEMI
+This is a readstate
+1 PRINTFSY printf
+This is a state
+1 LPAR
+1 SCON result1 =
+1 COMMA
+1 IDEN getint
+1 LPAR
+1 IDEN LMN
+1 LBRA
+1 ICON 0
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 PLUS
+This is a callfunctstate
+This is a factor
+This is a item
+1 IDEN getint
+1 LPAR
+1 IDEN LMN
+1 LBRA
+1 ICON 1
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 PLUS
+This is a callfunctstate
+This is a factor
+This is a item
+1 IDEN getint
+1 LPAR
+1 IDEN LMN
+1 LBRA
+1 ICON 2
+1 RBRA
+This is a integer
+This is a factor
+This is a item
+This is a expr
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 RPAR
+This is a callfunctstate
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a writestate
+1 PRINTFSY printf
+This is a state
+1 LPAR
+1 SCON the 10th Fibonacci number is
+1 COMMA
+1 IDEN getint
+1 LPAR
+1 IDEN ABCD
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 RPAR
+This is a callfunctstate
+This is a factor
+This is a item
+This is a expr
+1 SEMI
+This is a writestate
+1 IDEN getcha
+This is a state
+1 SEMI
+This is a callfunctstate
+1 IDEN print1
+This is a state
+1 LPAR
+1 IDEN HIJK
+1 COMMA
+This is a factor
+This is a item
+This is a expr
+1 IDEN O
+1 COMMA
+This is a factor
+This is a item
+This is a expr
+1 IDEN cha1
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 SEMI
+This is a callfuncfstate
+1 IDEN print1
+This is a state
+1 LPAR
+1 IDEN O
+1 COMMA
+This is a factor
+This is a item
+This is a expr
+1 IDEN HIJK
+1 COMMA
+This is a factor
+This is a item
+This is a expr
+1 IDEN cha1
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 SEMI
+This is a callfuncfstate
+1 IDEN print1
+This is a state
+1 LPAR
+1 IDEN HIJK
+1 COMMA
+This is a factor
+This is a item
+This is a expr
+1 IDEN HIJK
+1 COMMA
+This is a factor
+This is a item
+This is a expr
+1 IDEN cha2
+1 RPAR
+This is a factor
+This is a item
+This is a expr
+This is a valueparalist
+1 SEMI
+This is a callfuncfstate
+1 IDEN print2
+This is a state
+1 SEMI
+This is a callfuncfstate
+1 RETURNSY return
+This is a state
+1 SEMI
+This is a returnstate
+1 RBPA
+This is a state
+This is a states
+This is a multistate
+This is a mainfunc
+This is a program

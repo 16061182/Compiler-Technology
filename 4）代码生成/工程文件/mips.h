@@ -298,7 +298,7 @@ void generatemips(){
                 fout << "   jal " << name << endl;
                 fout << "   subi $sp $sp " << first_para_offset << endl;
                 fout << "   lw $ra " << first_para_offset + 4 << "($sp)" << endl;
-                current_stacktop = first_para_offset + 8;//记录当前栈顶位置
+                current_stacktop = first_para_offset + 4;//记录当前栈顶位置
                 first_para_offset = 0;//重置第一个参数位置
                 first_para = 0;//重置标志位
             }

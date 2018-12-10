@@ -1,9 +1,9 @@
 const int con1 = 0;
-int var1;
+int b,add[10];
 int getint(int i){	
 	if(i < 1) return(0);
 	if(i == 1) return(0);
-	if(i == 2) return(0);
+	if(i == 2) return(1);
 	return(getint(i - 1) + getint(i - 2));
 } 
 char getcha{
@@ -65,7 +65,12 @@ void main(){
 	scanf(ABCD);
 	scanf(HIJK,O);
 	scanf(cha1);
-	scanf(cha2); 
+	scanf(cha2);
+	scanf(b); 
+	add[7] = -1+2*(-1+2*3);
+	add[8] = b;
+	add[9] = add[7];
+	b = 233;
 	
 	printf("result1 = ",getint(LMN[0]) +getint(LMN[1]) + getint(LMN[2]));
 	printf("the 10th Fibonacci number is ",getint(ABCD));
@@ -74,6 +79,8 @@ void main(){
 	print1(O,HIJK,cha1);
 	print1(HIJK,HIJK,cha2);
 	print2;
+	printf(b);
+	printf(add[7]+add[8]+add[9]);
 	
 	return;
 

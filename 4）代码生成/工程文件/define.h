@@ -300,8 +300,8 @@ enum midcode_type{
 typedef struct{
     midcode_kind kind;//四元式种类标志
     midcode_type type;//操作数类型
-    char name1[IDENL];//被赋值者的名称
-    char name2[IDENL];//赋值者的名称
+    char name1[LINEL];//被赋值者的名称（因为还要存储字符串常量，因此如果大小设为IDENL的话可能引起数组越界）
+    char name2[LINEL];//赋值者的名称
     int value;
     int t1;//第一个寄存器号
     int t2;//第二个寄存器号
@@ -461,7 +461,7 @@ int find_str_con(char *_content){//查找字符串的位置
 void print_str_con(){
     int i;
     for(i=0;i<str_con_index;i++){
-        cout << str_cons[i] << endl;
+        cout << i << " " << str_cons[i] << endl;
     }
 }
 /*typedef struct{
