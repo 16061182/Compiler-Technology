@@ -40,7 +40,8 @@ char kinds[50][IDENL] = {//需要更新
         "FACTOR_ARRAY_EXTERN",
         "ASSIGN_EXTERN",
         "ASSIGN_ARR_EXTERN",
-        "READ_EXTERN"
+        "READ_EXTERN",
+        "BLANK"
 };
 char types[4][IDENL] = {
         "INT",
@@ -170,6 +171,9 @@ void print_singlemidcode(int i){
     }
     else if(kind == READ_EXTERN){
         cout << "  " << "READ_EXTERN " << types[type] << " " << name1 << endl;
+    }
+    else if(kind == BLANK){
+        cout << "  " << "BLANK" << endl;
     }
 }
 

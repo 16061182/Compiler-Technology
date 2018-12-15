@@ -387,6 +387,7 @@ void deffunct(){//有返回值函数定义*
 	if(sy != IDEN){
 		error(DEFFUNCT_NAME_ERROR);
 	}
+	char idvalue[IDENL];//保存函数名
 	strcpy(idvalue,id0);//获取符号名称
 	funcindex = tab.index;//记录函数名保存位置
 	intarrayindex = tempintindex;//记录int数组表下标
@@ -439,6 +440,8 @@ void deffunct(){//有返回值函数定义*
 	else{
 		error(DEFFUNCT_ERROR);
 	}
+	//记录下一个函数使用的寄存器时的基础位移
+	func_regnum[func_index] = regno - 1 + func_regnum[func_index-1];//表示成累加和的形式
 	printf("This is a deffunct\n");
 }
 
@@ -503,6 +506,8 @@ void deffuncf(){//无返回值函数定义*
 	else{
 		error(DEFFUNCF_ERROR);
 	}
+	//记录下一个函数使用的寄存器时的基础位移
+	func_regnum[func_index] = regno - 1 + func_regnum[func_index-1];//表示成累加和的形式
 	printf("This is a deffuncf\n");
 }
 
@@ -585,11 +590,13 @@ void mainfunc(){//主函数*
 		error(RBPA_LOST_ERROR);
 	}
 	levelvalue --;
-	getsym();//主函数的末尾，需要考虑
+	//主函数的末尾，需要考虑
+	getsym();
+	//记录下一个函数使用的寄存器时的基础位移
+	func_regnum[func_index] = regno - 1 + func_regnum[func_index-1];//表示成累加和的形式
+	reg_index = func_regnum[func_index] + 1;//寄存器的总数
 	printf("This is a mainfunc\n");
-	printmidcode();//打印四元式表
 	enter_func("exit");
-	print_func();//打印函数表和参数表
 }
 
 int expr(){//表达式*
@@ -607,9 +614,13 @@ int expr(){//表达式*
 	if(negative){
         t2 = t1;//t2 = t1
         entermidcode(FACTOR_CON,midtypevalue,"","",regno++,0,0);//存入0
+        //把因子的存储位置标记为常量
+        int ans = func_regnum[func_index-1];//当前函数的基础位移
+        reg_is_con[ans + regno-1] = KIND_CONST;
+        reg_con_value[ans + regno-1] = 0;
         t1 = regno - 1;//t1 = 0
-        entermidcode(JIAN,INT,"","",t1,t1,t2);//存在最后操作数的位置
-        //t1 = regno - 1;
+        entermidcode(JIAN,INT,"","",regno++,t1,t2);//存在最后操作数的位置
+        t1 = regno - 1;
 	}
 	while(sy == PLUS || sy == MINUS){
         midcode_kind kind = (sy == PLUS)?JIA:JIAN;
@@ -619,7 +630,7 @@ int expr(){//表达式*
             entermidcode(kind,INT,"negative","",regno++,t1,t2);
             negative = 0;
 		}*/
-        entermidcode(kind,INT,"","",regno-1,t1,t2);//存在第二个操作数的位置
+        entermidcode(kind,INT,"","",regno++,t1,t2);//存在第二个操作数的位置
         t1 = regno - 1;//前面计算完的视为一项
 	}
 	printf("This is a expr\n");
@@ -634,7 +645,7 @@ int item(){//项* 返回值是项的值保存的寄存器编号
 		int t2 = factor();
         //int t1 = regno - 2;//左操作数寄存器下标
         //int t2 = regno - 1;//右操作数寄存器下标
-		entermidcode(kind,INT,"","",regno-1,t1,t2);//存在第二个操作数的位置
+		entermidcode(kind,INT,"","",regno++,t1,t2);//存在第二个操作数的位置
 		t1 = regno - 1;
 	}
 	printf("This is a item\n");
@@ -681,6 +692,10 @@ int factor(){//因子*
             else if(kind == KIND_CONST){
                 int value = tab.symbols[location].value;//获取常量的值，常量因子直接传值，值记录在t1
                 entermidcode(FACTOR_CON,midtypevalue,"","",regno++,value,0);
+                //把因子的存储位置标记为常量
+                int ans = func_regnum[func_index-1];//当前函数的基础位移
+                reg_is_con[ans + regno-1] = KIND_CONST;
+                reg_con_value[ans + regno-1] = value;
             	getsym();
 			}
             else if(kind == KIND_ARRAY){
@@ -727,12 +742,20 @@ int factor(){//因子*
         exprtype += 2;
 		integer();
 		entermidcode(FACTOR_CON,INT,"","",regno++,integervalue,0);
+        //把因子的存储位置标记为常量
+        int ans = func_regnum[func_index-1];//当前函数的基础位移
+        reg_is_con[ans + regno-1] = KIND_CONST;
+        reg_con_value[ans + regno-1] = integervalue;
 	}
 	else if(sy == CCON){
 	    exprtype += 1;
 		getsym();
 		//此时inum中保存了CCON的ASCII值
 		entermidcode(FACTOR_CON,CHAR,"","",regno++,inum,0);
+        //把因子的存储位置标记为常量
+        int ans = func_regnum[func_index-1];//当前函数的基础位移
+        reg_is_con[ans + regno-1] = KIND_CONST;
+        reg_con_value[ans + regno-1] = inum;
 	}
 	else{
 		error(FACTOR_ERROR);
@@ -915,14 +938,18 @@ void tiaojianstate(){//条件语句*
     int _indexloc = midtab.index;
     entermidcode(JUMP,INT,"","",0,0,0);//value是else的state之后的位置
     //生成label
-    int i = labelno++;
+    /*int i = labelno++;
     char str[IDENL];
-    itoa(i,str,10);
+    string per = to_string(i);
+    strcpy(str,per.c_str());
     char labelname[IDENL] = {'l','a','b','e','l','_'};
-    strcat(labelname,str);
-    //char labelname[IDENL];
-    //strcpy(labelname,getlabel());//labelname保存了label的名称
+    strcat(labelname,str);*/
+    char labelname[IDENL];
+    memset(labelname,65,sizeof(labelname));
+    string perona = getlabel();
+    strcpy(labelname,perona.c_str());
     entermidcode(LABEL,INT,labelname,"",0,0,0);//生成label
+    //cout << "len is ------ " << strlen(labelname) << "content is " << labelname << endl;
     strcpy(midtab.midcodes[indexloc].name1,labelname);//设置name1为跳转的目标
 	if(sy == ELSESY){
 		getsym();
@@ -930,12 +957,15 @@ void tiaojianstate(){//条件语句*
 	}
 	//midtab.midcodes[_indexloc].value = midtab.index;//写入跳转位置
 	//生成label
-    i = labelno++;
-    itoa(i,str,10);
+    /*i = labelno++;
+    per = to_string(i);
+    strcpy(str,per.c_str());
     char _labelname[IDENL] = {'l','a','b','e','l','_'};
-    strcat(_labelname,str);
-	//char _labelname[IDENL];
-	//strcpy(_labelname,getlabel());
+    strcat(_labelname,str);*/
+	char _labelname[IDENL];
+	memset(_labelname,65,sizeof(_labelname));
+	string _perona = getlabel();
+	strcpy(_labelname,_perona.c_str());
 	entermidcode(LABEL,INT,_labelname,"",0,0,0);
 	strcpy(midtab.midcodes[_indexloc].name1,_labelname);//设置name1为跳转的目标
 	printf("This is a tiaojianstate\n");
@@ -965,24 +995,15 @@ void xunhuanstate(){//循环语句*
 			error(LPAR_LOST_ERROR);
 		}
 		getsym();
-		//生成label
-        int i = labelno++;
-        char str[IDENL];
-        itoa(i,str,10);
-        char labelname[IDENL] = {'l','a','b','e','l','_'};
-        strcat(labelname,str);
+        char labelname[IDENL];
+        memset(labelname,65,sizeof(labelname));
+        string perona = getlabel();
+        strcpy(labelname,perona.c_str());
 		entermidcode(LABEL,INT,labelname,"",0,0,0);
 		int relation = tiaojian();
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
-		/*//生成label
-        int i = labelno++;
-        char str[IDENL];
-        itoa(i,str,10);
-        char labelname[IDENL] = {'l','a','b','e','l','_'};
-        strcat(labelname,str);
-		entermidcode(LABEL,INT,labelname,"",0,0,0);*/
 		//生成条件跳转四元式
         midcode_kind kind;
         switch(relation){
@@ -999,14 +1020,10 @@ void xunhuanstate(){//循环语句*
 		getsym();
 		state();
 		entermidcode(JUMP,INT,labelname,"",indexloc,0,0);//跳转到while的循环条件
-		//记录jump语句的下一条语句
-		//midtab.midcodes[indexloc].value = midtab.index;
-		//生成label
-        i = labelno++;
-        itoa(i,str,10);
-        char _labelname[IDENL] = {'l','a','b','e','l','_'};
-        strcat(_labelname,str);
-		//strcpy(labelname,getlabel());
+        char _labelname[IDENL];
+        memset(_labelname,65,sizeof(_labelname));
+        string _perona = getlabel();
+        strcpy(_labelname,_perona.c_str());
 		entermidcode(LABEL,INT,_labelname,"",0,0,0);
 		strcpy(midtab.midcodes[indexloc].name1,_labelname);//设置跳转的目标
 	}
@@ -1046,25 +1063,58 @@ void xunhuanstate(){//循环语句*
 		else if(level == 0){//是外部变量
             entermidcode(ASSIGN_EXTERN,INT,name,"",init,0,0);//直接默认循环变量是int类型
 		}
-		//生成无条件跳转
+		/*//生成无条件跳转
 		int indexloc = midtab.index;//记录跳转指令的位置
 		entermidcode(JUMP,INT,"","",0,0,0);
-		int huitiaoweizhi = midtab.index;//回跳应该跳到的位置
+		int huitiaoweizhi = midtab.index;//回跳应该跳到的位置*/
 		if(sy != SEMI){
 			error(XUNHUANSTATE_SEMI_ERROR);
 		}
 
+/*-------------------生成label-------------------------*/
+		char labelname[IDENL];
+        memset(labelname,65,sizeof(labelname));
+        string perona = getlabel();
+        strcpy(labelname,perona.c_str());
+		entermidcode(LABEL,INT,labelname,"",0,0,0);
 
-/*-------------------先执行步长变化-----------------------*/
-        int index_record = sourceindex;
-        char ch_record = ch;
-        int sy_record = sy;
+/*-------------------先执行语句列-------------------------*/
+        int index_record_tiaojian = sourceindex;//保存条件语句开始的位置（分号）
+        char ch_record_tiaojian = ch;
+        int sy_record_tiaojian = sy;
         getsym();
         while(sy != SEMI){//一直读到下一个分号//此处可以报错
             getsym();
             //cout << "---------------------the sy is " << sy << endl;
         }
+        int index_record_step = sourceindex;//保存步长变化语句开始的位置（分号）
+        char ch_record_step = ch;
+        int sy_record_step = sy;
         getsym();
+        while(sy != RPAR){//一直读到右括号//此处可以报错
+            getsym();
+        }
+        getsym();
+        state();
+        int index_record_over = sourceindex;//保存for语句结束的位置
+        char ch_record_over = ch;
+        int sy_record_over = sy;
+        char id0_record_over[IDENL];
+        strcpy(id0_record_over,id0);
+
+/*-------------------再执行步长变化-----------------------*/
+        /*int index_record = sourceindex;
+        char ch_record = ch;
+        int sy_record = sy;*/
+        sourceindex = index_record_step;
+        ch = ch_record_step;
+        sy = sy_record_step;
+        getsym();
+       /* while(sy != SEMI){//一直读到下一个分号//此处可以报错
+            getsym();
+            //cout << "---------------------the sy is " << sy << endl;
+        }*/
+        //getsym();
         if(sy != IDEN){
 			error(XUNHUANSTATE_STEP_ERROR);
 		}
@@ -1120,13 +1170,11 @@ void xunhuanstate(){//循环语句*
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
-		//生成label
-        int i = labelno++;
-        char str[IDENL];
-        itoa(i,str,10);
-        char labelname_step[IDENL] = {'l','a','b','e','l','_'};
-        strcat(labelname_step,str);
-		entermidcode(LABEL,INT,labelname_step,"",0,0,0);
+        /*char labelname_step[IDENL];
+        memset(labelname_step,65,sizeof(labelname_step));
+        string perona_step = getlabel();
+        strcpy(labelname_step,perona_step.c_str());
+		entermidcode(LABEL,INT,labelname_step,"",0,0,0);*/
         //步长变化语句
         if(level_1 > 0){//是普通变量
             entermidcode(FACTOR_VAR,INT,name_1,"",regno++,0,0);//标识符因子读到寄存器
@@ -1135,25 +1183,29 @@ void xunhuanstate(){//循环语句*
             entermidcode(FACTOR_VAR_EXTERN,INT,name_1,"",regno++,0,0);//外部变量因子读到寄存器
         }
         entermidcode(FACTOR_CON,INT,"","",regno++,value,0);//步长因子读到寄存器
+         //把因子的存储位置标记为常量
+        int ans = func_regnum[func_index-1];//当前函数的基础位移
+        reg_is_con[ans + regno-1] = KIND_CONST;
+        reg_con_value[ans + regno-1] = value;
         int t1 = regno - 2;
         int t2 = regno - 1;
         //变更循环变量
-        entermidcode(kind,INT,"","",regno-1,t1,t2);//计算新的循环变量
+        entermidcode(kind,INT,"","",regno++,t1,t2);//计算新的循环变量
         if(level_0 > 0){//是普通变量
             entermidcode(ASSIGN,INT,name,"",regno-1,0,0);
         }
         else if(level_0 == 0){//是外部变量
             entermidcode(ASSIGN_EXTERN,INT,name,"",regno-1,0,0);
         }
-        //记录分析到的位置
+        /*//记录分析到的位置
         int _index_record = sourceindex;
         char _ch_record = ch;
-        int _sy_record = sy;
+        int _sy_record = sy;*/
 /*-----------------------------分析中间的部分（条件跳转）------------------------------*/
         //回退读到的位置（当前符号为分号）
-        sourceindex = index_record;
-        ch = ch_record;
-        sy = sy_record;
+        sourceindex = index_record_tiaojian;
+        ch = ch_record_tiaojian;
+        sy = sy_record_tiaojian;
         getsym();
 		int relation = tiaojian();
 		//生成条件跳转语句
@@ -1162,50 +1214,53 @@ void xunhuanstate(){//循环语句*
 		//生成条件跳转语句
 		midcode_kind kind_1;
         switch(relation){
-            case LSS : kind_1 = BGEQ; break;//相反
-            case LEQ : kind_1 = BGTR; break;//
-            case GTR : kind_1 = BLEQ; break;//
-            case GEQ : kind_1 = BLSS; break;//
-            case NEQ : kind_1 = BEQ; break;//
-            case EQL : kind_1 = BNE; break;//
+            case LSS : kind_1 = BLSS; break;//相同
+            case LEQ : kind_1 = BLEQ; break;//
+            case GTR : kind_1 = BGTR; break;//
+            case GEQ : kind_1 = BGEQ; break;//
+            case NEQ : kind_1 = BNE; break;//
+            case EQL : kind_1 = BEQ; break;//
             default : break;
         }
-        int tiaojiantiaozhuan = midtab.index;//记录条件跳转语句的下标，之后更新跳转位置
-        entermidcode(kind_1,INT,"","",0,expr1,expr2);//跳转出for语句块
+        //int tiaojiantiaozhuan = midtab.index;//记录条件跳转语句的下标，之后更新跳转位置
+        entermidcode(kind_1,INT,labelname,"",0,expr1,expr2);//
 		if(sy != SEMI){
 			error(XUNHUANSTATE_SEMI_ERROR);
 		}
+		//下标置为for语句结束位置
+		sourceindex = index_record_over;
+		ch = ch_record_over;
+		sy = sy_record_over;
+		strcpy(id0,id0_record_over);
 /*--------------------------分析语句列部分------------------------------------*/
         //回退读到的位置（读到右括号）
-        sourceindex = _index_record;
-        ch = _ch_record;
-        sy = _sy_record;
+        //sourceindex = _index_record;
+        //ch = _ch_record;
+        //sy = _sy_record;
 
-		getsym();
-		//生成label
+		//getsym();
+		/*//生成label
         i = labelno++;
         itoa(i,str,10);
         char labelname[IDENL] = {'l','a','b','e','l','_'};
-        strcat(labelname,str);
-		//char labelname[IDENL];
-		//strcpy(labelname,getlabel());
-		entermidcode(LABEL,INT,labelname,"",0,0,0);
+        strcat(labelname,str);*/
+        /*char labelname[IDENL];
+        memset(labelname,65,sizeof(labelname));
+        string perona = getlabel();
+        strcpy(labelname,perona.c_str());
+		entermidcode(LABEL,INT,labelname,"",0,0,0);*/
 		//midtab.midcodes[indexloc].value = midtab.index;
-		strcpy(midtab.midcodes[indexloc].name1,labelname);//记录跳转的位置（语句的开始）
+		//strcpy(midtab.midcodes[indexloc].name1,labelname);//记录跳转的位置（语句的开始）
 
-		state();
+		//state();
         //无条件跳转到步长变化语句
-        entermidcode(JUMP,INT,labelname_step,"",huitiaoweizhi,0,0);
-        //条件跳转的位置（跳出for语句）
-        //midtab.midcodes[tiaojiantiaozhuan].value = midtab.index;
-        //生成label
-        i = labelno++;
-        itoa(i,str,10);
-        char _labelname[IDENL] = {'l','a','b','e','l','_'};
-        strcat(_labelname,str);
-        //strcpy(labelname,getlabel());
-        entermidcode(LABEL,INT,_labelname,"",0,0,0);
-        strcpy(midtab.midcodes[tiaojiantiaozhuan].name1,_labelname);
+        //entermidcode(JUMP,INT,labelname_step,"",huitiaoweizhi,0,0);
+        /*char _labelname[IDENL];
+        memset(_labelname,65,sizeof(_labelname));
+        string _perona = getlabel();
+        strcpy(_labelname,_perona.c_str());
+        entermidcode(LABEL,INT,_labelname,"",0,0,0);*/
+        //strcpy(midtab.midcodes[tiaojiantiaozhuan].name1,_labelname);
 	}
 	else{
 		error(XUNHUANSTATE_ERROR);

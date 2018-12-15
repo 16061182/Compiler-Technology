@@ -98,9 +98,11 @@ void generatemips(){
         else if(extern_vars[ans].kind == KIND_ARRAY){
             char name[MIPS_IDENL] = {'.','v','a','r','_'};
             strcat(name,extern_vars[ans].name);
-            char no[MIPS_IDENL];
-            itoa(extern_vars[ans].arraysize*4,no,10);//需要申请的空间大小
-            fout << "   " << name << ": .space " << no << endl;//在堆中申请空间
+            /*char no[MIPS_IDENL];
+            string per = to_string(extern_vars[ans].arraysize*4);
+            strcpy(no,per.c_str());*/
+            //itoa(extern_vars[ans].arraysize*4,no,10);//需要申请的空间大小
+            fout << "   " << name << ": .space " << extern_vars[ans].arraysize*4 << endl;//在堆中申请空间
         }
     }
 
@@ -108,7 +110,9 @@ void generatemips(){
     for(ans = 0;ans < str_con_index;ans++){
         char name[MIPS_IDENL] = {'.','s','t','r','_'};
         char no[MIPS_IDENL];
-        itoa(ans,no,10);
+        string per = to_string(ans);
+        strcpy(no,per.c_str());
+        //itoa(ans,no,10);
         strcat(name,no);
         char str[LINEL];
         memset(str,65,sizeof(str));
@@ -312,7 +316,7 @@ void generatemips(){
                 fout << "   jal " << name << endl;
                 fout << "   subi $sp $sp " << first_para_offset << endl;
                 fout << "   lw $ra " << first_para_offset + 4 << "($sp)" << endl;
-                current_stacktop = first_para_offset + 8;//记录当前栈顶位置（保证下次复用的是$ra保存的位置）
+                current_stacktop = first_para_offset + 8;//记录当前栈顶位置
                 first_para_offset = 0;//重置第一个参数位置
                 first_para = 0;//重置标志位
             }
@@ -361,7 +365,9 @@ void generatemips(){
                 int ans = find_str_con(mid.name1);
                 char name[MIPS_IDENL] = {'.','s','t','r','_'};
                 char no[MIPS_IDENL];
-                itoa(ans,no,10);
+                string per = to_string(ans);
+                strcpy(no,per.c_str());
+                //itoa(ans,no,10);
                 strcat(name,no);//获得了字符串的代号
                 fout << "   la $a0 " << name << endl;
                 fout << "   syscall" << endl;

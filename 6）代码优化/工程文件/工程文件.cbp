@@ -37,6 +37,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="mips.h" />
 		<Unit filename="siyuanshi.h" />
+		<Unit filename="youhua.h" />
 		<Unit filename="yufafenxi.h" />
 		<Extensions>
 			<code_completion />

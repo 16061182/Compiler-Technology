@@ -321,7 +321,7 @@
 	"yufafenxi.h"
 	"siyuanshi.h"
 
-1544435331 source:e:\git\compiler-technology\6）代码优化\工程文件\main.cpp
+1544456226 source:e:\git\compiler-technology\5）代码测试\工程文件\main.cpp
 	<iostream>
 	<string.h>
 	<fstream>
@@ -330,13 +330,13 @@
 	"siyuanshi.h"
 	"mips.h"
 
-1544445520 e:\git\compiler-technology\6）代码优化\工程文件\define.h
+1544457627 e:\git\compiler-technology\5）代码测试\工程文件\define.h
 	<iostream>
 	<string.h>
 	<stdlib.h>
 	<fstream>
 
-1544367476 e:\git\compiler-technology\6）代码优化\工程文件\yufafenxi.h
+1544453331 e:\git\compiler-technology\5）代码测试\工程文件\yufafenxi.h
 	<iostream>
 	<string.h>
 	<fstream>
@@ -344,19 +344,73 @@
 	"cifafenxi.h"
 	"siyuanshi.h"
 
-1543590900 e:\git\compiler-technology\6）代码优化\工程文件\cifafenxi.h
+1543590900 e:\git\compiler-technology\5）代码测试\工程文件\cifafenxi.h
 	<iostream>
 	<string.h>
 	<fstream>
 	"define.h"
 
-1544110008 e:\git\compiler-technology\6）代码优化\工程文件\siyuanshi.h
+1544110008 e:\git\compiler-technology\5）代码测试\工程文件\siyuanshi.h
 	<iostream>
 	<string.h>
 	<fstream>
 	"define.h"
 
-1544435003 e:\git\compiler-technology\6）代码优化\工程文件\mips.h
+1544449326 e:\git\compiler-technology\5）代码测试\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1544694575 source:e:\本次作业\5）代码测试\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+	"youhua.h"
+
+1544694769 e:\本次作业\5）代码测试\工程文件\define.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<fstream>
+
+1544708487 e:\本次作业\5）代码测试\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1543590900 e:\本次作业\5）代码测试\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544688208 e:\本次作业\5）代码测试\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1544657227 e:\本次作业\5）代码测试\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1544697419 e:\本次作业\5）代码测试\工程文件\youhua.h
 	<iostream>
 	<string.h>
 	<fstream>

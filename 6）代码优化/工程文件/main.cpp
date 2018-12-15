@@ -40,6 +40,7 @@ c语言语法细节解读
 #include"yufafenxi.h"
 #include"siyuanshi.h"
 #include"mips.h"
+#include"youhua.h"
 using namespace std;
 
 void setup(){
@@ -71,8 +72,10 @@ void setup(){
 }
 
 int main(){
-	fin.open("./test_files/hamidun_test.txt",ios::in);
-	fout.open("./test_outputs/hamidun_result.asm",ios::out);
+    init_regs();
+
+	fin.open("C:/Users/98341/Desktop/test_files/qiyunshangai_test.txt",ios::in);
+	fout.open("C:/Users/98341/Desktop/test_files/qiyunshangai_result.asm",ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
@@ -80,9 +83,19 @@ int main(){
 	getsym();
 	program();
 
+	cout << "--------------------STRING CONSTANT TABLE--------------------" << endl;
 	print_str_con();
-	cout << "--------------------" << endl;
+	cout << "--------------------EXTERN VAR TABLE--------------------" << endl;
 	print_extern_var();
+	cout << "--------------------FUNCTION AND PARAMETER TABLE--------------------" << endl;
+	print_func();//打印函数表和参数表
+
+	cout << endl;
+	cout << "--------------------SIYUANSHI TABLE--------------------" << endl;
+	printmidcode();//打印四元式表
+	cout << "--------------------REGISTER TABLE--------------------" << endl;
+	print_regs();
+
 	/*cout << get_firstpara("getint") << "    " << get_funcend("getint") << endl;
 	cout << get_firstpara("getcha") << "    " << get_funcend("getcha") << endl;
 	cout << get_firstpara("print1") << "    " << get_funcend("print1") << endl;
@@ -92,6 +105,11 @@ int main(){
 	cout << get_para_offset("print1","var2",7) << endl;
 	cout << get_para_offset("main","o",0) << endl;
 	cout << para_offsets[0].name << "   " << para_offsets[1].name << endl;*/
+	const_combine();
+	cout << "--------------------SIYUANSHI TABLE--------------------" << endl;
+	printmidcode();
+	cout << "--------------------REGISTER TABLE--------------------" << endl;
+	print_regs();
 	generatemips();
 
 	fin.close();

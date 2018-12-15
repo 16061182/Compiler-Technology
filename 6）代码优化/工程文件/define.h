@@ -60,6 +60,7 @@ using namespace std;
 #define MAXPARA 1000//参数表长度限制
 #define MAXVALUEPARA 50
 #define MIPS_IDENL 100//用在mips中的label长度
+#define REGNOSUM 10000
 
 #define TYPE_INT 1
 #define TYPE_CHAR 2
@@ -204,6 +205,7 @@ void enter_para(char *_name,int _size){//添加参数表
 
 char func_names[MAXFUNC][IDENL];//函数名表
 int func_firstpara[MAXFUNC];//函数对应的第一个参数在参数表中的位置
+int func_regnum[MAXFUNC];//函数所使用的寄存器的数量
 int func_index;//函数表索引
 void enter_func(char *_name){//添加函数表
     strcpy(func_names[func_index],_name);
@@ -219,6 +221,15 @@ int get_firstpara(char *_name){//根据函数名获取第一个参数的位置
         }
     }
     return func_firstpara[i];
+}
+int get_regnum(char *_name){//根据函数名获得第一个参数的位置
+    int i;
+    for(i=0;i<func_index;i++){
+        if(strcmp(_name,func_names[i]) == 0){
+            break;
+        }
+    }
+    return func_regnum[i];
 }
 int get_funcend(char *_name){//获取寄存器在栈中开始的位置
     int i;
@@ -249,7 +260,7 @@ int get_para_offset(char *_funcname,char *_paraname,int _paraindex){//获取某�
 void print_func(){//打印函数表和参数表
     int i,j;
     for(i=0;i<func_index-1;i++){//遍历函数表
-        cout << func_names[i] << endl;
+        cout << func_names[i] << "  reg offset is : " << func_regnum[i] << endl;
         for(j=func_firstpara[i];j<func_firstpara[i+1];j++){//遍历参数表
             cout << "       name : " << para_offsets[j].name << "      offset : " << para_offsets[j].offset << endl;
         }
@@ -290,7 +301,8 @@ enum midcode_kind{
     FACTOR_ARRAY_EXTERN,
     ASSIGN_EXTERN,
     ASSIGN_ARR_EXTERN,
-    READ_EXTERN
+    READ_EXTERN,
+    BLANK
 };
 enum midcode_type{
     INT,
@@ -367,7 +379,7 @@ int midtiaojian;//记录条件操作符的临时变量
 //int reg1;
 //int reg2;
 int regno = 1;//申请的临时寄存器编号（0号为$zero，1号为函数返回寄存器）
-int pararegno = 0;//保存函数调用传入参数的寄存器组
+int pararegno = 0;//保存函数调用传入参数的寄存器组（没有实际用处，只是形式化表示）
 int exprregno1;//记录表达式值保存的寄存器的下标
 int exprregno2;
 
@@ -385,13 +397,12 @@ int getexprtype(){//根据特征值获取表达式类型
 
 //获取标签名称
 int labelno;
-char *getlabel(){
+string getlabel(){
+    string per = "label_";
     int i = labelno++;
-    char str[IDENL];
-    itoa(i,str,10);
-    char lab[IDENL] = {'l','a','b','e','l','_'};
-    strcat(lab,str);
-    return lab;
+    string ona = to_string(i);
+    string perona = per + ona;
+    return perona;
 }
 
 //外部全局变量记录
@@ -417,16 +428,6 @@ void enter_extern_var(char *_name,int _kind,int _size){//变量_size为0，数�
         extern_vars[extern_var_index].kind = KIND_ARRAY;
         extern_vars[extern_var_index].arraysize = _size;//数组大小
         extern_var_index++;
-        /*int i;
-        for(i=0;i<_size;i++){
-            strcpy(extern_vars[extern_var_index].name,_name);
-            char no[IDENL];
-            itoa(i,no,10);//获取下标
-            strcat(extern_vars[extern_var_index].name,"_");//名字后面加上下划线
-            strcat(extern_vars[extern_var_index].name,no);//下划线后面加上下标数字（最后一个下划线后的数字是数组下标）
-            extern_vars[extern_var_index].kind == KIND_ARRAY;
-            extern_var_index++;
-        }*/
     }
 }
 //打印全局变量
@@ -464,6 +465,28 @@ void print_str_con(){
     for(i=0;i<str_con_index;i++){
         cout << i << " " << str_cons[i] << endl;
     }
+}
+
+//记录存储空间各单元是否是常量的标志位
+int reg_is_con[REGNOSUM];
+//记录常量值的数组
+int reg_con_value[REGNOSUM];
+int reg_index = 0;
+void init_regs(){
+    memset(reg_is_con,0,sizeof(reg_is_con));//初始化为非常量
+    memset(reg_con_value,0,sizeof(reg_con_value));//常量值初始化为0
+}
+void print_regs(){
+    int i;
+    for(i=0;i<reg_index;i++){
+        cout << i << "  " << reg_is_con[i] << " " << reg_con_value[i] << endl;
+    }
+}
+
+void test(){
+    int a = 0;
+    char b[10];
+    //itoa(a,b,10);
 }
 /*typedef struct{
     char content[LINEL];
