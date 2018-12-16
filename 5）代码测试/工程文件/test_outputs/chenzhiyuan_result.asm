@@ -679,10 +679,10 @@ label_16:
 
 #------------166  PARA INT m
 
-#------------167  CONST CHAR divide = 45
+#------------167  CONST CHAR divide = 42
 
-#------------168  FACTOR_CON CHAR 45 save in reg[1]
-   li $t0 45
+#------------168  FACTOR_CON CHAR 42 save in reg[1]
+   li $t0 42
    sw $t0 -8($sp)
 
 #------------169  WRITE CHAR reg[1]
@@ -816,307 +816,396 @@ label_22:
 
 #------------201  VAR INT n
 
-#------------202  ARRAY INT array[10]
+#------------202  VAR INT i
 
-#------------203  CALL INT get_max_num_1(0)
-   sw $ra -44($sp)
-   addi $sp $sp -48
-   jal .func_get_max_num_1
-   subi $sp $sp -48
-   lw $ra -44($sp)
+#------------203  ARRAY INT array[12]
 
-#------------204  FACTOR_FUNC INT get_max_num_1 save in reg[1]
-   sw $v0 -44($sp)
-
-#------------205  FACTOR_CON INT 1 save in reg[2]
-   li $t0 1
-   sw $t0 -48($sp)
-
-#------------206  FACTOR_CON CHAR 43 save in reg[3]
-   li $t0 43
-   sw $t0 -52($sp)
-
-#------------207  PUSH INT parareg[1] from reg[1]
+#------------204  CALL INT get_max_num_1(0)
    sw $ra -56($sp)
-   lw $t0 -44($sp)
-   sw $t0 -60($sp)
-
-#------------208  PUSH INT parareg[2] from reg[2]
-   lw $t0 -48($sp)
-   sw $t0 -64($sp)
-
-#------------209  PUSH INT parareg[3] from reg[3]
-   lw $t0 -52($sp)
-   sw $t0 -68($sp)
-
-#------------210  CALL INT compute(3)
    addi $sp $sp -60
-   jal .func_compute
+   jal .func_get_max_num_1
    subi $sp $sp -60
    lw $ra -56($sp)
 
-#------------211  FACTOR_FUNC INT compute save in reg[4]
+#------------205  FACTOR_FUNC INT get_max_num_1 save in reg[1]
    sw $v0 -56($sp)
 
-#------------212  ASSIGN INT n = reg[4]
-   lw $t3 -56($sp)
-   sw $t3 0($sp)
-
-#------------213  label_23    ----------------Label----------------
-label_23:
-
-#------------214  FACTOR_VAR INT n save in reg[5]
-   lw $t3 0($sp)
-   sw $t3 -60($sp)
-
-#------------215  IF reg[5] BEQ reg[0] THEN GOTO label_24
-   lw $t0 -60($sp)
-    beq $t0 $0 label_24
-
-#------------216  FACTOR_CON INT 1 save in reg[6]
+#------------206  FACTOR_CON INT 1 save in reg[2]
    li $t0 1
+   sw $t0 -60($sp)
+
+#------------207  FACTOR_CON CHAR 43 save in reg[3]
+   li $t0 43
    sw $t0 -64($sp)
 
-#------------217  FACTOR_CON INT 0 save in reg[7]
-   li $t0 0
-   sw $t0 -68($sp)
+#------------208  PUSH INT parareg[1] from reg[1]
+   sw $ra -68($sp)
+   lw $t0 -56($sp)
+   sw $t0 -72($sp)
 
-#------------218  reg[7] = reg[7] JIAN reg[6]
-   lw $t0 -68($sp)
-   lw $t1 -64($sp)
-   sub $t2 $t0 $t1
-   sw $t2 -68($sp)
+#------------209  PUSH INT parareg[2] from reg[2]
+   lw $t0 -60($sp)
+   sw $t0 -76($sp)
 
-#------------219  FACTOR_VAR INT n save in reg[8]
+#------------210  PUSH INT parareg[3] from reg[3]
+   lw $t0 -64($sp)
+   sw $t0 -80($sp)
+
+#------------211  CALL INT compute(3)
+   addi $sp $sp -72
+   jal .func_compute
+   subi $sp $sp -72
+   lw $ra -68($sp)
+
+#------------212  FACTOR_FUNC INT compute save in reg[4]
+   sw $v0 -68($sp)
+
+#------------213  ASSIGN INT n = reg[4]
+   lw $t3 -68($sp)
+   sw $t3 0($sp)
+
+#------------214  label_23    ----------------Label----------------
+label_23:
+
+#------------215  FACTOR_VAR INT n save in reg[5]
    lw $t3 0($sp)
    sw $t3 -72($sp)
 
-#------------220  reg[8] = reg[7] JIA reg[8]
-   lw $t0 -68($sp)
-   lw $t1 -72($sp)
-   add $t2 $t0 $t1
-   sw $t2 -72($sp)
+#------------216  IF reg[5] BEQ reg[0] THEN GOTO label_24
+   lw $t0 -72($sp)
+    beq $t0 $0 label_24
 
-#------------221  ASSIGN INT n = reg[8]
-   lw $t3 -72($sp)
-   sw $t3 0($sp)
+#------------217  FACTOR_CON INT 1 save in reg[6]
+   li $t0 1
+   sw $t0 -76($sp)
 
-#------------222  FACTOR_VAR INT n save in reg[9]
-   lw $t3 0($sp)
-   sw $t3 -76($sp)
-
-#------------223  FACTOR_CON INT 0 save in reg[10]
+#------------218  FACTOR_CON INT 0 save in reg[7]
    li $t0 0
    sw $t0 -80($sp)
 
-#------------224  ASSIGN_ARR_EXTERN INT used[reg[9]] = reg[10]
-   lw $t0 -76($sp)
-   lw $t1 -80($sp)
-   sll $t0 $t0 2
-   sw $t1 .var_used($t0)
+#------------219  reg[7] = reg[7] JIAN reg[6]
+   lw $t0 -80($sp)
+   lw $t1 -76($sp)
+   sub $t2 $t0 $t1
+   sw $t2 -80($sp)
 
-#------------225  FACTOR_VAR INT n save in reg[11]
+#------------220  FACTOR_VAR INT n save in reg[8]
    lw $t3 0($sp)
    sw $t3 -84($sp)
 
-#------------226  FACTOR_CON INT 0 save in reg[12]
+#------------221  reg[8] = reg[7] JIA reg[8]
+   lw $t0 -80($sp)
+   lw $t1 -84($sp)
+   add $t2 $t0 $t1
+   sw $t2 -84($sp)
+
+#------------222  ASSIGN INT n = reg[8]
+   lw $t3 -84($sp)
+   sw $t3 0($sp)
+
+#------------223  FACTOR_VAR INT n save in reg[9]
+   lw $t3 0($sp)
+   sw $t3 -88($sp)
+
+#------------224  FACTOR_CON INT 0 save in reg[10]
    li $t0 0
-   sw $t0 -88($sp)
-
-#------------227  ASSIGN_ARR INT array[reg[11]] = reg[12]
-   lw $t0 -84($sp)
-   lw $t1 -88($sp)
-   sll $t0 $t0 2
-   sub $t0 $sp $t0
-   sw $t1 -4($t0)
-
-#------------228  JUMP to label_23
-   j label_23
-
-#------------229  label_24    ----------------Label----------------
-label_24:
-
-#------------230  FACTOR_CON INT 10 save in reg[13]
-   li $t0 10
    sw $t0 -92($sp)
 
-#------------231  CALL INT get_2(0)
-   sw $ra -96($sp)
-   addi $sp $sp -100
-   jal .func_get_2
-   subi $sp $sp -100
-   lw $ra -96($sp)
+#------------225  ASSIGN_ARR_EXTERN INT used[reg[9]] = reg[10]
+   lw $t0 -88($sp)
+   lw $t1 -92($sp)
+   sll $t0 $t0 2
+   sw $t1 .var_used($t0)
 
-#------------232  FACTOR_FUNC INT get_2 save in reg[14]
-   sw $v0 -96($sp)
+#------------226  FACTOR_VAR INT n save in reg[11]
+   lw $t3 0($sp)
+   sw $t3 -96($sp)
 
-#------------233  FACTOR_CON CHAR 43 save in reg[15]
-   li $t0 43
+#------------227  FACTOR_CON INT 10086 save in reg[12]
+   li $t0 10086
    sw $t0 -100($sp)
 
-#------------234  PUSH INT parareg[4] from reg[13]
-   sw $ra -104($sp)
-   lw $t0 -92($sp)
-   sw $t0 -108($sp)
-
-#------------235  PUSH INT parareg[5] from reg[14]
+#------------228  ASSIGN_ARR INT array[reg[11]] = reg[12]
    lw $t0 -96($sp)
+   lw $t1 -100($sp)
+   sll $t0 $t0 2
+   sub $t0 $sp $t0
+   sw $t1 -8($t0)
+
+#------------229  JUMP to label_23
+   j label_23
+
+#------------230  label_24    ----------------Label----------------
+label_24:
+
+#------------231  FACTOR_CON INT 10 save in reg[13]
+   li $t0 10
+   sw $t0 -104($sp)
+
+#------------232  CALL INT get_2(0)
+   sw $ra -108($sp)
+   addi $sp $sp -112
+   jal .func_get_2
+   subi $sp $sp -112
+   lw $ra -108($sp)
+
+#------------233  FACTOR_FUNC INT get_2 save in reg[14]
+   sw $v0 -108($sp)
+
+#------------234  FACTOR_CON CHAR 43 save in reg[15]
+   li $t0 43
    sw $t0 -112($sp)
 
-#------------236  PUSH INT parareg[6] from reg[15]
-   lw $t0 -100($sp)
-   sw $t0 -116($sp)
-
-#------------237  CALL INT compute(3)
-   addi $sp $sp -108
-   jal .func_compute
-   subi $sp $sp -108
-   lw $ra -104($sp)
-
-#------------238  FACTOR_FUNC INT compute save in reg[16]
-   sw $v0 -104($sp)
-
-#------------239  FACTOR_CON INT 1 save in reg[17]
-   li $t0 1
-   sw $t0 -108($sp)
-
-#------------240  reg[17] = reg[16] JIAN reg[17]
+#------------235  PUSH INT parareg[4] from reg[13]
+   sw $ra -116($sp)
    lw $t0 -104($sp)
-   lw $t1 -108($sp)
-   sub $t2 $t0 $t1
-   sw $t2 -108($sp)
+   sw $t0 -120($sp)
 
-#------------241  ASSIGN INT n = reg[17]
-   lw $t3 -108($sp)
+#------------236  PUSH INT parareg[5] from reg[14]
+   lw $t0 -108($sp)
+   sw $t0 -124($sp)
+
+#------------237  PUSH INT parareg[6] from reg[15]
+   lw $t0 -112($sp)
+   sw $t0 -128($sp)
+
+#------------238  CALL INT compute(3)
+   addi $sp $sp -120
+   jal .func_compute
+   subi $sp $sp -120
+   lw $ra -116($sp)
+
+#------------239  FACTOR_FUNC INT compute save in reg[16]
+   sw $v0 -116($sp)
+
+#------------240  FACTOR_CON INT 1 save in reg[17]
+   li $t0 1
+   sw $t0 -120($sp)
+
+#------------241  reg[17] = reg[16] JIAN reg[17]
+   lw $t0 -116($sp)
+   lw $t1 -120($sp)
+   sub $t2 $t0 $t1
+   sw $t2 -120($sp)
+
+#------------242  ASSIGN INT n = reg[17]
+   lw $t3 -120($sp)
    sw $t3 0($sp)
 
-#------------242  JUMP to label_26
+#------------243  JUMP to label_26
    j label_26
 
-#------------243  label_25    ----------------Label----------------
+#------------244  label_25    ----------------Label----------------
 label_25:
 
-#------------244  FACTOR_VAR INT n save in reg[18]
-   lw $t3 0($sp)
-   sw $t3 -112($sp)
-
-#------------245  FACTOR_CON INT 1 save in reg[19]
-   li $t0 1
-   sw $t0 -116($sp)
-
-#------------246  reg[19] = reg[18] JIAN reg[19]
-   lw $t0 -112($sp)
-   lw $t1 -116($sp)
-   sub $t2 $t0 $t1
-   sw $t2 -116($sp)
-
-#------------247  ASSIGN INT n = reg[19]
-   lw $t3 -116($sp)
-   sw $t3 0($sp)
-
-#------------248  FACTOR_VAR INT n save in reg[20]
-   lw $t3 0($sp)
-   sw $t3 -120($sp)
-
-#------------249  IF reg[20] BEQ reg[0] THEN GOTO label_27
-   lw $t0 -120($sp)
-    beq $t0 $0 label_27
-
-#------------250  label_26    ----------------Label----------------
-label_26:
-
-#------------251  FACTOR_VAR INT n save in reg[21]
+#------------245  FACTOR_VAR INT n save in reg[18]
    lw $t3 0($sp)
    sw $t3 -124($sp)
 
-#------------252  FACTOR_CON INT 1 save in reg[22]
+#------------246  FACTOR_CON INT 1 save in reg[19]
    li $t0 1
    sw $t0 -128($sp)
 
-#------------253  reg[22] = reg[21] JIAN reg[22]
+#------------247  reg[19] = reg[18] JIAN reg[19]
    lw $t0 -124($sp)
    lw $t1 -128($sp)
    sub $t2 $t0 $t1
    sw $t2 -128($sp)
 
-#------------254  FACTOR_VAR INT n save in reg[23]
+#------------248  ASSIGN INT n = reg[19]
+   lw $t3 -128($sp)
+   sw $t3 0($sp)
+
+#------------249  FACTOR_VAR INT n save in reg[20]
    lw $t3 0($sp)
    sw $t3 -132($sp)
 
-#------------255  FACTOR_ARRAY INT array [reg[23]] save in reg[24]
-   lw $t3 -132($sp)
-   sll $t3 $t3 2
-   sub $t3 $sp $t3
-   lw $t3 -4($t3)
+#------------250  IF reg[20] BEQ reg[0] THEN GOTO label_27
+   lw $t0 -132($sp)
+    beq $t0 $0 label_27
+
+#------------251  label_26    ----------------Label----------------
+label_26:
+
+#------------252  FACTOR_VAR INT n save in reg[21]
+   lw $t3 0($sp)
    sw $t3 -136($sp)
 
-#------------256  ASSIGN_ARR_EXTERN INT stack[reg[22]] = reg[24]
-   lw $t0 -128($sp)
-   lw $t1 -136($sp)
+#------------253  FACTOR_CON INT 1 save in reg[22]
+   li $t0 1
+   sw $t0 -140($sp)
+
+#------------254  reg[22] = reg[21] JIAN reg[22]
+   lw $t0 -136($sp)
+   lw $t1 -140($sp)
+   sub $t2 $t0 $t1
+   sw $t2 -140($sp)
+
+#------------255  FACTOR_VAR INT n save in reg[23]
+   lw $t3 0($sp)
+   sw $t3 -144($sp)
+
+#------------256  FACTOR_CON INT 6 save in reg[24]
+   li $t0 6
+   sw $t0 -148($sp)
+
+#------------257  FACTOR_CON INT 4 save in reg[25]
+   li $t0 4
+   sw $t0 -152($sp)
+
+#------------258  reg[25] = reg[24] CHU reg[25]
+   lw $t0 -148($sp)
+   lw $t1 -152($sp)
+   div $t0 $t1
+   mflo $t2
+   sw $t2 -152($sp)
+
+#------------259  FACTOR_CON INT 0 save in reg[26]
+   li $t0 0
+   sw $t0 -156($sp)
+
+#------------260  reg[26] = reg[26] JIAN reg[25]
+   lw $t0 -156($sp)
+   lw $t1 -152($sp)
+   sub $t2 $t0 $t1
+   sw $t2 -156($sp)
+
+#------------261  FACTOR_CON INT 2 save in reg[27]
+   li $t0 2
+   sw $t0 -160($sp)
+
+#------------262  FACTOR_CON INT 3 save in reg[28]
+   li $t0 3
+   sw $t0 -164($sp)
+
+#------------263  reg[28] = reg[27] CHENG reg[28]
+   lw $t0 -160($sp)
+   lw $t1 -164($sp)
+   mult $t0 $t1
+   mflo $t2
+   sw $t2 -164($sp)
+
+#------------264  reg[28] = reg[26] JIA reg[28]
+   lw $t0 -156($sp)
+   lw $t1 -164($sp)
+   add $t2 $t0 $t1
+   sw $t2 -164($sp)
+
+#------------265  FACTOR_EXPR reg[28] save in reg[29]
+   lw $t0 -164($sp)
+   sw $t0 -168($sp)
+
+#------------266  FACTOR_CON INT 4 save in reg[30]
+   li $t0 4
+   sw $t0 -172($sp)
+
+#------------267  reg[30] = reg[29] CHENG reg[30]
+   lw $t0 -168($sp)
+   lw $t1 -172($sp)
+   mult $t0 $t1
+   mflo $t2
+   sw $t2 -172($sp)
+
+#------------268  reg[30] = reg[23] JIA reg[30]
+   lw $t0 -144($sp)
+   lw $t1 -172($sp)
+   add $t2 $t0 $t1
+   sw $t2 -172($sp)
+
+#------------269  FACTOR_CON INT 21 save in reg[31]
+   li $t0 21
+   sw $t0 -176($sp)
+
+#------------270  reg[31] = reg[30] JIAN reg[31]
+   lw $t0 -172($sp)
+   lw $t1 -176($sp)
+   sub $t2 $t0 $t1
+   sw $t2 -176($sp)
+
+#------------271  FACTOR_ARRAY INT array [reg[31]] save in reg[32]
+   lw $t3 -176($sp)
+   sll $t3 $t3 2
+   sub $t3 $sp $t3
+   lw $t3 -8($t3)
+   sw $t3 -180($sp)
+
+#------------272  FACTOR_CON INT 10086 save in reg[33]
+   li $t0 10086
+   sw $t0 -184($sp)
+
+#------------273  reg[33] = reg[32] JIAN reg[33]
+   lw $t0 -180($sp)
+   lw $t1 -184($sp)
+   sub $t2 $t0 $t1
+   sw $t2 -184($sp)
+
+#------------274  ASSIGN_ARR_EXTERN INT stack[reg[22]] = reg[33]
+   lw $t0 -140($sp)
+   lw $t1 -184($sp)
    sll $t0 $t0 2
    sw $t1 .var_stack($t0)
 
-#------------257  JUMP to label_25
+#------------275  JUMP to label_25
    j label_25
 
-#------------258  label_27    ----------------Label----------------
+#------------276  label_27    ----------------Label----------------
 label_27:
 
-#------------259  RETURN reg[0] TO $V0 AND THEN GOTO 0
-   lw $v0 -40($sp)
+#------------277  RETURN reg[0] TO $V0 AND THEN GOTO 0
+   lw $v0 -52($sp)
    jr $ra
 
-#------------260  FUNC VOID test_for(0)
+#------------278  FUNC VOID test_for(0)
    jr $ra
 
 .func_test_for:
 
-#------------261  VAR INT i
+#------------279  VAR INT i
 
-#------------262  FACTOR_CON INT 1 save in reg[1]
+#------------280  FACTOR_CON INT 1 save in reg[1]
    li $t0 1
    sw $t0 -4($sp)
 
-#------------263  ASSIGN INT i = reg[1]
+#------------281  ASSIGN INT i = reg[1]
    lw $t3 -4($sp)
    sw $t3 0($sp)
 
-#------------264  JUMP to label_29
+#------------282  JUMP to label_29
    j label_29
 
-#------------265  label_28    ----------------Label----------------
+#------------283  label_28    ----------------Label----------------
 label_28:
 
-#------------266  FACTOR_VAR INT i save in reg[2]
+#------------284  FACTOR_VAR INT i save in reg[2]
    lw $t3 0($sp)
    sw $t3 -8($sp)
 
-#------------267  FACTOR_CON INT 1 save in reg[3]
+#------------285  FACTOR_CON INT 1 save in reg[3]
    li $t0 1
    sw $t0 -12($sp)
 
-#------------268  reg[3] = reg[2] JIA reg[3]
+#------------286  reg[3] = reg[2] JIA reg[3]
    lw $t0 -8($sp)
    lw $t1 -12($sp)
    add $t2 $t0 $t1
    sw $t2 -12($sp)
 
-#------------269  ASSIGN INT i = reg[3]
+#------------287  ASSIGN INT i = reg[3]
    lw $t3 -12($sp)
    sw $t3 0($sp)
 
-#------------270  FACTOR_CON INT 0 save in reg[4]
+#------------288  FACTOR_CON INT 0 save in reg[4]
    li $t0 0
    sw $t0 -16($sp)
 
-#------------271  IF reg[4] BEQ reg[0] THEN GOTO label_30
+#------------289  IF reg[4] BEQ reg[0] THEN GOTO label_30
    lw $t0 -16($sp)
     beq $t0 $0 label_30
 
-#------------272  label_29    ----------------Label----------------
+#------------290  label_29    ----------------Label----------------
 label_29:
 
-#------------273  WRITE test for success
+#------------291  WRITE test for success
    li $v0 4
    la $a0 .str_2
    syscall
@@ -1124,288 +1213,288 @@ label_29:
    li $a0 10
    syscall
 
-#------------274  JUMP to label_28
+#------------292  JUMP to label_28
    j label_28
 
-#------------275  label_30    ----------------Label----------------
+#------------293  label_30    ----------------Label----------------
 label_30:
 
-#------------276  FUNC INT test_6_para(6)
+#------------294  FUNC INT test_6_para(6)
    jr $ra
 
 .func_test_6_para:
 
-#------------277  PARA INT a1
+#------------295  PARA INT a1
 
-#------------278  PARA INT a2
+#------------296  PARA INT a2
 
-#------------279  PARA INT a3
+#------------297  PARA INT a3
 
-#------------280  PARA INT a4
+#------------298  PARA INT a4
 
-#------------281  PARA INT a5
+#------------299  PARA INT a5
 
-#------------282  PARA INT a6
+#------------300  PARA INT a6
 
-#------------283  FACTOR_VAR INT a1 save in reg[1]
+#------------301  FACTOR_VAR INT a1 save in reg[1]
    lw $t3 0($sp)
    sw $t3 -24($sp)
 
-#------------284  FACTOR_VAR INT a2 save in reg[2]
+#------------302  FACTOR_VAR INT a2 save in reg[2]
    lw $t3 -4($sp)
    sw $t3 -28($sp)
 
-#------------285  reg[2] = reg[1] JIA reg[2]
+#------------303  reg[2] = reg[1] JIA reg[2]
    lw $t0 -24($sp)
    lw $t1 -28($sp)
    add $t2 $t0 $t1
    sw $t2 -28($sp)
 
-#------------286  FACTOR_VAR INT a3 save in reg[3]
+#------------304  FACTOR_VAR INT a3 save in reg[3]
    lw $t3 -8($sp)
    sw $t3 -32($sp)
 
-#------------287  reg[3] = reg[2] JIA reg[3]
+#------------305  reg[3] = reg[2] JIA reg[3]
    lw $t0 -28($sp)
    lw $t1 -32($sp)
    add $t2 $t0 $t1
    sw $t2 -32($sp)
 
-#------------288  FACTOR_VAR INT a4 save in reg[4]
+#------------306  FACTOR_VAR INT a4 save in reg[4]
    lw $t3 -12($sp)
    sw $t3 -36($sp)
 
-#------------289  reg[4] = reg[3] JIA reg[4]
+#------------307  reg[4] = reg[3] JIA reg[4]
    lw $t0 -32($sp)
    lw $t1 -36($sp)
    add $t2 $t0 $t1
    sw $t2 -36($sp)
 
-#------------290  FACTOR_VAR INT a5 save in reg[5]
+#------------308  FACTOR_VAR INT a5 save in reg[5]
    lw $t3 -16($sp)
    sw $t3 -40($sp)
 
-#------------291  reg[5] = reg[4] JIA reg[5]
+#------------309  reg[5] = reg[4] JIA reg[5]
    lw $t0 -36($sp)
    lw $t1 -40($sp)
    add $t2 $t0 $t1
    sw $t2 -40($sp)
 
-#------------292  FACTOR_VAR INT a6 save in reg[6]
+#------------310  FACTOR_VAR INT a6 save in reg[6]
    lw $t3 -20($sp)
    sw $t3 -44($sp)
 
-#------------293  reg[6] = reg[5] JIA reg[6]
+#------------311  reg[6] = reg[5] JIA reg[6]
    lw $t0 -40($sp)
    lw $t1 -44($sp)
    add $t2 $t0 $t1
    sw $t2 -44($sp)
 
-#------------294  RETURN reg[6] TO $V0 AND THEN GOTO 0
+#------------312  RETURN reg[6] TO $V0 AND THEN GOTO 0
    lw $v0 -44($sp)
    jr $ra
 
-#------------295  FUNC VOID main(0)
+#------------313  FUNC VOID main(0)
    jr $ra
 
 .func_main:
 
-#------------296  VAR INT a
+#------------314  VAR INT a
 
-#------------297  VAR INT b
+#------------315  VAR INT b
 
-#------------298  VAR CHAR op
+#------------316  VAR CHAR op
 
-#------------299  VAR CHAR sy
+#------------317  VAR CHAR sy
 
-#------------300  VAR CHAR nor_sy
+#------------318  VAR CHAR nor_sy
 
-#------------301  CALL VOID test_for(0)
+#------------319  CALL VOID test_for(0)
    sw $ra -20($sp)
    addi $sp $sp -24
    jal .func_test_for
    subi $sp $sp -24
    lw $ra -20($sp)
 
-#------------302  READ INT a
+#------------320  READ INT a
    li $v0 5
    syscall
    sw $v0 0($sp)
 
-#------------303  READ INT b
+#------------321  READ INT b
    li $v0 5
    syscall
    sw $v0 -4($sp)
 
-#------------304  READ CHAR op
+#------------322  READ CHAR op
    li $v0 12
    syscall
    sw $v0 -8($sp)
 
-#------------305  FACTOR_VAR INT a save in reg[7]
+#------------323  FACTOR_VAR INT a save in reg[7]
    lw $t3 0($sp)
    sw $t3 -44($sp)
 
-#------------306  FACTOR_VAR INT b save in reg[8]
+#------------324  FACTOR_VAR INT b save in reg[8]
    lw $t3 -4($sp)
    sw $t3 -48($sp)
 
-#------------307  FACTOR_VAR CHAR op save in reg[9]
+#------------325  FACTOR_VAR CHAR op save in reg[9]
    lw $t3 -8($sp)
    sw $t3 -52($sp)
 
-#------------308  PUSH INT parareg[7] from reg[7]
+#------------326  PUSH INT parareg[7] from reg[7]
    sw $ra -56($sp)
    lw $t0 -44($sp)
    sw $t0 -60($sp)
 
-#------------309  PUSH INT parareg[8] from reg[8]
+#------------327  PUSH INT parareg[8] from reg[8]
    lw $t0 -48($sp)
    sw $t0 -64($sp)
 
-#------------310  PUSH INT parareg[9] from reg[9]
+#------------328  PUSH INT parareg[9] from reg[9]
    lw $t0 -52($sp)
    sw $t0 -68($sp)
 
-#------------311  CALL INT compute(3)
+#------------329  CALL INT compute(3)
    addi $sp $sp -60
    jal .func_compute
    subi $sp $sp -60
    lw $ra -56($sp)
 
-#------------312  FACTOR_FUNC INT compute save in reg[10]
+#------------330  FACTOR_FUNC INT compute save in reg[10]
    sw $v0 -56($sp)
 
-#------------313  ASSIGN_EXTERN INT n = reg[10]
+#------------331  ASSIGN_EXTERN INT n = reg[10]
    lw $t3 -56($sp)
    sw $t3 .var_n
 
-#------------314  FACTOR_VAR_EXTERN INT n save in reg[11]
-   lw $t3 .var_n
-   sw $t3 -60($sp)
+#------------332  FACTOR_CON CHAR 95 save in reg[11]
+   li $t0 95
+   sw $t0 -60($sp)
 
-#------------315  WRITE INT reg[11]
-   li $v0 1
+#------------333  WRITE CHAR reg[11]
+   li $v0 11
    lw $a0 -60($sp)
    syscall
    li $v0 11
    li $a0 10
    syscall
 
-#------------316  FACTOR_CON CHAR 95 save in reg[12]
-   li $t0 95
-   sw $t0 -64($sp)
+#------------334  FACTOR_VAR_EXTERN INT n save in reg[12]
+   lw $t3 .var_n
+   sw $t3 -64($sp)
 
-#------------317  WRITE CHAR reg[12]
-   li $v0 11
+#------------335  WRITE INT reg[12]
+   li $v0 1
    lw $a0 -64($sp)
    syscall
    li $v0 11
    li $a0 10
    syscall
 
-#------------318  READ_EXTERN INT m
+#------------336  READ_EXTERN INT m
    li $v0 5
    syscall
    sw $v0 .var_m
 
-#------------319  FACTOR_VAR_EXTERN INT n save in reg[13]
+#------------337  FACTOR_VAR_EXTERN INT n save in reg[13]
    lw $t3 .var_n
    sw $t3 -68($sp)
 
-#------------320  FACTOR_VAR_EXTERN INT m save in reg[14]
+#------------338  FACTOR_VAR_EXTERN INT m save in reg[14]
    lw $t3 .var_m
    sw $t3 -72($sp)
 
-#------------321  PUSH INT parareg[10] from reg[13]
+#------------339  PUSH INT parareg[10] from reg[13]
    sw $ra -76($sp)
    lw $t0 -68($sp)
    sw $t0 -80($sp)
 
-#------------322  PUSH INT parareg[11] from reg[14]
+#------------340  PUSH INT parareg[11] from reg[14]
    lw $t0 -72($sp)
    sw $t0 -84($sp)
 
-#------------323  CALL CHAR judge(2)
+#------------341  CALL CHAR judge(2)
    addi $sp $sp -80
    jal .func_judge
    subi $sp $sp -80
    lw $ra -76($sp)
 
-#------------324  FACTOR_FUNC CHAR judge save in reg[15]
+#------------342  FACTOR_FUNC CHAR judge save in reg[15]
    sw $v0 -76($sp)
 
-#------------325  ASSIGN CHAR sy = reg[15]
+#------------343  ASSIGN CHAR sy = reg[15]
    lw $t3 -76($sp)
    sw $t3 -12($sp)
 
-#------------326  FACTOR_VAR INT a save in reg[16]
+#------------344  FACTOR_VAR INT a save in reg[16]
    lw $t3 0($sp)
    sw $t3 -80($sp)
 
-#------------327  FACTOR_VAR INT b save in reg[17]
+#------------345  FACTOR_VAR INT b save in reg[17]
    lw $t3 -4($sp)
    sw $t3 -84($sp)
 
-#------------328  FACTOR_VAR_EXTERN INT n save in reg[18]
+#------------346  FACTOR_VAR_EXTERN INT n save in reg[18]
    lw $t3 .var_n
    sw $t3 -88($sp)
 
-#------------329  FACTOR_VAR_EXTERN INT m save in reg[19]
+#------------347  FACTOR_VAR_EXTERN INT m save in reg[19]
    lw $t3 .var_m
    sw $t3 -92($sp)
 
-#------------330  FACTOR_CON INT 1 save in reg[20]
+#------------348  FACTOR_CON INT 1 save in reg[20]
    li $t0 1
    sw $t0 -96($sp)
 
-#------------331  FACTOR_CON INT 2 save in reg[21]
+#------------349  FACTOR_CON INT 2 save in reg[21]
    li $t0 2
    sw $t0 -100($sp)
 
-#------------332  PUSH INT parareg[12] from reg[16]
+#------------350  PUSH INT parareg[12] from reg[16]
    sw $ra -104($sp)
    lw $t0 -80($sp)
    sw $t0 -108($sp)
 
-#------------333  PUSH INT parareg[13] from reg[17]
+#------------351  PUSH INT parareg[13] from reg[17]
    lw $t0 -84($sp)
    sw $t0 -112($sp)
 
-#------------334  PUSH INT parareg[14] from reg[18]
+#------------352  PUSH INT parareg[14] from reg[18]
    lw $t0 -88($sp)
    sw $t0 -116($sp)
 
-#------------335  PUSH INT parareg[15] from reg[19]
+#------------353  PUSH INT parareg[15] from reg[19]
    lw $t0 -92($sp)
    sw $t0 -120($sp)
 
-#------------336  PUSH INT parareg[16] from reg[20]
+#------------354  PUSH INT parareg[16] from reg[20]
    lw $t0 -96($sp)
    sw $t0 -124($sp)
 
-#------------337  PUSH INT parareg[17] from reg[21]
+#------------355  PUSH INT parareg[17] from reg[21]
    lw $t0 -100($sp)
    sw $t0 -128($sp)
 
-#------------338  CALL INT test_6_para(6)
+#------------356  CALL INT test_6_para(6)
    addi $sp $sp -108
    jal .func_test_6_para
    subi $sp $sp -108
    lw $ra -104($sp)
 
-#------------339  FACTOR_FUNC INT test_6_para save in reg[22]
+#------------357  FACTOR_FUNC INT test_6_para save in reg[22]
    sw $v0 -104($sp)
 
-#------------340  ASSIGN_EXTERN INT sum = reg[22]
+#------------358  ASSIGN_EXTERN INT sum = reg[22]
    lw $t3 -104($sp)
    sw $t3 .var_sum
 
-#------------341  FACTOR_VAR_EXTERN INT sum save in reg[23]
+#------------359  FACTOR_VAR_EXTERN INT sum save in reg[23]
    lw $t3 .var_sum
    sw $t3 -108($sp)
 
-#------------342  WRITE INT reg[23]
+#------------360  WRITE INT reg[23]
    li $v0 1
    lw $a0 -108($sp)
    syscall
@@ -1413,16 +1502,16 @@ label_30:
    li $a0 10
    syscall
 
-#------------343  WRITE You can choose m numbers permutations from n numbers ? 
+#------------361  WRITE You can choose m numbers permutations from n numbers ? 
    li $v0 4
    la $a0 .str_3
    syscall
 
-#------------344  FACTOR_VAR CHAR sy save in reg[24]
+#------------362  FACTOR_VAR CHAR sy save in reg[24]
    lw $t3 -12($sp)
    sw $t3 -112($sp)
 
-#------------345  WRITE CHAR reg[24]
+#------------363  WRITE CHAR reg[24]
    li $v0 11
    lw $a0 -112($sp)
    syscall
@@ -1430,7 +1519,7 @@ label_30:
    li $a0 10
    syscall
 
-#------------346  WRITE ___________
+#------------364  WRITE ___________
    li $v0 4
    la $a0 .str_1
    syscall
@@ -1438,42 +1527,42 @@ label_30:
    li $a0 10
    syscall
 
-#------------347  CALL CHAR get_permutations_sy(0)
+#------------365  CALL CHAR get_permutations_sy(0)
    sw $ra -116($sp)
    addi $sp $sp -120
    jal .func_get_permutations_sy
    subi $sp $sp -120
    lw $ra -116($sp)
 
-#------------348  FACTOR_FUNC CHAR get_permutations_sy save in reg[25]
+#------------366  FACTOR_FUNC CHAR get_permutations_sy save in reg[25]
    sw $v0 -116($sp)
 
-#------------349  ASSIGN CHAR nor_sy = reg[25]
+#------------367  ASSIGN CHAR nor_sy = reg[25]
    lw $t3 -116($sp)
    sw $t3 -16($sp)
 
-#------------350  FACTOR_VAR CHAR sy save in reg[26]
+#------------368  FACTOR_VAR CHAR sy save in reg[26]
    lw $t3 -12($sp)
    sw $t3 -120($sp)
 
-#------------351  FACTOR_EXPR reg[26] save in reg[27]
+#------------369  FACTOR_EXPR reg[26] save in reg[27]
    lw $t0 -120($sp)
    sw $t0 -124($sp)
 
-#------------352  FACTOR_VAR CHAR nor_sy save in reg[28]
+#------------370  FACTOR_VAR CHAR nor_sy save in reg[28]
    lw $t3 -16($sp)
    sw $t3 -128($sp)
 
-#------------353  FACTOR_EXPR reg[28] save in reg[29]
+#------------371  FACTOR_EXPR reg[28] save in reg[29]
    lw $t0 -128($sp)
    sw $t0 -132($sp)
 
-#------------354  IF reg[27] BEQ reg[29] THEN GOTO label_31
+#------------372  IF reg[27] BEQ reg[29] THEN GOTO label_31
    lw $t0 -124($sp)
    lw $t1 -132($sp)
     beq $t0 $t1 label_31
 
-#------------355  WRITE error input: 0 < m <= n <= 10
+#------------373  WRITE error input: 0 < m <= n <= 10
    li $v0 4
    la $a0 .str_4
    syscall
@@ -1481,35 +1570,35 @@ label_30:
    li $a0 10
    syscall
 
-#------------356  JUMP to label_32
+#------------374  JUMP to label_32
    j label_32
 
-#------------357  label_31    ----------------Label----------------
+#------------375  label_31    ----------------Label----------------
 label_31:
 
-#------------358  CALL VOID preparation(0)
+#------------376  CALL VOID preparation(0)
    sw $ra -136($sp)
    addi $sp $sp -140
    jal .func_preparation
    subi $sp $sp -140
    lw $ra -136($sp)
 
-#------------359  FACTOR_CON INT 0 save in reg[30]
+#------------377  FACTOR_CON INT 0 save in reg[30]
    li $t0 0
    sw $t0 -136($sp)
 
-#------------360  PUSH INT parareg[18] from reg[30]
+#------------378  PUSH INT parareg[18] from reg[30]
    sw $ra -140($sp)
    lw $t0 -136($sp)
    sw $t0 -144($sp)
 
-#------------361  CALL VOID permutations(1)
+#------------379  CALL VOID permutations(1)
    addi $sp $sp -144
    jal .func_permutations
    subi $sp $sp -144
    lw $ra -140($sp)
 
-#------------362  label_32    ----------------Label----------------
+#------------380  label_32    ----------------Label----------------
 label_32:
 
    jr $ra

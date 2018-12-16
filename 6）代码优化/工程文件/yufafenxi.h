@@ -8,6 +8,7 @@
 #include"define.h"
 #include"cifafenxi.h"
 #include"siyuanshi.h"
+#include"cuowuchuli.h"
 using namespace std;
 
 void deccon();
@@ -31,7 +32,7 @@ int tiaojian();
 void xunhuanstate();
 void callfunctstate();
 void callfuncfstate();
-void valueparalist();
+void valueparalist(char *_funcname);
 void states();
 void readstate();
 void writestate();
@@ -301,8 +302,8 @@ void defvar(){//变量定义*
 	if(sy != INTSY && sy != CHARSY){
 		error(DEFVAR_TYPE_ERROR);
 	}
-	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型（符号表）
-	midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
+	int typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型（符号表）
+	midcode_type midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 	getsym();
 	if(sy != IDEN){
 		error(DEFVAR_IDEN_ERROR);
@@ -324,7 +325,7 @@ void defvar(){//变量定义*
             enter_extern_var(idvalue,KIND_ARRAY,integervalue);//加入外部变量表
 		}
 		//登录参数表
-        enter_para(idvalue,integervalue);
+        enter_para(idvalue,integervalue,typevalue);
 		entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
 		getsym();
 	}
@@ -334,7 +335,7 @@ void defvar(){//变量定义*
             enter_extern_var(idvalue,KIND_VAR,0);//加入外部变量表
         }
         //登录参数表
-        enter_para(idvalue,1);
+        enter_para(idvalue,1,typevalue);
         entermidcode(VAR,midtypevalue,idvalue,"",0,0,0);//登录四元式表
 	}
 	while(sy == COMMA){
@@ -359,7 +360,7 @@ void defvar(){//变量定义*
                 enter_extern_var(idvalue,KIND_ARRAY,integervalue);//加入外部变量表
             }
 			//登录参数表
-            enter_para(idvalue,integervalue);
+            enter_para(idvalue,integervalue,typevalue);
 			entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
 			getsym();
 		}
@@ -369,7 +370,7 @@ void defvar(){//变量定义*
                 enter_extern_var(idvalue,KIND_VAR,0);//加入外部变量表
             }
             //登录参数表
-            enter_para(idvalue,1);
+            enter_para(idvalue,1,typevalue);
             entermidcode(VAR,midtypevalue,idvalue,"",0,0,0);//登录四元式表
 		}
 	}
@@ -382,6 +383,7 @@ void deffunct(){//有返回值函数定义*
 		error(DEFFUNCT_TYPE_ERROR);
 	}
 	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录变量类型
+	current_func_type = typevalue;
 	midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 	getsym();
 	if(sy != IDEN){
@@ -450,6 +452,7 @@ void deffuncf(){//无返回值函数定义*
 	if(sy != VOIDSY){
 		error(DEFFUNCF_VOID_ERROR);
 	}
+	current_func_type = TYPE_VOID;
 	getsym();
 	if(sy != IDEN){
 		error(DEFFUNCF_NAME_ERROR);
@@ -526,8 +529,8 @@ void paralist(){//参数表*
 	if(sy != INTSY && sy != CHARSY){
 		error(PARALIST_TYPE_ERROR);
 	}
-	typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录参数类型
-	midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
+	int typevalue = (sy == INTSY)?TYPE_INT:TYPE_CHAR;//记录参数类型
+	midcode_type midtypevalue = (sy == INTSY)?INT:CHAR;//记录变量类型（四元式）
 	getsym();
 	if(sy != IDEN){
 		error(PARALIST_IDEN_ERROR);
@@ -535,7 +538,7 @@ void paralist(){//参数表*
 	strcpy(idvalue,id0);//记录参数名称
 	enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//加入符号表
 	//加入参数表
-	enter_para(idvalue,1);//参数为int或char，大小为1
+	enter_para(idvalue,1,typevalue);//参数为int或char，大小为1
 	entermidcode(PARA,midtypevalue,idvalue,"",0,0,0);//四元式
 	paranumvalue += 1;//记录参数的个数
 	getsym();
@@ -553,7 +556,7 @@ void paralist(){//参数表*
 		strcpy(idvalue,id0);//记录参数名称
 		enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//加入符号表
 		//加入参数表
-        enter_para(idvalue,1);//参数为int或char，大小为1
+        enter_para(idvalue,1,typevalue);//参数为int或char，大小为1
 		entermidcode(PARA,midtypevalue,idvalue,"",0,0,0);//四元式
 		paranumvalue++;//参数的个数++
 		getsym();
@@ -888,7 +891,7 @@ void fuzhistate(){//赋值语句*
     initexprtype();
 	int value = expr();//获得=右侧表达式值存储的寄存器号
 	int expr_type = getexprtype();
-	if(expr_type != iden_type){
+	if(expr_type != iden_type){//int赋给char
         error(BECOM_NOT_MATCH);//
 	}
 	if(level > 0){
@@ -972,12 +975,21 @@ void tiaojianstate(){//条件语句*
 }
 
 int tiaojian(){//条件*
+    //记录左侧表达式类型
+    initexprtype();
 	exprregno1 = expr();
+	int type_record1 = getexprtype();
 	int relation;
 	if(sy == LSS || sy == LEQ || sy == GTR || sy == GEQ || sy == NEQ || sy == EQL){
 		relation = sy;
 		getsym();
+		//记录右侧表达式类型
+		initexprtype();
 		exprregno2 = expr();
+		int type_record2 = getexprtype();
+		if(type_record1 != type_record2){
+            error(TIAOJIAN_NOT_MATCH);
+		}
 	}
 	else{
         //expr1 != 0
@@ -1041,11 +1053,13 @@ void xunhuanstate(){//循环语句*
 		//检查是否定义过以及是否是普通标识符
 		int location = loc(name);
 		int level;
+		int iden_type;
 		if(location >= 0){
             if(tab.symbols[location].kind != KIND_VAR){
                 error(IDEN_NOT_VAR);
             }
             level = tab.symbols[location].level;
+            iden_type = tab.symbols[location].type;
 		}
 		else{
             error(IDEN_NOTFOUND_ERROR);
@@ -1055,7 +1069,14 @@ void xunhuanstate(){//循环语句*
 			error(XUNHUANSTATE_BECOM_ERROR);
 		}
 		getsym();
+		//获得表达式类型
+		initexprtype();
 		int init = expr();
+		int expr_type = getexprtype();
+		//类型不匹配则报错
+		if(expr_type != iden_type){
+            error(BECOM_NOT_MATCH);
+		}
 		//生成赋值语句
 		if(level > 0){//是普通变量
             entermidcode(ASSIGN,INT,name,"",init,0,0);//直接默认循环变量是int类型
@@ -1079,6 +1100,7 @@ void xunhuanstate(){//循环语句*
 		entermidcode(LABEL,INT,labelname,"",0,0,0);
 
 /*-------------------先执行语句列-------------------------*/
+        int lineno = lc;//结束时的行号
         int index_record_tiaojian = sourceindex;//保存条件语句开始的位置（分号）
         char ch_record_tiaojian = ch;
         int sy_record_tiaojian = sy;
@@ -1101,11 +1123,13 @@ void xunhuanstate(){//循环语句*
         int sy_record_over = sy;
         char id0_record_over[IDENL];
         strcpy(id0_record_over,id0);
+        int lineno_over = lc;//结束时的行号
 
 /*-------------------再执行步长变化-----------------------*/
         /*int index_record = sourceindex;
         char ch_record = ch;
         int sy_record = sy;*/
+        lc = lineno;
         sourceindex = index_record_step;
         ch = ch_record_step;
         sy = sy_record_step;
@@ -1203,6 +1227,7 @@ void xunhuanstate(){//循环语句*
         int _sy_record = sy;*/
 /*-----------------------------分析中间的部分（条件跳转）------------------------------*/
         //回退读到的位置（当前符号为分号）
+        lc = lineno;
         sourceindex = index_record_tiaojian;
         ch = ch_record_tiaojian;
         sy = sy_record_tiaojian;
@@ -1232,6 +1257,7 @@ void xunhuanstate(){//循环语句*
 		ch = ch_record_over;
 		sy = sy_record_over;
 		strcpy(id0,id0_record_over);
+		lc = lineno_over;
 /*--------------------------分析语句列部分------------------------------------*/
         //回退读到的位置（读到右括号）
         //sourceindex = _index_record;
@@ -1294,7 +1320,7 @@ void callfunctstate(){//有返回值函数调用语句*
 	int flag = 0;//是否生成四元式
 	if(sy == LPAR){
 		getsym();
-		valueparalist();
+		valueparalist(name);
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
@@ -1333,7 +1359,7 @@ void callfuncfstate(){//无返回值函数调用语句*
 	int flag = 0;//是否生成四元式
 	if(sy == LPAR){
 		getsym();
-		valueparalist();
+		valueparalist(name);
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}
@@ -1348,7 +1374,8 @@ void callfuncfstate(){//无返回值函数调用语句*
 	printf("This is a callfuncfstate\n");
 }
 
-void valueparalist(){//值参数表*
+void valueparalist(char *_funcname){//值参数表*
+    int para_num = 0;//第几个参数
     //值参数表（值参数的寄存器号）（用来改四元式输出顺序，一次性读完值参数再一起PUSH，方便生成mips）
     int value_paras[MAXVALUEPARA] = {0};
     int value_para_index = 0;
@@ -1357,20 +1384,30 @@ void valueparalist(){//值参数表*
 	initexprtype();
 	value = expr();//值参数保存的寄存器编号
 	int expr_type = getexprtype();
+	int para_type = get_para_type(_funcname,para_num);
+	if(expr_type != para_type){
+        error(PARA_TYPE_ERROR);
+	}
 	midcode_type type = (expr_type == TYPE_INT)?INT:CHAR;
 	//entermidcode(PUSH,type,"","",pararegno++,value,0);//文法规定值参数不能是数组元素;加入参数寄存器
 	//加入值参数表
 	value_paras[value_para_index++] = value;
+	para_num ++;
 	while(sy == COMMA){
 		getsym();
 		//获得值参数的类型
 		initexprtype();
 		value = expr();
 		expr_type = getexprtype();
-		type = (expr_type == TYPE_INT)?INT:CHAR;
+		para_type = get_para_type(_funcname,para_num);
+		if(expr_type != para_type){
+            error(PARA_TYPE_ERROR);
+		}
+		//type = (expr_type == TYPE_INT)?INT:CHAR;
 		//entermidcode(PUSH,type,"","",pararegno++,value,0);//值参数加入参数寄存器
 		//加入值参数表
         value_paras[value_para_index++] = value;
+        para_num ++;
 	}
 	int ans;
 	for(ans=0;ans<value_para_index;ans++){
@@ -1470,21 +1507,27 @@ void writestate(){//写语句*
 	}
 	getsym();
 	if(sy == SCON){
-        //打印表达式
-        entermidcode(WRITE,STR,str,"",0,0,0);//name1为需要打印的内容str
+        //打印表达式（此时不应该立即打印，应该先判断后面是否有逗号和表达式，若有的话，应该在后面再一起打印）
+        //entermidcode(WRITE,STR,str,"",0,0,0);//name1为需要打印的内容str
+        char str_print[LINEL];
+        strcpy(str_print,str);
 		//加入字符串常量表
-		enter_str_con(str);
+		enter_str_con(str_print);
 		getsym();
 		if(sy == COMMA){
             //记录上一条WRITE CON语句打印完之后不换行
-            midtab.midcodes[midtab.index-1].t2 = 1;
+            //midtab.midcodes[midtab.index-1].t2 = 1;
 			getsym();
 			//获得表达式的类型
 			initexprtype();
 			int value = expr();
 			int expr_type = getexprtype();
 			midcode_type type = (expr_type == TYPE_INT)?INT:CHAR;
-			entermidcode(WRITE,type,"","",value,0,0);////表达式如果是单个字符或者单个字符变量的话，应视为打印字母?
+			entermidcode(WRITE,STR,str_print,"",0,0,1);//t2为1表示不换行
+			entermidcode(WRITE,type,"","",value,0,0);//表达式如果是单个字符或者单个字符变量的话，应视为打印字母
+		}
+		else{//只是单纯地打印字符串
+            entermidcode(WRITE,STR,str_print,"",0,0,0);
 		}
 	}
 	else{
@@ -1508,8 +1551,18 @@ void returnstate(){//返回语句*
 	}
 	getsym();
 	if(sy == LPAR){
+        //分析到左括号，如果函数类型是void则报错
+        if(current_func_type == TYPE_VOID){
+            error(FUNCF_RETURN_VALUE);
+        }
 		getsym();
+		initexprtype();
 		int value = expr();
+		int expr_type = getexprtype();
+		//判断当前返回值类型是否正确
+		if(current_func_type != expr_type){
+            error(FUNCT_RETURN_ERROR);
+		}
 		if(sy != RPAR){
 			error(RPAR_LOST_ERROR);
 		}

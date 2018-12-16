@@ -71,8 +71,8 @@ void setup(){
 }
 
 int main(){
-	fin.open("./test_files/fengcong_test.txt",ios::in);
-	fout.open("./test_outputs/fengcong_result.asm",ios::out);
+	fin.open("./test_files/chenzhiyuan_test.txt",ios::in);
+	fout.open("./test_outputs/chenzhiyuan_result.asm",ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();

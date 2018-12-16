@@ -33,6 +33,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="cifafenxi.h" />
+		<Unit filename="cuowuchuli.h" />
 		<Unit filename="define.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="mips.h" />

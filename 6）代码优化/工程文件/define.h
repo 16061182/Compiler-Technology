@@ -2,6 +2,7 @@
 #define DEFINE_H_INCLUDED
 #include<iostream>
 #include<string.h>
+#include<string>
 #include<stdlib.h>
 #include<fstream>
 //#include<windows.h>
@@ -133,6 +134,11 @@ using namespace std;
 #define IDEN_NOT_FUNCF 58
 #define BECOM_NOT_MATCH 59//赋值语句左右两侧类型不同
 #define IDEN_NOT_VARORCONST 60
+
+#define TIAOJIAN_NOT_MATCH 61
+#define PARA_TYPE_ERROR 62
+#define FUNCF_RETURN_VALUE 63
+#define FUNCT_RETURN_ERROR 64
 char printsym[SYMNUM][IDENL] = {
 "CONSTSY",//const
 "INTSY",//int
@@ -191,15 +197,17 @@ typedef struct{
     char name[IDENL];//函数参数的名称
     int offset;//相对于函数头的偏移（从0开始，最小单位为4）
     int nextoffset;//下一个参数相对于函数头的偏移
+    int type;//参数的类型（传参类型错误需要报错）
 }para_offset;//偏移量表的表项
 int current_offset;//相对于当前函数的偏移
 para_offset para_offsets[MAXPARA];//参数表
 int para_offsets_index;//参数表索引
-void enter_para(char *_name,int _size){//添加参数表
+void enter_para(char *_name,int _size,int _type){//添加参数表
     strcpy(para_offsets[para_offsets_index].name,_name);
     para_offsets[para_offsets_index].offset = current_offset;
     current_offset -= _size * 4;//更新当前函数内偏移
     para_offsets[para_offsets_index].nextoffset = current_offset;
+    para_offsets[para_offsets_index].type = _type;
     para_offsets_index ++;
 }
 
@@ -222,7 +230,7 @@ int get_firstpara(char *_name){//根据函数名获取第一个参数的位置
     }
     return func_firstpara[i];
 }
-int get_regnum(char *_name){//根据函数名获得第一个参数的位置
+int get_regnum(char *_name){//根据函数名获得函数使用的寄存器的数量
     int i;
     for(i=0;i<func_index;i++){
         if(strcmp(_name,func_names[i]) == 0){
@@ -254,6 +262,12 @@ int get_para_offset(char *_funcname,char *_paraname,int _paraindex){//获取某�
         }
     }
     int outcome = para_offsets[loc].offset - 4*_paraindex;
+    return outcome;
+}
+
+int get_para_type(char *_funcname,int _offset){//获取参数的类型
+    int loc = get_firstpara(_funcname);
+    int outcome = para_offsets[loc + _offset].type;
     return outcome;
 }
 
@@ -326,10 +340,11 @@ typedef struct{
 
 ifstream fin;//Ô´´úÂëÊäÈëÎÄ¼þ
 ofstream fout;//mips代码输出文件
+FILE *error_message;
 char ch;//µ±Ç°¶Áµ½µÄ×Ö·û
 int ll = 0;//lenth of current line       LenOfCline
 int cc = 0;//character counter      indexInLine
-int lc = 0;//行计数器（用来打印报错信息）
+int lc = 1;//行计数器（用来打印报错信息）
 char line[LINEL];//±£´æÒ»ÐÐ×Ö·û
 char key[KEYNUM][IDENL];//Ô¤¶¨Òå¹Ø¼ü×Ö±í
 int ksy[KEYNUM]; //Ô¤¶¨Òå¹Ø¼ü×Ö¶ÔÓ¦µÄsymbol
@@ -356,10 +371,8 @@ int intarrayindex;//当前函数开始时int数组表的下标
 int chararrayindex;//当前函数开始时char数组表的下标
 int exprtype;//表达式类型特征值，1代表类型是char，其他代表类型是int
 int exprlevel;//表达式嵌套层数
-/*int firstfactorflag;//第一个因子flag，为0的话表达式未读到第1个因子，为1的话表达式已经读到第1个因子
-int factorsum;//一个表达式中的因子数量
-int firstfactortype;//第一个因子的type，分为TYPE_INT和TYPE_CHAR
-int exprlevel;//表达式嵌套层数*/
+char current_func[IDENL];//当前分析到的函数名称
+int current_func_type;//当前分析到的函数的类型
 
 //源代码存储数组及其索引
 char sourcecode[MAXSOURCECODE];

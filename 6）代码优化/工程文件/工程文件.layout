@@ -2,14 +2,24 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="define.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cuowuchuli.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="15422" topLine="459" />
+			<Cursor1 position="9240" topLine="47" />
 		</Cursor>
 	</File>
 	<File name="mips.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="270" topLine="300" />
+			<Cursor1 position="2210" topLine="54" />
+		</Cursor>
+	</File>
+	<File name="yufafenxi.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="33737" topLine="168" />
+		</Cursor>
+	</File>
+	<File name="cifafenxi.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="240" topLine="15" />
 		</Cursor>
 	</File>
 	<File name="siyuanshi.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -17,24 +27,19 @@
 			<Cursor1 position="6845" topLine="214" />
 		</Cursor>
 	</File>
-	<File name="yufafenxi.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="36504" topLine="1177" />
-		</Cursor>
-	</File>
 	<File name="youhua.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1641" topLine="27" />
+			<Cursor1 position="3647" topLine="19" />
 		</Cursor>
 	</File>
-	<File name="cifafenxi.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="165" />
+			<Cursor1 position="3606" topLine="56" />
 		</Cursor>
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="define.h" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3208" topLine="73" />
+			<Cursor1 position="10569" topLine="369" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

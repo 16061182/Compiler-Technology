@@ -23,7 +23,7 @@ void const_combine(){
         for(i = 0 ; i < midtab.index ; i++){
             midcode mid = midtab.midcodes[i];
             if(mid.kind == FUNC) funcnum++;
-            if(mid.kind == JIA || mid.kind == JIAN || mid.kind == CHENG || mid.kind == CHU){
+            else if(mid.kind == JIA || mid.kind == JIAN || mid.kind == CHENG || mid.kind == CHU){
                 if(reg_is_con[func_regnum[funcnum] + mid.t1] == KIND_CONST && reg_is_con[func_regnum[funcnum] + mid.t2] == KIND_CONST){//两个操作数都是常量
                     int op1 = reg_con_value[func_regnum[funcnum] + mid.t1];
                     int op2 = reg_con_value[func_regnum[funcnum] + mid.t2];
@@ -66,6 +66,29 @@ void const_combine(){
                     flag = 1;
                 }//if is const
             }//if mid.kind == JIA
+            else if(mid.kind == FACTOR_EXPR){//常量表达式因子转换为常量因子，便于用以上方法再次归约
+                if(reg_is_con[func_regnum[funcnum] + mid.t1] == KIND_CONST){//表达式是个常量
+                    int result = reg_con_value[func_regnum[funcnum] + mid.t1];
+                    //删除之前的存储存储表达式值的四元式
+                    int j;
+                    for(j=i-1;j>=0;j--){
+                        midcode m = midtab.midcodes[j];
+                        if(m.kind == FACTOR_CON && m.value == mid.t1){
+                            midtab.midcodes[j].kind = BLANK;
+                            break;
+                        }
+                    }
+                    //更新四元式
+                    midtab.midcodes[i].kind = FACTOR_CON;
+                    midtab.midcodes[i].type = INT;
+                    midtab.midcodes[i].t1 = result;
+                    //更新标志位
+                    reg_is_con[func_regnum[funcnum] + mid.value] = KIND_CONST;
+                    reg_con_value[func_regnum[funcnum] + mid.value] = result;
+                    //本次遍历有实际意义
+                    flag = 1;
+                }
+            }
         }//for
         if(flag == 0){//本次遍历没有找到可优化部分
             break;

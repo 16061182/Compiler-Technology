@@ -84,7 +84,7 @@ char get_permutations_sy
 
 char judge(int n, int m)
 {
-    const char DIVIDE = '-';
+    const char DIVIDE = '*';
     printf(DIVIDE);
     if (n >= get_max_num_1 + 1)
         return ('F');
@@ -99,18 +99,20 @@ void preparation
 {                    
     const int zero = 0;
     int n;
-    int array[10];
+    int i;
+    int array[12];
 
     n = compute(get_max_num_1, 1, '+');
+
     while (n)
     {
         n = -1 + n;
         used[n] = zero;
-        array[n] = 0;
+        array[n] = 10086;
     }
     
     for (n = compute(MAX_CHOOSE_NUM, get_2, '+') - 1; n; n = n - 1)
-        stack[n - 1] = array[n];
+        stack[n - 1] = array[n + (-6 / 4 + 2 * 3) * 4 - 21] - 10086;
     return;
 }
 
@@ -133,12 +135,14 @@ void Main()
     char sy,nor_sy;
 
     test_for;
+
+    
     scanf(A, b, op);
     n = compute(a, b, op);
-    printf(n);
     printf(DIVIDE);
-    
+    printf(n);
     scanf(m);
+
     sy = judge(n, m);
     sum = test_6_para(a,b,n,m,1,2);
     printf(sum);

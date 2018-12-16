@@ -9,6 +9,7 @@
 (6)#表达式的类型的测试，如果是类似'c'的单个字符的话则为TYPE_CHAR，其他情况均为TYPE_INT
 (7)#scanf(a)在控制台既可以输入数字也可以输入字符？（不用）
 (8)有返回值的函数如果一个return语句都没有才报错。
+(9)比较运算符两边表达式应都为整型，不为整型则报错
 */
 
 /*文法细节解读
@@ -41,6 +42,7 @@ c语言语法细节解读
 #include"siyuanshi.h"
 #include"mips.h"
 #include"youhua.h"
+#include"cuowuchuli.h"
 using namespace std;
 
 void setup(){
@@ -73,9 +75,9 @@ void setup(){
 
 int main(){
     init_regs();
-
-	fin.open("C:/Users/98341/Desktop/test_files/qiyunshangai_test.txt",ios::in);
-	fout.open("C:/Users/98341/Desktop/test_files/qiyunshangai_result.asm",ios::out);
+    error_message = fopen("./error_message.txt","w");
+	fin.open("C:/Users/98341/Desktop/test_files/xiejingfen_test.txt",ios::in);
+	fout.open("C:/Users/98341/Desktop/test_outputs/xiejingfen_result.asm",ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
@@ -113,5 +115,7 @@ int main(){
 	generatemips();
 
 	fin.close();
+	fout.close();
+	fclose(error_message);
 	return 0;
 }

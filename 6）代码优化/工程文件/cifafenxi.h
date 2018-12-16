@@ -4,11 +4,12 @@
 #include<string.h>
 #include<fstream>
 #include"define.h"
+#include"cuowuchuli.h"
 using namespace std;
 
-void error(int a){
+/*void error(int a){
        printf("error!\n");
-}
+}*/
 
 void readfile(){
     while(!fin.eof()){
