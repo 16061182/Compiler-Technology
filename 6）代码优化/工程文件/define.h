@@ -5,6 +5,7 @@
 #include<string>
 #include<stdlib.h>
 #include<fstream>
+#include<sstream>
 //#include<windows.h>
 using namespace std;
 
@@ -127,7 +128,7 @@ using namespace std;
 #define PROGRAM_IDEN_ERROR 51
 #define FUNC_NOTFOUND_ERROR 52//未声明的函数
 #define IDEN_REDEFINE 53//标识符重定义
-#define IDEN_NOT_ARRAY 54//标识符不是数组名（本应是数组名）
+//#define IDEN_NOT_ARRAY 54//标识符不是数组名（本应是数组名）
 #define IDEN_NOT_VAR 55
 #define IDEN_NOT_CONST 56
 #define IDEN_NOT_FUNCT 57
@@ -139,6 +140,19 @@ using namespace std;
 #define PARA_TYPE_ERROR 62
 #define FUNCF_RETURN_VALUE 63
 #define FUNCT_RETURN_ERROR 64
+#define PARA_TOO_MANY 65
+#define PARA_TOO_FEW 66
+#define ARRAY_INDEX_TYPE_ERROR 67
+#define NONEPARA_BUT_LPAR 68
+#define INDEX_OUTOF_BOUNDS 69
+#define NOTARRAY_BUT_LBRA 70
+#define FUZHISTATE_KIND_ERROR 71
+#define TIAOJIAN_SHOULDBE_INT 72
+
+#define SQUOTE_LOST_ERROR 73
+#define DQUOTE_LOST_ERROR 74
+#define ARRAY_SIZE_ERROR 75
+
 char printsym[SYMNUM][IDENL] = {
 "CONSTSY",//const
 "INTSY",//int
@@ -353,6 +367,10 @@ int inum;//getsym¶ÁÈ¡µÄÊý×Ö
 int printnum = 1;
 char id0[IDENL];
 char str[LINEL];
+string input_file;
+string output_file;
+string error_string;//错误信息（输出到控制台）
+stringstream eout(error_string);
 
 //符号表相关的变量声明
 symboltab tab;
@@ -366,7 +384,7 @@ int typevalue;//保存当前IDEN的类型int,char,void
 char idvalue[IDENL];//保存当前IDEN的名称（小写）
 int levelvalue;//保存当前层次
 int paranumvalue;//保存当前参数个数
-int funcindex;//当前函数在符号表中的地址
+//int funcindex;//当前函数在符号表中的地址
 int intarrayindex;//当前函数开始时int数组表的下标
 int chararrayindex;//当前函数开始时char数组表的下标
 int exprtype;//表达式类型特征值，1代表类型是char，其他代表类型是int
@@ -500,6 +518,19 @@ void test(){
     int a = 0;
     char b[10];
     //itoa(a,b,10);
+}
+
+int get_func_paranum(char *_funcname){
+    int i;
+    int found = 0;
+    for(i=0;i<tab.index;i++){
+        if(strcmp(_funcname,tab.symbols[i].name) == 0 && (tab.symbols[i].kind == KIND_FUNCT || tab.symbols[i].kind == KIND_FUNCF)){
+            found = 1;
+            break;
+        }
+    }
+    if(found) return tab.symbols[i].paranum;//得到传入参数的个数
+    else return -1;
 }
 /*typedef struct{
     char content[LINEL];

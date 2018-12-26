@@ -7,10 +7,6 @@
 #include"cuowuchuli.h"
 using namespace std;
 
-/*void error(int a){
-       printf("error!\n");
-}*/
-
 void readfile(){
     while(!fin.eof()){
         if(fin.good()){
@@ -26,7 +22,10 @@ void getch(){
 
 void getsym(){
        while(ch == ' '||ch == '\t'||ch == '\n'){
-        if(ch == '\n') lc++;
+        if(ch == '\n') {
+                lc++;
+                cout << "hangshu jia+++++++" << lc << endl;
+        }
               getch();
        }
        if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_'){
@@ -71,6 +70,12 @@ void getsym(){
                      sy = NEQ;
                      printf("%d %s\n",printnum,printsym[sy]);
                      getch();
+              }
+              else{
+                error(ILLEGAL_ERROR);
+                //容错处理
+                sy = NEQ;
+                printf("%d %s\n",printnum,printsym[sy]);
               }
        }
        else if(ch == '>'){
@@ -153,15 +158,22 @@ void getsym(){
        }
        else if(ch == '\''){
               getch();
-              if(ch == '+'||ch == '-'||ch == '*'||ch == '/'||(ch >= 'a'&&ch <= 'z')||(ch >= 'A'&&ch <= 'Z')||(ch >= '0'&&ch <= '9')||ch == '_'){
-                     inum = ch;
-                     getch();
-                     if(ch == '\''){
-                            sy = CCON;
-                            printf("%d %s %c\n",printnum,printsym[sy],inum);
-                            getch();
-                     }
+              if(!(ch == '+'||ch == '-'||ch == '*'||ch == '/'||(ch >= 'a'&&ch <= 'z')||(ch >= 'A'&&ch <= 'Z')||(ch >= '0'&&ch <= '9')||ch == '_')){
+                    error(ILLEGAL_ERROR);
               }
+            inum = ch;
+            getch();
+            if(ch == '\''){
+                sy = CCON;
+                printf("%d %s %c\n",printnum,printsym[sy],inum);
+                getch();
+            }
+            else{
+                error(SQUOTE_LOST_ERROR);
+                //容错处理
+                sy = CCON;
+                printf("%d %s %c\n",printnum,printsym[sy],inum);
+            }
        }
        else if(ch == '\"'){
               getch();
@@ -176,6 +188,13 @@ void getsym(){
                      str[i] = '\0';
                      printf("%d %s %s\n",printnum,printsym[sy],str);
                      getch();
+              }
+              else{
+                error(DQUOTE_LOST_ERROR);
+                //容错处理（这里的容错似乎没用，因为其他字符可以读进字符串）
+                sy = SCON;
+                str[i] = '\0';
+                printf("%d %s %s\n",printnum,printsym[sy],str);
               }
        }
        else if(ch == '+'){
@@ -197,6 +216,13 @@ void getsym(){
               getch();
               sy = DIV;
               printf("%d %s\n",printnum,printsym[sy]);
+       }
+       else{//出现了文法中不允许的符号
+              if(ch != '\0'){
+                    error(ILLEGAL_ERROR);
+              }
+              //int ans = ch;
+              //fprintf(error_message,"the last symbol is %d\n",ans);
        }
 
 }

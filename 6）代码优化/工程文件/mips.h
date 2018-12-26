@@ -127,7 +127,7 @@ void generatemips(){
             }
         }
         str[k] = '\0';//¼ÓÉÏ½áÊø·û
-        cout << str  << " len is " << strlen(str) << endl;
+        //cout << str  << " len is " << strlen(str) << endl;
         fout << "   " << name << ": .asciiz \"" << str << "\"" << endl;
     }
 

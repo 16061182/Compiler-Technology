@@ -106,6 +106,7 @@ void program(){//程序*
     int i(int a) { }*/
     if(sy == INTSY || sy == CHARSY){
         MARK
+        int lc_record_1 = lc;
         getsym();
         if(sy != IDEN){
             error(PROGRAM_IDEN_ERROR);
@@ -113,10 +114,12 @@ void program(){//程序*
         getsym();
         if(sy == COMMA || sy == LBRA || sy == SEMI){//是变量说明
             BACK
+            lc = lc_record_1;//行号回退
             decvar_extern();
         }
         else if(sy == LPAR || sy == LBPA){//是有返回值函数定义
             BACK
+            lc = lc_record_1;//行号回退
         }
         else{
         	error(ILLEGAL_ERROR);
@@ -128,13 +131,16 @@ void program(){//程序*
         }
         else if(sy == VOIDSY){
         	MARK
+        	int lc_record_2 = lc;
         	getsym();
         	if(sy == IDEN){//说明是无返回值函数定义
         		BACK
+        		lc = lc_record_2;//行号回退
         		deffuncf();
         	}
         	else if(sy == MAINSY){//说明是主函数
         		BACK
+        		lc = lc_record_2;//行号回退
         		break;
         	}
         }
@@ -266,9 +272,11 @@ void decvar_extern(){//用于程序中的变量说明（带回溯）
 	}
 	while(sy == INTSY || sy == CHARSY){
         MARK
+        int lc_record = lc;//记录下当前行号
 		defvar();
         if(sy == LPAR || sy == LBPA){//如果是'('或'{'，说明不是var而是有返回值函数
             BACK
+            lc = lc_record;//行号回退
             tab.index --;//符号表回退
             midtab.index --;//四元式表回退
             extern_var_index--;//全局变量表回退
@@ -299,6 +307,7 @@ void decvar(){//用于语句列中的变量说明*
 }
 
 void defvar(){//变量定义*
+    int integervalue = 0;
 	if(sy != INTSY && sy != CHARSY){
 		error(DEFVAR_TYPE_ERROR);
 	}
@@ -316,6 +325,10 @@ void defvar(){//变量定义*
 			error(DEFVAR_ICON_ERROR);
 		}
 		integervalue = inum;//记录数组元素个数
+		//数组长度非正，报错
+		if(integervalue <= 0){
+            error(ARRAY_SIZE_ERROR);
+		}
 		getsym();
 		if(sy != RBRA){
 			error(RBRA_LOST_ERROR);
@@ -351,6 +364,10 @@ void defvar(){//变量定义*
 				error(DEFVAR_ICON_ERROR);
 			}
 			integervalue = inum;//记录数组元素个数
+			//数组长度非正，报错
+            if(integervalue <= 0){
+                error(ARRAY_SIZE_ERROR);
+            }
 			getsym();
 			if(sy != RBRA){
 				error(RBRA_LOST_ERROR);
@@ -379,6 +396,7 @@ void defvar(){//变量定义*
 
 void deffunct(){//有返回值函数定义*
     regno = 1;//清零存储空间
+    int funcindex = 0;
 	if(sy != INTSY && sy != CHARSY){//省略声明头部的定义
 		error(DEFFUNCT_TYPE_ERROR);
 	}
@@ -449,6 +467,7 @@ void deffunct(){//有返回值函数定义*
 
 void deffuncf(){//无返回值函数定义*
     regno = 1;//清零存储空间
+    int funcindex = 0;
 	if(sy != VOIDSY){
 		error(DEFFUNCF_VOID_ERROR);
 	}
@@ -615,14 +634,21 @@ int expr(){//表达式*
 	int t1 = item();
 	int t2;
 	if(negative){
-        t2 = t1;//t2 = t1
+        t2 = t1;//t2 = t1//t2是项
         entermidcode(FACTOR_CON,midtypevalue,"","",regno++,0,0);//存入0
+        //新加入的常数0会改变表达式的类型
+        exprtype += 2;
         //把因子的存储位置标记为常量
         int ans = func_regnum[func_index-1];//当前函数的基础位移
         reg_is_con[ans + regno-1] = KIND_CONST;
         reg_con_value[ans + regno-1] = 0;
         t1 = regno - 1;//t1 = 0
         entermidcode(JIAN,INT,"","",regno++,t1,t2);//存在最后操作数的位置
+        //如果t2是常量，则0-t2仍为常量
+        if(reg_is_con[ans + t2] == KIND_CONST){
+            reg_is_con[ans + regno-1] = KIND_CONST;
+            reg_con_value[ans + regno-1] = 0 - reg_con_value[ans + t2];
+        }
         t1 = regno - 1;
 	}
 	while(sy == PLUS || sy == MINUS){
@@ -663,6 +689,7 @@ int factor(){//因子*
 		if(location >= 0 ){
             int kind = tab.symbols[location].kind;
             int level = tab.symbols[location].level;//记录层数（0层为外部变量）
+            int array_size = tab.symbols[location].paranum;//记录数组元素的数量，用来判断越界
             midcode_type midtypevalue;//记录因子类型
             if(tab.symbols[location].type == TYPE_INT){
                 midtypevalue = INT;
@@ -710,7 +737,21 @@ int factor(){//因子*
                 //保存现场
                 int recordtype = exprtype;
                 int recordlevel = exprlevel;
+                //数组下标必须是int
+                initexprtype();
                 int index = expr();//数组下标（可以视为int，不参与特征值更改，因此要保存现场）
+                int expr_type = getexprtype();
+                if(expr_type != TYPE_INT){
+                    error(ARRAY_INDEX_TYPE_ERROR);
+                }
+                //判断数组下标是否越界
+                int ans = func_regnum[func_index-1];//当前函数的基础位移
+                if(reg_is_con[ans + index] == KIND_CONST){//如果表达式的类型是const
+                    if(reg_con_value[ans + index] >= array_size || reg_con_value[ans + index] < 0){//大于等于length或小于0，数组越界
+                        error(INDEX_OUTOF_BOUNDS);
+                    }
+                }
+                //还原现场
                 exprtype = recordtype;
                 exprlevel = recordlevel;
                 if(sy != RBRA){
@@ -843,13 +884,18 @@ void fuzhistate(){//赋值语句*
 		error(FUZHISTATE_IDEN_ERROR);
 	}
 	char name[IDENL]; strcpy(name,id0);//记录名称
-	midcode_type type;//要复制的标识符类型
+	midcode_type type;//要赋值的标识符类型
 	//记录标识符位置
 	int location = loc(name);
 	if(location < 0){
         error(IDEN_NOTFOUND_ERROR);
 	}
 	int level = tab.symbols[location].level;//获得符号的层次
+	//判断符号的类型是否正确
+	int iden_kind = tab.symbols[location].kind;
+	if(iden_kind != KIND_ARRAY && iden_kind != KIND_VAR){
+        error(FUZHISTATE_KIND_ERROR);
+	}
 	int iden_type = tab.symbols[location].type;//获得被赋值符号的类型
 	if(iden_type == TYPE_INT) type = INT;
 	else if(iden_type == TYPE_CHAR) type = CHAR;
@@ -859,15 +905,33 @@ void fuzhistate(){//赋值语句*
 	midcode_kind kind;//要赋值的标识符种类
 	int temp;//
 	if(sy == LBRA){//需要查找符号表判断是不是数组
+        //如果不是数组却有中括号，报错
+        if(tab.symbols[location].kind != KIND_ARRAY){
+            error(NOTARRAY_BUT_LBRA);
+        }
+        int array_size = tab.symbols[location].paranum;//记录数组元素个数
 		getsym();
+		initexprtype();
 		temp = expr();//数组下标
+		int expr_type = getexprtype();
+		//数组下标必须是int
+		if(expr_type != TYPE_INT){
+            error(ARRAY_INDEX_TYPE_ERROR);
+		}
+		//判断数组下标是否越界
+		int ans = func_regnum[func_index-1];//当前函数的基础位移
+        if(reg_is_con[ans + temp] == KIND_CONST){//如果表达式的类型是const
+            if(reg_con_value[ans + temp] >= array_size || reg_con_value[ans + temp] < 0){//大于等于length或小于0，数组越界
+                error(INDEX_OUTOF_BOUNDS);
+            }
+        }
 		if(sy != RBRA){
 			error(RBRA_LOST_ERROR);
 		}
-		//判断标识符是不是数组
+		/*//判断标识符是不是数组
         if(tab.symbols[location].kind != KIND_ARRAY){
             error(IDEN_NOT_ARRAY);
-        }
+        }*/
         flag = 1;
         kind = ASSIGN_ARR;
 		//数组元素赋值
@@ -979,6 +1043,10 @@ int tiaojian(){//条件*
     initexprtype();
 	exprregno1 = expr();
 	int type_record1 = getexprtype();
+	//条件表达式只能是整型，不是整型报错
+	if(type_record1 != TYPE_INT){
+        error(TIAOJIAN_SHOULDBE_INT);
+	}
 	int relation;
 	if(sy == LSS || sy == LEQ || sy == GTR || sy == GEQ || sy == NEQ || sy == EQL){
 		relation = sy;
@@ -987,6 +1055,10 @@ int tiaojian(){//条件*
 		initexprtype();
 		exprregno2 = expr();
 		int type_record2 = getexprtype();
+		//不是整型报错
+		if(type_record2 != TYPE_INT){
+            error(TIAOJIAN_SHOULDBE_INT);
+		}
 		if(type_record1 != type_record2){
             error(TIAOJIAN_NOT_MATCH);
 		}
@@ -1301,7 +1373,7 @@ void callfunctstate(){//有返回值函数调用语句*
 	char name[IDENL];
 	strcpy(name,id0);//记录函数名
 	//检查是否声明过
-	int paranum;
+	int paranum = 0;
 	midcode_type type;
 	int location = loc(name);
 	if(location >= 0){
@@ -1319,6 +1391,10 @@ void callfunctstate(){//有返回值函数调用语句*
 	getsym();
 	int flag = 0;//是否生成四元式
 	if(sy == LPAR){
+        //没有参数却写了左括号
+        if(paranum == 0){
+            error(NONEPARA_BUT_LPAR);
+        }
 		getsym();
 		valueparalist(name);
 		if(sy != RPAR){
@@ -1342,7 +1418,7 @@ void callfuncfstate(){//无返回值函数调用语句*
 	char name[IDENL];
 	strcpy(name,id0);//记录函数名
 	//检查是否声明过
-	int paranum;
+	int paranum = 0;
 	int location = loc(name);
 	if(location >= 0){
         if(tab.symbols[location].kind == KIND_FUNCF){
@@ -1358,6 +1434,10 @@ void callfuncfstate(){//无返回值函数调用语句*
 	getsym();
 	int flag = 0;//是否生成四元式
 	if(sy == LPAR){
+        //没有参数却写了左括号
+        if(paranum == 0){
+            error(NONEPARA_BUT_LPAR);
+        }
 		getsym();
 		valueparalist(name);
 		if(sy != RPAR){
@@ -1408,6 +1488,15 @@ void valueparalist(char *_funcname){//值参数表*
 		//加入值参数表
         value_paras[value_para_index++] = value;
         para_num ++;
+	}
+	int true_paranum = get_func_paranum(_funcname);//得到函数参数的数量
+	if(true_paranum != -1){
+        if(true_paranum < value_para_index){
+            error(PARA_TOO_MANY);
+        }
+        else if(true_paranum > value_para_index){
+            error(PARA_TOO_FEW);
+        }
 	}
 	int ans;
 	for(ans=0;ans<value_para_index;ans++){

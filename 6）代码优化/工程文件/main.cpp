@@ -10,6 +10,16 @@
 (7)#scanf(a)在控制台既可以输入数字也可以输入字符？（不用）
 (8)有返回值的函数如果一个return语句都没有才报错。
 (9)比较运算符两边表达式应都为整型，不为整型则报错
+
+
+#数组定义的时候下标不能为负数
+#缺少分号的报错行数（会在原基础上加一，可以尝试减一）（多条语句写在同一行的情况无法预料，只能说明问题）
+#袁景林代码的报错行数（发现原因：deffunct的时候的回溯没有保存当前行号，导致执行了两遍lc++）
+#数组因子和数组赋值里面，下标为负数的判断方式改一下，不然无法判断下标是-0
+#对于a = -'b'，的情况，应该不报错，应该修改表达式类型判断部分
+
+
+
 */
 
 /*文法细节解读
@@ -75,9 +85,11 @@ void setup(){
 
 int main(){
     init_regs();
+    cin >> input_file;
+    cin >> output_file;
     error_message = fopen("./error_message.txt","w");
-	fin.open("C:/Users/98341/Desktop/test_files/xiejingfen_test.txt",ios::in);
-	fout.open("C:/Users/98341/Desktop/test_outputs/xiejingfen_result.asm",ios::out);
+	fin.open(input_file,ios::in);
+	fout.open(output_file,ios::out);
 	fin.unsetf(ios::skipws);//取消忽略空白符
 	setup();
 	readfile();
@@ -112,6 +124,16 @@ int main(){
 	printmidcode();
 	cout << "--------------------REGISTER TABLE--------------------" << endl;
 	print_regs();
+	cout << "--------------------ERROR MESSAGE--------------------" << endl;
+	string error_print;
+	string head = "ERROR"; int cnt = 0;
+	while(eout >> error_print){
+        if(error_print == head){
+            cnt++;
+            if(cnt > 1) cout << endl;
+        }
+        cout << error_print << " ";
+	}
 	generatemips();
 
 	fin.close();
