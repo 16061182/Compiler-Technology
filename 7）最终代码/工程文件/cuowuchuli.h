@@ -32,7 +32,9 @@ void error(int e){
     else if(e == DECVAR_SEMI_ERROR) eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT \';\' HERE\n";
     else if(e == DEFVAR_TYPE_ERROR) eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT THE SYMBOLS \"int\" OR \"char\" HERE\n";
     else if(e == DEFVAR_SEMI_ERROR) eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT \';\' HERE\n";
-    else if(e == DEFVAR_ICON_ERROR) eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT CONSTANT INTEGER HERE\n";
+    else if(e == DEFVAR_ICON_ERROR){ eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT CONSTANT INTEGER HERE\n";
+    cout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT CONSTANT INTEGER HERE\n";
+    }
     else if(e == DEFVAR_IDEN_ERROR) eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT IDENTIFIER HERE\n";
 
     else if(e == DEFFUNCT_ERROR) eout << "ERROR NO." << error_num << " AT LINE " << lc << " : EXPECT \'(\' OR \'{\' FOLLOWING A FUNCTION IDENTIFIER\n";

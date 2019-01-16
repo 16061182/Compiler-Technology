@@ -185,7 +185,7 @@ void generatemips(){
             int index_offset = current_paraoffset - mid.t1 * 4;//获取下标位置
             fout << "   lw $t3 " << index_offset << "($sp)" << endl;
             fout << "   sll $t3 $t3 2" << endl;//数组下标乘4
-            fout << "   sub $t3 $sp $t3" << endl;
+            fout << "   subu $t3 $sp $t3" << endl;
             int array_offset = get_para_offset(current_funcname,mid.name1,0);//获取数组位置
             fout << "   lw $t3 " << array_offset << "($t3)" << endl;
             int save_offset = current_paraoffset - mid.value * 4;//获取存储位置
@@ -269,8 +269,8 @@ void generatemips(){
             int offset_2 = current_paraoffset - mid.t2 * 4;
             fout << "   lw $t1 " << offset_2 << "($sp)" << endl;
             switch(mid.kind){
-                case JIA:   fout << "   add $t2 $t0 $t1" << endl; break;
-                case JIAN:  fout << "   sub $t2 $t0 $t1" << endl; break;
+                case JIA:   fout << "   addu $t2 $t0 $t1" << endl; break;
+                case JIAN:  fout << "   subu $t2 $t0 $t1" << endl; break;
                 case CHENG: fout << "   mult $t0 $t1" << endl;
                             fout << "   mflo $t2" << endl; break;
                 case CHU:   fout << "   div $t0 $t1" << endl;
@@ -306,15 +306,15 @@ void generatemips(){
             strcat(name,mid.name1);
             if(mid.value == 0){//函数没有参数，需要在这里生成sw $ra语句
                 fout << "   sw $ra " << current_stacktop - 4 << "($sp)" << endl;
-                fout << "   addi $sp $sp " << current_stacktop - 8 << endl;
+                fout << "   addiu $sp $sp " << current_stacktop - 8 << endl;
                 fout << "   jal " << name << endl;
-                fout << "   subi $sp $sp " << current_stacktop - 8 << endl;
+                fout << "   subiu $sp $sp " << current_stacktop - 8 << endl;
                 fout << "   lw $ra " << current_stacktop - 4 << "($sp)" << endl;
             }
             else{
-                fout << "   addi $sp $sp " << first_para_offset << endl;
+                fout << "   addiu $sp $sp " << first_para_offset << endl;
                 fout << "   jal " << name << endl;
-                fout << "   subi $sp $sp " << first_para_offset << endl;
+                fout << "   subiu $sp $sp " << first_para_offset << endl;
                 fout << "   lw $ra " << first_para_offset + 4 << "($sp)" << endl;
                 current_stacktop = first_para_offset + 8;//记录当前栈顶位置
                 first_para_offset = 0;//重置第一个参数位置
@@ -343,7 +343,7 @@ void generatemips(){
             int expr_offset = current_paraoffset - mid.value * 4;
             fout << "   lw $t1 " << expr_offset << "($sp)" << endl;
             fout << "   sll $t0 $t0 2" << endl;//数组下标*4
-            fout << "   sub $t0 $sp $t0" << endl;
+            fout << "   subu $t0 $sp $t0" << endl;
             int array_offset = get_para_offset(current_funcname,mid.name1,0);//获取数组的偏移
             fout << "   sw $t1 " << array_offset << "($t0)" << endl;
         }

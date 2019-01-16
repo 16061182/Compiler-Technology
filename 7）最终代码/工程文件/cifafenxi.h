@@ -9,6 +9,7 @@ using namespace std;
 
 void getch(){
        ch = sourcecode[sourceindex++];
+       cout << ch << endl;
 }
 
 void getsym(){

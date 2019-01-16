@@ -615,3 +615,69 @@
 	"yufafenxi.h"
 	"siyuanshi.h"
 
+1545809569 source:e:\git\compiler-technology\7）最终代码\工程文件\main.cpp
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+	"mips.h"
+	"youhua.h"
+	"cuowuchuli.h"
+
+1546573616 e:\git\compiler-technology\7）最终代码\工程文件\define.h
+	<iostream>
+	<string.h>
+	<string>
+	<stdlib.h>
+	<fstream>
+	<sstream>
+
+1547048490 e:\git\compiler-technology\7）最终代码\工程文件\yufafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+	"cuowuchuli.h"
+
+1547046106 e:\git\compiler-technology\7）最终代码\工程文件\cifafenxi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cuowuchuli.h"
+
+1547014979 e:\git\compiler-technology\7）最终代码\工程文件\cuowuchuli.h
+	<iostream>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"siyuanshi.h"
+
+1544688210 e:\git\compiler-technology\7）最终代码\工程文件\siyuanshi.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+
+1546604722 e:\git\compiler-technology\7）最终代码\工程文件\mips.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+
+1544893986 e:\git\compiler-technology\7）最终代码\工程文件\youhua.h
+	<iostream>
+	<string.h>
+	<fstream>
+	"define.h"
+	"cifafenxi.h"
+	"yufafenxi.h"
+	"siyuanshi.h"
+

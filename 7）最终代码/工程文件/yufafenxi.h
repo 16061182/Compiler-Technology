@@ -11,6 +11,54 @@
 #include"cuowuchuli.h"
 using namespace std;
 
+void enter(int _type,int _kind,int _value,char *_name,int _level,int _paranum){
+    int index = tab.index;
+    int i;
+    for(i=tab.index - 1;tab.symbols[i].level == _level;i--){
+        if(strcmp(_name,tab.symbols[i].name) == 0){//在当前层中已经定义过
+            cout << _name << " have been declared in the same level" << endl;
+            error(IDEN_REDEFINE);//标识符重定义
+            return ;
+        }
+    }
+    tab.symbols[index].type = _type;
+    tab.symbols[index].kind = _kind;
+    tab.symbols[index].value = _value;
+    strcpy(tab.symbols[index].name,_name);
+    tab.symbols[index].address = 0;
+    tab.symbols[index].level = _level;
+    tab.symbols[index].paranum = _paranum;//数组的长度
+    if(_kind == KIND_ARRAY){
+        if(_type == TYPE_INT){
+            tab.symbols[index].address = tempintindex;//该数组第一个参数在tempintarray中的位置
+            tempintindex += _paranum;//预留出空间
+        }
+        else if(_type == TYPE_CHAR){
+            tab.symbols[index].address = tempcharindex;
+            tempcharindex += _paranum;
+        }
+    }
+    char types[4][IDENL] = {"","int","char","void"};
+    char kinds[6][IDENL] = {"","const","var","array","funct","funcf"};
+    tab.index += 1;
+    for(i=0;i<tab.index;i++){
+        cout << "       type:" << types[tab.symbols[i].type] << " kind:" << kinds[tab.symbols[i].kind] << " value:" << tab.symbols[i].value << " name:" << tab.symbols[i].name << " level:" << tab.symbols[i].level << " paranum:" << tab.symbols[i].paranum << " address:" << tab.symbols[i].address << endl;
+    }
+}
+
+int loc(char *_name){//查找符号表，找到返回下标，未找到返回-1
+    int i;
+    int found = 0;
+    for(i=tab.index-1;i>=0;i--){
+        if(strcmp(_name,tab.symbols[i].name) == 0){
+            found = 1;
+            break;
+        }
+    }
+    if(found) return i;
+    else return -1;
+}
+
 void deccon();
 void defcon();
 void integer();
@@ -97,6 +145,7 @@ void program(){//程序*
         	}
         }
     }
+    cout << "MAIN START!!!" << endl;
     mainfunc();
     printf("This is a program\n");
 }
@@ -108,10 +157,12 @@ void deccon(){//常量说明*
 	while(sy == CONSTSY){
 		getsym();
 		defcon();
-		if(sy != SEMI){
-			error(DECCON_SEMI_ERROR);
+		if(sy == SEMI){
+			getsym();
 		}
-		getsym();
+		else{
+            error(DECCON_SEMI_ERROR);
+		}
 	}
 	printf("This is a deccon\n");
 }
@@ -250,15 +301,18 @@ void decvar(){//用于语句列中的变量说明*
 	}
 	while(sy == INTSY || sy == CHARSY){
 		defvar();
-		if(sy != SEMI){
-            error(DECCON_SEMI_ERROR);
+		if(sy == SEMI){
+            getsym();
 		}
-		getsym();
+		else{
+            error(DECVAR_SEMI_ERROR);
+		}
 	}
 	printf("This is a decvar\n");
 }
 
 void defvar(){//变量定义*
+    cout << "hello-1" << endl;
     int integervalue = 0;
 	if(sy != INTSY && sy != CHARSY){
 		error(DEFVAR_TYPE_ERROR);
@@ -271,10 +325,16 @@ void defvar(){//变量定义*
 	}
 	strcpy(idvalue,id0);//获取符号名称
 	getsym();
+	cout << "hello-2" << endl;
 	if(sy == LBRA){
+        cout << "hello-3" << endl;
 		getsym();
 		if(sy != ICON){
+            cout << "hello0" << endl;
 			error(DEFVAR_ICON_ERROR);
+			cout << "hello1" << endl;
+			return;
+			cout << "hello2" << endl;
 		}
 		integervalue = inum;//记录数组元素个数
 		//数组长度非正，报错
@@ -282,8 +342,11 @@ void defvar(){//变量定义*
             error(ARRAY_SIZE_ERROR);
 		}
 		getsym();
-		if(sy != RBRA){
-			error(RBRA_LOST_ERROR);
+		if(sy == RBRA){
+			getsym();
+		}
+		else{
+            error(RBRA_LOST_ERROR);
 		}
 		enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
 		if(levelvalue == 0){//是外部数组
@@ -292,7 +355,6 @@ void defvar(){//变量定义*
 		//登录参数表
         enter_para(idvalue,integervalue,typevalue);
 		entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
-		getsym();
 	}
 	else{
         enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
@@ -314,6 +376,7 @@ void defvar(){//变量定义*
 			getsym();
 			if(sy != ICON){
 				error(DEFVAR_ICON_ERROR);
+                cout << "!=ICON " << sy << endl;
 			}
 			integervalue = inum;//记录数组元素个数
 			//数组长度非正，报错
@@ -321,8 +384,12 @@ void defvar(){//变量定义*
                 error(ARRAY_SIZE_ERROR);
             }
 			getsym();
-			if(sy != RBRA){
-				error(RBRA_LOST_ERROR);
+			cout << "zhegeshi " << sy << endl;
+			if(sy == RBRA){
+				getsym();
+			}
+			else{
+                error(RBRA_LOST_ERROR);
 			}
 			enter(typevalue,KIND_ARRAY,0,idvalue,levelvalue,integervalue);//登录符号表（数组）
 			if(levelvalue == 0){//是外部数组
@@ -331,7 +398,6 @@ void defvar(){//变量定义*
 			//登录参数表
             enter_para(idvalue,integervalue,typevalue);
 			entermidcode(ARRAY,midtypevalue,idvalue,"",integervalue,0,0);//登录四元式表（数组）
-			getsym();
 		}
 		else{
             enter(typevalue,KIND_VAR,0,idvalue,levelvalue,0);//登录符号表
@@ -375,39 +441,45 @@ void deffunct(){//有返回值函数定义*
 	if(sy == LPAR){
 		getsym();
 		paralist();
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
+		if(sy == RPAR){
+			getsym();
+		}
+		else{
+            error(RPAR_LOST_ERROR);
 		}
 		tab.symbols[funcindex].paranum = paranumvalue;//记录函数参数的数量
 		midtab.midcodes[midfuncindex].value = paranumvalue;//参数数量计入四元式
-		getsym();
 		if(sy != LBPA){
 			error(LBPA_LOST_ERROR);
 		}
 		getsym();
 		multistate();
-		if(sy != RBPA){
-			error(RBPA_LOST_ERROR);
+		if(sy == RBPA){
+			getsym();
+		}
+		else{
+            error(RBPA_LOST_ERROR);
 		}
 		//函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
 		tempintindex = intarrayindex;//int数组表回退
 		tempcharindex = chararrayindex;//char数组表回退
 		levelvalue --;//层次减一
-		getsym();
 	}
 	else if(sy == LBPA){
 		getsym();
 		multistate();
-		if(sy != RBPA){
-			error(RBPA_LOST_ERROR);
+		if(sy == RBPA){
+			getsym();
+		}
+		else{
+            error(RBPA_LOST_ERROR);
 		}
         //函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
 		tempintindex = intarrayindex;//int数组表回退
 		tempcharindex = chararrayindex;//char数组表回退
 		levelvalue --;//层次减一
-		getsym();
 	}
 	else{
 		error(DEFFUNCT_ERROR);
@@ -443,39 +515,45 @@ void deffuncf(){//无返回值函数定义*
 	if(sy == LPAR){
 		getsym();
 		paralist();
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
+		if(sy == RPAR){
+			getsym();
+		}
+		else{
+            error(RPAR_LOST_ERROR);
 		}
 		tab.symbols[funcindex].paranum = paranumvalue;//记录函数参数的数量
 		midtab.midcodes[midfuncindex].value = paranumvalue;//参数数量计入四元式
-		getsym();
 		if(sy != LBPA){
 			error(LBPA_LOST_ERROR);
 		}
 		getsym();
 		multistate();
-		if(sy != RBPA){
-			error(RBPA_LOST_ERROR);
+		if(sy == RBPA){
+			getsym();
+		}
+		else{
+            error(RBPA_LOST_ERROR);
 		}
 		//函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
 		tempintindex = intarrayindex;//int数组表回退
 		tempcharindex = chararrayindex;//char数组表回退
 		levelvalue --;//层次减一
-		getsym();
 	}
 	else if(sy == LBPA){
 		getsym();
 		multistate();
-		if(sy != RBPA){
-			error(RBPA_LOST_ERROR);
+		if(sy == RBPA){
+			getsym();
+		}
+		else{
+            error(RBPA_LOST_ERROR);
 		}
 		//函数结束，退栈
 		tab.index = funcindex + 1;//函数名保留在符号栈中
 		tempintindex = intarrayindex;//int数组表回退
 		tempcharindex = chararrayindex;//char数组表回退
 		levelvalue --;//层次减一
-		getsym();
 	}
 	else{
 		error(DEFFUNCF_ERROR);
@@ -492,6 +570,7 @@ void multistate(){//语句列*
 	if(sy == INTSY || sy == CHARSY){
 		decvar();
 	}
+	cout << "zhelishi" << sy << endl;
 	states();
 	printf("This is a multistate\n");
 }
@@ -538,24 +617,32 @@ void paralist(){//参数表*
 void mainfunc(){//主函数*
 	if(sy != VOIDSY){
 		error(MAINFUNC_VOID_ERROR);
+		cout << sy << "!=VOIDSY" << endl;
 	}
 	getsym();
 	if(sy != MAINSY){
 		error(MAINFUNC_MAIN_ERROR);
+		cout << sy << "!=MAINSY" << endl;
 	}
 	getsym();
 	if(sy != LPAR){
 		error(LPAR_LOST_ERROR);
+		cout << sy << "!=LPAR" << endl;
 	}
 	getsym();
-	if(sy != RPAR){
-		error(RPAR_LOST_ERROR);
+	if(sy == RPAR){
+		getsym();
+
 	}
-	getsym();
+	else{
+        error(RPAR_LOST_ERROR);
+        cout << sy << "!=RPAR" << endl;
+	}
 	enter_func("main");
 	entermidcode(FUNC,VOID,"main","",0,0,0);//主函数加入四元式
 	if(sy != LBPA){
 		error(LBPA_LOST_ERROR);
+		cout << sy << "!=LBPA" << endl;
 	}
 	levelvalue ++;
 	getsym();
@@ -706,7 +793,10 @@ int factor(){//因子*
                 //还原现场
                 exprtype = recordtype;
                 exprlevel = recordlevel;
-                if(sy != RBRA){
+                if(sy == RBRA){
+                    getsym();
+                }
+                else{
                     error(RBRA_LOST_ERROR);
                 }
                 if(level > 0){
@@ -715,7 +805,6 @@ int factor(){//因子*
                 else if(level == 0){//是外部数组
                     entermidcode(FACTOR_ARRAY_EXTERN,midtypevalue,name,"",regno++,index,0);
                 }
-                getsym();
             }
             else{
                 error(IDEN_KIND_ERROR);
@@ -728,11 +817,13 @@ int factor(){//因子*
 	else if(sy == LPAR){
 		getsym();
 		int index = expr();
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
+		if(sy == RPAR){
+			getsym();
+		}
+		else{
+            error(RPAR_LOST_ERROR);
 		}
 		entermidcode(FACTOR_EXPR,INT,"","",regno++,index,0);
-		getsym();
 	}
 	else if(sy == ICON || sy == PLUS || sy == MINUS){
         exprtype += 2;
@@ -770,10 +861,12 @@ void state(){//语句*
 	else if(sy == LBPA){
 		getsym();
 		states();
-		if(sy != RBPA){
-			error(RBPA_LOST_ERROR);
+		if(sy == RBPA){
+			getsym();
 		}
-		getsym();
+		else{
+            error(RBPA_LOST_ERROR);
+		}
 	}
 	else if(sy == IDEN){//根据符号表判断是函数调用还是赋值
 		strcpy(idvalue,id0);//保存符号名称
@@ -796,31 +889,39 @@ void state(){//语句*
 		else{
             error(IDEN_NOTFOUND_ERROR);//未声明的标识符
 		}
-		if(sy != SEMI){
+		if(sy == SEMI){
+            getsym();
+		}
+		else{
             error(STATE_SEMI_ERROR);
 		}
-		getsym();
 	}
 	else if(sy == SCANFSY){
 		readstate();
-		if(sy != SEMI){
-			error(STATE_SEMI_ERROR);
+		if(sy == SEMI){
+            getsym();
 		}
-		getsym();
+		else{
+            error(STATE_SEMI_ERROR);
+		}
 	}
 	else if(sy == PRINTFSY){
 		writestate();
-		if(sy != SEMI){
-			error(STATE_SEMI_ERROR);
+		if(sy == SEMI){
+            getsym();
 		}
-		getsym();
+		else{
+            error(STATE_SEMI_ERROR);
+		}
 	}
 	else if(sy == RETURNSY){
 		returnstate();
-		if(sy != SEMI){
-			error(STATE_SEMI_ERROR);
+		if(sy == SEMI){
+            getsym();
 		}
-		getsym();
+		else{
+            error(STATE_SEMI_ERROR);
+		}
 	}
 	else if(sy == SEMI){
 		getsym();
@@ -877,8 +978,11 @@ void fuzhistate(){//赋值语句*
                 error(INDEX_OUTOF_BOUNDS);
             }
         }
-		if(sy != RBRA){
-			error(RBRA_LOST_ERROR);
+		if(sy == RBRA){
+			getsym();
+		}
+		else{
+            error(RBRA_LOST_ERROR);
 		}
 		/*//判断标识符是不是数组
         if(tab.symbols[location].kind != KIND_ARRAY){
@@ -888,7 +992,6 @@ void fuzhistate(){//赋值语句*
         kind = ASSIGN_ARR;
 		//数组元素赋值
 		//entermidcode(ASSIGN_ARR,INT,name,"",0,temp,0);//t1记录数组下标的寄存器位置
-		getsym();
 	}
 	if(!flag){
         //判断标识符是不是普通变量
@@ -935,8 +1038,11 @@ void tiaojianstate(){//条件语句*
 	}
 	getsym();
 	int relation = tiaojian();//记录关系
-	if(sy != RPAR){
-		error(RPAR_LOST_ERROR);
+	if(sy == RPAR){
+		getsym();
+	}
+	else{
+        error(RPAR_LOST_ERROR);
 	}
 	//生成条件跳转四元式
 	midcode_kind kind;
@@ -951,7 +1057,6 @@ void tiaojianstate(){//条件语句*
 	}
 	int indexloc = midtab.index;
 	entermidcode(kind,INT,"","",0,exprregno1,exprregno2);//这里的value是跳转的目标行，应该是state()之后的位置
-	getsym();
 	state();
     //midtab.midcodes[indexloc].value = midtab.index + 1;//写入跳转位置（midtab.index+1才是else语句第一句话的位置）
     int _indexloc = midtab.index;
@@ -1037,8 +1142,11 @@ void xunhuanstate(){//循环语句*
         strcpy(labelname,perona.c_str());
 		entermidcode(LABEL,INT,labelname,"",0,0,0);
 		int relation = tiaojian();
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
+		if(sy == RPAR){
+			getsym();
+		}
+		else{
+            error(RPAR_LOST_ERROR);
 		}
 		//生成条件跳转四元式
         midcode_kind kind;
@@ -1053,7 +1161,6 @@ void xunhuanstate(){//循环语句*
         }
         int indexloc = midtab.index;
         entermidcode(kind,INT,"","",0,exprregno1,exprregno2);
-		getsym();
 		state();
 		entermidcode(JUMP,INT,labelname,"",indexloc,0,0);//跳转到while的循环条件
         char _labelname[IDENL];
@@ -1349,13 +1456,15 @@ void callfunctstate(){//有返回值函数调用语句*
         }
 		getsym();
 		valueparalist(name);
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
+		if(sy == RPAR){
+			getsym();
+		}
+		else{
+            error(RPAR_LOST_ERROR);
 		}
         //前几个寄存器保存了参数值
 		entermidcode(CALL,type,name,"",paranum,0,0);//把参数寄存器的前n个参数作为要传入的参数
 		flag = 1;
-		getsym();
 	}
 	if(!flag){
         entermidcode(CALL,type,name,"",0,0,0);//没有参数
@@ -1392,13 +1501,15 @@ void callfuncfstate(){//无返回值函数调用语句*
         }
 		getsym();
 		valueparalist(name);
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
+		if(sy == RPAR){
+			getsym();
+		}
+		else{
+            error(RPAR_LOST_ERROR);
 		}
         //前几个寄存器保存了参数值
         entermidcode(CALL,VOID,name,"",paranum,0,0);//把参数寄存器的前n个参数作为要传入的参数
         flag = 1;
-		getsym();
 	}
 	if(!flag){
         entermidcode(CALL,VOID,name,"",0,0,0);//参数个数为0
@@ -1531,10 +1642,12 @@ void readstate(){//读语句*
 		}
 		getsym();
 	}
-	if(sy != RPAR){
-		error(RPAR_LOST_ERROR);
-	}
-	getsym();
+	if(sy == RPAR){
+        getsym();
+    }
+    else{
+        error(RPAR_LOST_ERROR);
+    }
 	printf("This is a readstate\n");
 }
 
@@ -1579,10 +1692,12 @@ void writestate(){//写语句*
         midcode_type type = (expr_type == TYPE_INT)?INT:CHAR;
 		entermidcode(WRITE,type,"","",value,0,0);////表达式如果是单个字符或者单个字符变量的话，应视为打印字母?
 	}
-	if(sy != RPAR){
-		error(RPAR_LOST_ERROR);
-	}
-	getsym();
+	if(sy == RPAR){
+        getsym();
+    }
+    else{
+        error(RPAR_LOST_ERROR);
+    }
 	printf("This is a writestate\n");
 }
 
@@ -1604,12 +1719,14 @@ void returnstate(){//返回语句*
 		if(current_func_type != expr_type){
             error(FUNCT_RETURN_ERROR);
 		}
-		if(sy != RPAR){
-			error(RPAR_LOST_ERROR);
-		}
+		if(sy == RPAR){
+            getsym();
+        }
+        else{
+            error(RPAR_LOST_ERROR);
+        }
 		//返回
 		entermidcode(RETURN,INT,"","",0,value,0);//不需要知道返回值类型，返回值读入1号寄存器
-		getsym();
 	}
 	else{
         //返回void
